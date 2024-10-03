@@ -1,0 +1,37 @@
+#!/usr/bin/env python
+
+import rospy
+import math
+import dynamic_reconfigure.client
+from std_msgs.msg import Float64
+
+rww=0.09
+lww=0.09
+
+def get_right_wing(rightwing):
+	global rww
+	rw=rightwing.data
+	rww=((math.sin(abs(0.6-rw)))*0.155)+0.09
+	setparam()
+
+def get_left_wing(leftwing):
+	global lww
+	lw=leftwing.data
+	lww=((math.sin(abs(0.6-lw)))*0.155)+0.09
+	setparam()
+
+def setparam():
+	global rww
+	global lww
+	client = dynamic_reconfigure.client.Client("move_base/local_costmap")
+	client.update_configuration({"footprint": [[-0.09, -0.09], [-0.09, 0.09], [0.08, lww], [0.09, 0.09], [0.09, -0.09], [0.08, -rww]]})
+
+def main():
+	rospy.init_node('rectbot_wing_controller')
+	rospy.Subscriber('rectbot/RightWingJoint_PositionController/command', Float64, get_right_wing)
+	rospy.Subscriber('rectbot/LeftWingJoint_PositionController/command', Float64, get_left_wing)
+	setparam()
+	rospy.spin()
+
+if __name__ == '__main__':
+	main()

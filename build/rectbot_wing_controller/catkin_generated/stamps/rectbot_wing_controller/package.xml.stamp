@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>rectbot_wing_controller</name>
+  <version>1.2.3</version>
+  <description>
+    This package provides rectbot wing control.  
+  </description>
+  <license>ARAR Jsc.</license>
+  <author email="duc.ta@arar.vn">Tri-Duc Ta</author>
+  <maintainer email="duc.ta@arar.vn">Tri-Duc Ta</maintainer>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>rospy</depend>
+  <depend>std_msgs</depend>
+  <exec_depend>rectbot_navigation</exec_depend>
+</package>

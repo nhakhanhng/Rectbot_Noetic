@@ -1,0 +1,19 @@
+<launch>
+  <arg name="model" />
+  <param name="robot_description" textfile="$(find rectbot_description)/urdf/rectbot.urdf" />
+  <rosparam file="$(find rectbot_hardware_interface)/config/controllers.yaml" command="load"/>
+  <rosparam file="$(find rectbot_hardware_interface)/config/joint_limits.yaml" command="load"/>
+  <node    name="RectbotHardwareInterface" pkg="rectbot_hardware_interface" type="rectbot_hardware_interface" output="screen"/>
+  <node    name="robot_state_publisher"    pkg="robot_state_publisher"    type="robot_state_publisher"/>
+  <!--<node    name="joint_state_publisher"    pkg="joint_state_publisher"    type="joint_state_publisher"/>-->
+  <node    name="rviz"    pkg="rviz"    type="rviz"    args="-d $(find rectbot_description)/urdf.rviz" />
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen"
+        args="
+            /rectbot/joints_update
+            /rectbot/RightWingJoint_PositionController
+            /rectbot/LeftWingJoint_PositionController
+            /rectbot/RightWheelJoint_VelocityController
+            /rectbot/LeftWheelJoint_VelocityController"/>
+
+        
+</launch>

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>rectbot_navigation</name>
+  <version>1.2.0</version>
+  <description>
+    The rectbot_navigation provides roslaunch scripts for starting the navigation.
+  </description>
+  <license>ARAR Jsc.</license>
+  <author email="duc.ta@arar.vn">Tri-Duc Ta</author>
+  <maintainer email="duc.ta@arar.vn">Tri-Duc Ta</maintainer>
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>amcl</exec_depend>
+  <exec_depend>map_server</exec_depend>
+  <exec_depend>move_base</exec_depend>
+  <exec_depend>rectbot_bringup</exec_depend>
+</package>

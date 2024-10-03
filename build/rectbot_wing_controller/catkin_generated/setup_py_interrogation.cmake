@@ -1,0 +1,7 @@
+set(rectbot_wing_controller_SETUP_PY_SETUP_MODULE "distutils.core")
+set(rectbot_wing_controller_SETUP_PY_VERSION "1.2.3")
+set(rectbot_wing_controller_SETUP_PY_SCRIPTS "")
+set(rectbot_wing_controller_SETUP_PY_PACKAGES "rectbot_wing_controller")
+set(rectbot_wing_controller_SETUP_PY_PACKAGE_DIRS "src/rectbot_wing_controller")
+set(rectbot_wing_controller_SETUP_PY_MODULES "")
+set(rectbot_wing_controller_SETUP_PY_MODULE_DIRS "")

@@ -1,0 +1,8 @@
+prefix=/home/arar/Documents/rectbot_ws/install
+
+Name: rectbot_gazebo
+Description: Description of rectbot_gazebo
+Version: 1.2.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: tf gazebo_ros

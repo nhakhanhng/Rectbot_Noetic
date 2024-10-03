@@ -1,0 +1,57 @@
+#!/usr/bin/env python
+
+import roslib
+import rospy
+import math
+import dynamic_reconfigure.client
+from std_msgs.msg import Float64
+from geometry_msgs.msg import Point32
+from geometry_msgs.msg import Point, PoseStamped, PointStamped, Vector3, Pose, PoseArray 
+from geometry_msgs.msg import Twist
+from geometry_msgs.msg import Pose2D
+
+lwing=0
+rwing=0
+rwi=rospy.Publisher('rectbot/RightWingJoint_PositionController/command', Float64, queue_size=1)
+lwi=rospy.Publisher('rectbot/LeftWingJoint_PositionController/command', Float64, queue_size=1)
+
+def closest(closest_point):
+	global lwing
+	global rwing
+	tr_x=closest_point.poses[1].position.x
+	tl_x=closest_point.poses[2].position.x
+	br_x=closest_point.poses[3].position.x
+	bl_x=closest_point.poses[4].position.x
+	tr_y=closest_point.poses[1].position.y
+	tl_y=closest_point.poses[2].position.y
+	br_y=closest_point.poses[3].position.y
+	bl_y=closest_point.poses[4].position.y
+	top_dis=abs(tr_y-tl_y)
+	bot_dis=abs(br_y-bl_y)
+	fr_dis=(tr_x+tl_x)/2
+	bk_dis=(br_x+bl_x)/2
+	if tr_x < 0.3 or tl_x < 0.3 or br_x < 0.3 or bl_x < 0.3:
+		if (top_dis < (0.09*5.5) and top_dis > 0.09*2) or (bot_dis < (0.09*5.5) and bot_dis > 0.09*2):
+			lwing=0.6
+			rwing=0.6
+		else:
+			lwing=0
+			rwing=0
+	else:
+		lwing=0
+		rwing=0
+
+def main():
+	global lwing
+	global rwing
+	rospy.init_node('rectbot_wing_auto')
+	rospy.Subscriber('closest_point', PoseArray, closest)
+	rate = rospy.Rate(1)
+	while not rospy.is_shutdown():	
+		lwi.publish(lwing)
+		rwi.publish(rwing)
+		rate.sleep()
+
+
+if __name__ == '__main__':
+	main()

@@ -1,0 +1,7 @@
+set(rectbot_teleop_SETUP_PY_SETUP_MODULE "distutils.core")
+set(rectbot_teleop_SETUP_PY_VERSION "0.4.0")
+set(rectbot_teleop_SETUP_PY_SCRIPTS "")
+set(rectbot_teleop_SETUP_PY_PACKAGES "rectbot_teleop")
+set(rectbot_teleop_SETUP_PY_PACKAGE_DIRS "src/rectbot_teleop")
+set(rectbot_teleop_SETUP_PY_MODULES "")
+set(rectbot_teleop_SETUP_PY_MODULE_DIRS "")

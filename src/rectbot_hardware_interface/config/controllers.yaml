@@ -1,0 +1,23 @@
+rectbot:
+
+  joints_update:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50
+
+  RightWingJoint_PositionController:
+    type: position_controllers/JointPositionController
+    joint: right_wing_joint
+
+  LeftWingJoint_PositionController:
+    type: position_controllers/JointPositionController
+    joint: left_wing_joint
+
+  RightWheelJoint_VelocityController:
+    type: velocity_controllers/JointVelocityController
+    joint: right_wheel_joint
+
+  LeftWheelJoint_VelocityController:
+    type: velocity_controllers/JointVelocityController
+    joint: left_wheel_joint
+
+# No PID values defined since this controller simply passes the input position command to the actuators.

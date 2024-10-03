@@ -1,0 +1,18 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="map_file" default="$(find rectbot_navigation)/maps/map.yaml"/>
+
+  <!-- Map server -->
+  <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
+
+  <!-- AMCL -->
+
+  <include file="$(find rectbot_navigation)/launch/amcl.launch"/>
+
+  <!-- move_base -->
+
+  <include file="$(find rectbot_navigation)/launch/move_base.launch">
+  </include>
+
+
+</launch>

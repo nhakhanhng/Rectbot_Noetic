@@ -1,0 +1,8 @@
+prefix=/home/arar/Documents/rectbot_ws/devel
+
+Name: rectbot_bridge
+Description: Description of rectbot_bridge
+Version: 1.2.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

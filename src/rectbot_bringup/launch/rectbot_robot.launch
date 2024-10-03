@@ -1,0 +1,14 @@
+<launch>
+  <arg name="set_lidar_frame_id" default="lidar_link"/>
+
+  <include file="$(find rectbot_bringup)/launch/rectbot_core.launch">
+  </include>
+  <include file="$(find rectbot_bringup)/launch/rectbot_lidar.launch">
+    <arg name="set_frame_id" value="$(arg set_lidar_frame_id)"/>
+  </include>
+<!--
+  <include file="$(find rectbot_bringup)/launch/rectbot_camera.launch">
+  </include>
+-->
+
+</launch>

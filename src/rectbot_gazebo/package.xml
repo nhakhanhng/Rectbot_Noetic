@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>rectbot_gazebo</name>
+  <version>1.2.0</version>
+  <description>
+    Gazebo simulation package for the ReCTBot
+  </description>
+  <license>ARAR Jsc.</license>
+  <author email="duc.ta@arar.vn">Tri-Duc Ta</author>
+  <maintainer email="duc.ta@arar.vn">Tri-Duc Ta</maintainer>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>tf</depend>
+  <depend>gazebo_ros</depend>
+  <exec_depend>gazebo</exec_depend>
+  <exec_depend>rectbot_description</exec_depend>
+  <export>
+    <gazebo_ros gazebo_media_path="${prefix}"/>
+    <gazebo_ros gazebo_model_path="${prefix}/models"/>
+  </export>
+</package>

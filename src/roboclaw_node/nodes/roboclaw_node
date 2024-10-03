@@ -1,0 +1,157 @@
+#!/usr/bin/env python
+import roslib
+import rospy
+from geometry_msgs.msg import Twist
+from geometry_msgs.msg import Quaternion
+from nav_msgs.msg import Odometry
+from sensor_msgs.msg import BatteryState
+import tf
+from roboclaw import Roboclaw
+from math import pi, cos, sin
+
+address = 0x80
+kp1 = 7.83163
+ki1 = 1.01881
+kd1 = 0.0
+qpps1 = 3000
+kp2 = 7.26239
+ki2 = 0.81702
+kd2 = 0.0
+qpps2 = 3187
+global v,w
+global r,l
+global enc1, enc2, enc1new, enc2new, enc1old, enc2old
+global v_e, w_e, v_te, w_te
+global dphi, phi
+global dx, dy, x, y
+global quakhu
+v=0
+w=0
+enc1new =0
+enc2new =0
+enc1old =0
+enc2old =0
+x=0
+y=0
+phi=0
+dx=0
+dy=0
+dphi=0
+
+def twistCB(msg):
+    global v,w
+    v=msg.linear.x
+    w=msg.angular.z
+
+
+def odom_pub_CB():
+    global x,y,phi,v_te, w_te
+    global pub_odom
+    odom_quat = Quaternion()
+    odom_quat = tf.transformations.quaternion_from_euler(0,0,phi)
+
+    odom_msg = Odometry()
+    odom_msg.header.stamp = rospy.Time.now()
+    odom_msg.header.frame_id = 'odom'
+    odom_msg.child_frame_id = 'base_footprint'
+
+    odom_msg.pose.pose.position.x = x
+    odom_msg.pose.pose.position.y = y
+    odom_msg.pose.pose.position.z = 0.0
+    # odom_msg.pose.pose.orientation = odom_quat
+    odom_msg.pose.pose.orientation.z = odom_quat[2]
+    odom_msg.pose.pose.orientation.w = odom_quat[3]
+
+    odom_msg.pose.covariance[0]= 0.05
+    odom_msg.pose.covariance[7]= 0.05
+    odom_msg.pose.covariance[14]= 1e9
+    odom_msg.pose.covariance[21]= 1e9
+    odom_msg.pose.covariance[28]= 1e9
+    odom_msg.pose.covariance[35]= 0.06
+    
+    odom_msg.twist.twist.linear.x = v_te
+    odom_msg.twist.twist.angular.z = w_te
+    odom_msg.twist.covariance[0]= 0.025
+    odom_msg.twist.covariance[7]= 1e9
+    odom_msg.twist.covariance[14]= 1e9
+    odom_msg.twist.covariance[21]= 1e9
+    odom_msg.twist.covariance[28]= 1e9
+    odom_msg.twist.covariance[35]= 0.02
+
+    # print odom_msg
+    pub_odom.publish(odom_msg)
+
+def bat_pub_CB(pin):
+    bat_msg = BatteryState()
+    bat_msg.voltage = pin[1]/10.0
+    pub_bat.publish(bat_msg)
+
+
+
+def main():
+    global v,w,r,l,enc1, enc2, enc1new, enc2new, enc1old, enc2old,v_e, w_e, v_te, w_te,dphi, phi,dx, dy, x, y,quakhu,pin
+    global pub_odom, pub_bat
+    rospy.init_node('roboclaw_node')
+    pub_odom  = rospy.Publisher('/odom', Odometry, queue_size=10)
+    pub_bat  = rospy.Publisher('/battery', BatteryState, queue_size=10)
+    quakhu = rospy.Time.now()
+    rospy.Subscriber("/cmd_vel", Twist, twistCB)
+
+    roboclaw = Roboclaw("/dev/roboclaw", 115200)
+    roboclaw.Open()
+    roboclaw.ResetEncoders(address)
+    roboclaw.SetM1VelocityPID(address, kp1, ki1, kd1,qpps1)
+    roboclaw.SetM2VelocityPID(address, kp2, ki2, kd2, qpps2)
+
+    rate = rospy.Rate(20)
+    while not rospy.is_shutdown() :
+        v_l=((2*v)+(w*0.135))/2
+        v_r=((2*v)-(w*0.135))/2
+        r=(v_r/(3.14*0.065))*1675
+        l=(v_l/(3.14*0.065))*1675
+
+        roboclaw.SpeedM1(address,int(l))
+        roboclaw.SpeedM2(address,int(r))
+
+        enc1 = roboclaw.ReadEncM1(address)
+        enc2 = roboclaw.ReadEncM2(address)
+        pin = roboclaw.ReadMainBatteryVoltage(address)
+
+        enc1new = enc1[1] - enc1old
+        enc2new = enc2[1] - enc2old
+
+
+        t = rospy.Time.now() - quakhu
+        D_r= 0.065*3.14*(enc1new/1675.0)
+        D_l= 0.065*3.14*(enc2new/1675.0)
+        v_e= (D_l + D_r)/2
+        w_e= (D_r - D_l)/0.135
+
+        v_te=v_e/t.to_sec()
+        w_te=w_e/t.to_sec()
+
+        dphi =w_e
+        phi=phi+ dphi
+
+        dx=v_e * cos(phi)
+        dy=v_e * sin(phi)
+
+        x=x+ dx
+        y=y+ dy
+        # print "x: ",x
+        # print "y: ",y
+
+        if(phi>=6.28):
+            phi=phi-6.28
+        if(phi<=-6.28):
+            phi=phi+6.28
+        enc1old = enc1[1]
+        enc2old = enc2[1]
+        quakhu = rospy.Time.now()
+        
+        odom_pub_CB()
+        bat_pub_CB(pin)
+        rate.sleep()
+
+if __name__ == "__main__":
+    main()

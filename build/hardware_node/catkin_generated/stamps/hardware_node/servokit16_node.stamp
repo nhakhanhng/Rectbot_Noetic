@@ -1,0 +1,30 @@
+#!/usr/bin/env python3
+
+import rospy
+import time
+import math
+import dynamic_reconfigure.client
+from std_msgs.msg import Float64
+
+from adafruit_servokit import ServoKit
+kit = ServoKit(channels=16)
+
+def get_right_wing(rightwing):
+    rw=rightwing.data
+    rw_pos=rw*57.3
+    kit.servo[0].angle = rw_pos
+
+def get_left_wing(leftwing):
+    lw=leftwing.data
+    lw_rad=abs(0.85-lw)
+    lw_pos=lw_rad*57.3
+    kit.servo[1].angle = lw_pos
+
+def main():
+    rospy.init_node('servo_kit')
+    rospy.Subscriber('rectbot/RightWingJoint_PositionController/command', Float64, get_right_wing)
+    rospy.Subscriber('rectbot/LeftWingJoint_PositionController/command', Float64, get_left_wing)
+    rospy.spin()
+
+if __name__ == '__main__':
+    main()

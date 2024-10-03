@@ -1,0 +1,13 @@
+<launch>
+  <arg name="multi_robot_name" default=""/>
+
+  <rosparam file="$(find rectbot_hardware_interface)/config/controllers.yaml" command="load"/>
+  <rosparam file="$(find rectbot_hardware_interface)/config/joint_limits.yaml" command="load"/>
+
+  <include file="$(find rectbot_bringup)/launch/rectbot_remote.launch">
+  </include>
+
+  <node    name="RectbotHardwareInterface" pkg="rectbot_hardware_interface" type="rectbot_hardware_interface" output="screen"/>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find rectbot_description)/rviz/urdf.rviz"/>
+</launch>

@@ -1,0 +1,8 @@
+<launch>
+  <node pkg="rectbot_wing_controller" type="nearestobstacle_laser_v1.py" name="nearestobstacle"  output="screen">
+  </node>
+  <node pkg="rectbot_wing_controller" type="rectbot_wing_auto" name="rectbot_wing_auto"  output="screen">
+  </node>
+  <node pkg="rectbot_wing_controller" type="rectbot_wing_controller" name="rectbot_wing_controller"  output="screen">
+  </node>
+</launch>
