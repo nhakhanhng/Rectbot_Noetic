@@ -1,8 +1,0 @@
-prefix=/home/arar/Documents/rectbot_ws/devel
-
-Name: imu_node
-Description: Description of imu_node
-Version: 2.0.1
-Cflags: -I/home/arar/Documents/rectbot_ws/src/imu_node/include -I/usr/include
-Libs: -L${prefix}/lib 
-Requires: roscpp std_msgs sensor_msgs geometry_msgs nav_msgs tf

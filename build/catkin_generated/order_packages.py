@@ -2,4 +2,4 @@
 source_root_dir = '/home/arar/Documents/rectbot_ws/src'
 whitelisted_packages = ''.split(';') if '' != '' else []
 blacklisted_packages = ''.split(';') if '' != '' else []
-underlay_workspaces = '/home/arar/Documents/rectbot_ws/devel;/home/arar/Documents/catkin_ws/devel;/opt/ros/melodic'.split(';') if '/home/arar/Documents/rectbot_ws/devel;/home/arar/Documents/catkin_ws/devel;/opt/ros/melodic' != '' else []
+underlay_workspaces = '/home/arar/Documents/AStar_Plugin_ROS/devel;/home/arar/Documents/rectbot_ws/devel;/home/arar/Documents/catkin_ws/devel;/opt/ros/melodic'.split(';') if '/home/arar/Documents/AStar_Plugin_ROS/devel;/home/arar/Documents/rectbot_ws/devel;/home/arar/Documents/catkin_ws/devel;/opt/ros/melodic' != '' else []

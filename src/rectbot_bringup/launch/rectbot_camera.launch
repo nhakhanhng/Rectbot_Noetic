@@ -1,12 +1,47 @@
 <launch>
-  <include file="$(find realsense_camera)/launch/rs_camera.launch"/>
-<!--
-  <node pkg="raspicam_node" type="raspicam_node" name="raspicam_node" output="screen">
+  <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+    <!-- <arg name="enable_depth" value="true"/> -->
+    <arg name="initial_reset" value="true"/>
+    <arg name="publish_odom_tf"           default="false"/>
+    <arg name="filters"                default="pointcloud"/>
+    <!-- <arg name="fisheye_width"       value="640"/>
+    <arg name="fisheye_height"      value="480"/>
+    <arg name="enable_fisheye"      value="false"/> -->
+
+    <!-- <arg name="depth_width"         value="640"/>
+    <arg name="depth_height"        value="360"/>
+    <arg name="enable_depth"        value="true"/>
+    <arg name="depth_fps"           value="30"/> -->
+
+    <!-- <arg name="infra_width"        value="640"/>
+    <arg name="infra_height"       value="480"/>
+    <arg name="enable_infra1"       value="true"/>
+    <arg name="enable_infra2"       value="true"/>
+
+    <arg name="color_width"         value="640"/>
+    <arg name="color_height"        value="480"/>
+    <arg name="enable_color"        value="true"/>
+
+    <arg name="fisheye_fps"         value="30"/>
+    <arg name="depth_fps"           value="30"/>
+    <arg name="infra_fps"           value="30"/>
+    <arg name="color_fps"           value="30"/>
+    <arg name="gyro_fps"            value="400"/>
+    <arg name="accel_fps"           value="250"/>
+    <arg name="enable_gyro"         value="true"/>
+    <arg name="enable_accel"        value="true"/>
+
+    <arg name="enable_pointcloud"         value="false"/>
+    <arg name="pointcloud_texture_stream" value="RS2_STREAM_COLOR"/>
+    <arg name="pointcloud_texture_index"  value="0"/> -->
+  </include>
+
+  <!-- <node pkg="raspicam_node" type="raspicam_node" name="raspicam_node" output="screen">
     <param name="camera_info_url" value="package://rectbot_bringup/camera_info/rectbot_rpicamera.yaml"/>
     <param name="width" value="640"/>
     <param name="height" value="480"/>
     <param name="framerate" value="15"/>
     <param name="camera_frame_id" value="camera"/>
-  </node>
--->
+  </node> -->
+
 </launch>

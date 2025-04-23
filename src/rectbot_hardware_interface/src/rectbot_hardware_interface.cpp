@@ -61,12 +61,14 @@ void rectbot::init() {
 	registerInterface(&velocity_joint_interface_);
 	registerInterface(&velocityJointSaturationInterface);
 }
+
 void rectbot::update(const ros::TimerEvent& e) {
 	elapsed_time_ = ros::Duration(e.current_real - e.last_real);
 	read();
 	controller_manager_->update(ros::Time::now(), elapsed_time_);
 	write(elapsed_time_);
 }
+
 void rectbot::read(){
         joint_position_[0]=joint_position_command_[0];
         joint_position_[1]=joint_position_command_[1];

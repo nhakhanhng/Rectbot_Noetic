@@ -1,0 +1,27 @@
+<launch>
+    <!-- Launch the RealSense camera -->
+    <!-- <include file="$(find realsense2_camera)/launch/rs_aligned_depth.launch">
+        <arg name="color_width" value="640"/>
+        <arg name="color_height" value="480"/>
+        <arg name="enable_depth" value="true"/> -->
+        <!-- <arg name="enable_pointcloud" value="true"/> -->
+    <!-- </include> -->
+
+    <!-- Launch the main CV processing node -->
+    <node name="rectbot_cv_node" pkg="rectbot_cv" type="rectbot_cv_node" output="screen">
+        <!-- Load model parameters from config file -->
+        <rosparam command="load" file="$(find rectbot_cv)/config/model_params.yaml" />
+        <remap from="image" to="/camera/color/image_raw" />
+        <param name="debug_view" value="true" />
+        <!-- <param name="model/weights" value="$(find rectbot_cv)/models/yolov8n.engine" /> -->
+    </node>
+
+    <node name="rectbot_object_mapping_node" pkg="rectbot_cv" type="rectbot_object_mapping_node" output="screen">
+        <!-- Load model parameters from config file -->
+        <rosparam command="load" file="$(find rectbot_cv)/config/model_params.yaml" />
+        <remap from="image" to="/camera/color/image_raw" />
+        <param name="debug_view" value="true" />
+        <!-- <param name="model/weights" value="$(find rectbot_cv)/models/yolov8n.engine" /> -->
+    </node>
+
+</launch>

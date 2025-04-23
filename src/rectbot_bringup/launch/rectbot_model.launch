@@ -7,7 +7,7 @@
   <include file="$(find rectbot_bringup)/launch/rectbot_remote.launch">
   </include>
 
-  <node    name="RectbotHardwareInterface" pkg="rectbot_hardware_interface" type="rectbot_hardware_interface" output="screen"/>
+  <node name="RectbotHardwareInterface" pkg="rectbot_hardware_interface" type="rectbot_hardware_interface" output="screen"/>
 
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find rectbot_description)/rviz/urdf.rviz"/>
+  <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find rectbot_description)/rviz/urdf.rviz"/> -->
 </launch>

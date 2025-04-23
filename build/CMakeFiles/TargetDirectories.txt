@@ -197,3 +197,17 @@
 /home/arar/Documents/rectbot_ws/build/rectbot_description/CMakeFiles/install/local.dir
 /home/arar/Documents/rectbot_ws/build/rectbot_description/CMakeFiles/rebuild_cache.dir
 /home/arar/Documents/rectbot_ws/build/rectbot_description/CMakeFiles/install.dir
+/home/arar/Documents/rectbot_ws/build/rectbot_cv/CMakeFiles/install/strip.dir
+/home/arar/Documents/rectbot_ws/build/rectbot_cv/CMakeFiles/list_install_components.dir
+/home/arar/Documents/rectbot_ws/build/rectbot_cv/CMakeFiles/edit_cache.dir
+/home/arar/Documents/rectbot_ws/build/rectbot_cv/CMakeFiles/install/local.dir
+/home/arar/Documents/rectbot_ws/build/rectbot_cv/CMakeFiles/test.dir
+/home/arar/Documents/rectbot_ws/build/rectbot_cv/CMakeFiles/install.dir
+/home/arar/Documents/rectbot_ws/build/rectbot_cv/CMakeFiles/vision_msgs_generate_messages_lisp.dir
+/home/arar/Documents/rectbot_ws/build/rectbot_cv/CMakeFiles/vision_msgs_generate_messages_cpp.dir
+/home/arar/Documents/rectbot_ws/build/rectbot_cv/CMakeFiles/vision_msgs_generate_messages_nodejs.dir
+/home/arar/Documents/rectbot_ws/build/rectbot_cv/CMakeFiles/rebuild_cache.dir
+/home/arar/Documents/rectbot_ws/build/rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir
+/home/arar/Documents/rectbot_ws/build/rectbot_cv/CMakeFiles/vision_msgs_generate_messages_eus.dir
+/home/arar/Documents/rectbot_ws/build/rectbot_cv/CMakeFiles/vision_msgs_generate_messages_py.dir
+/home/arar/Documents/rectbot_ws/build/rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir

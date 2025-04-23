@@ -1,12 +1,37 @@
-obstacle_range: 3.0
-raytrace_range: 3.5
+obstacle_range: 10.0 
+raytrace_range: 10.5
 
-footprint: [[-0.09, -0.09], [-0.09, 0.09], [0.08, 0.09], [0.09, 0.09], [0.09, -0.09], [0.08, -0.09]]
+footprint: [[-0.08,-0.08],[-0.08,0.08],[0.08,0.08],[0.08,0.08],[0.08,-0.08],[0.08,-0.08]]
 #robot_radius: 0.16
 
-inflation_radius: 0.05
-cost_scaling_factor: 3.0
+inflation_radius: 0.1
+cost_scaling_factor: 40.0
 
 map_type: costmap
-observation_sources: scan
-scan: {sensor_frame: lidar_link, data_type: LaserScan, topic: scan, marking: true, clearing: true}
+observation_sources: scan 
+scan: {sensor_frame: lidar_link, data_type: LaserScan, topic: scan , marking: true, clearing: true}
+# depth_scan: {sensor_frame: camera_depth_frame, data_type: LaserScan, topic: depth_scan, marking: true, clearing: true}
+# map:
+#     topic: /map
+#     observation_persistence: 0.0
+#     expected_update_rate: 0.0
+#     data_type: "costmap"
+#     marking: true
+#     clearing: false
+# lidar_scan: {P}
+#layer definitions
+plugins:
+  - {name: static_layer, type: "costmap_2d::StaticLayer"}
+  - {name: obstacle_layer, type: "costmap_2d::ObstacleLayer"}
+  - {name: inflation_layer, type: "costmap_2d::InflationLayer"}
+static:
+    enable: true
+    map_topic: /map
+    use_maximum: false
+    # subscribe_to_updates: true
+obstacle_layer:
+  combination_method: 1
+  # track_unknown_space: true
+  observation_sources: scan
+  scan: {sensor_frame: lidar_link, data_type: LaserScan, topic: /scan, marking: true, clearing: true}
+

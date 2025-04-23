@@ -1,0 +1,118 @@
+# YOLO Object Detection Parameters for RectBot
+
+# Model configuration
+model:
+  name: "yolov8"                                    # YOLO version (yolov3, yolov4, yolov5, yolov7, yolov8)
+  weights: "/home/arar/Documents/rectbot_ws/src/rectbot_cv/models/yolov8s.engine"  # Path to pre-trained weights
+  device: "cuda"                                    # Processing device: "cuda" (GPU) or "cpu"
+  precision: "fp16"                                 # Precision: "fp32", "fp16", or "int8"
+  
+# Input configuration
+input:
+  width: 640                                        # Input width for the network
+  height: 640                                       # Input height for the network
+  channels: 3                                       # Number of channels (3 for RGB)
+  scaling: 1/255.0                                  # Scaling factor for pixel values
+  
+# Detection parameters
+detection:
+  confidence_threshold: 0.5                         # Minimum confidence threshold for detections
+  nms_threshold: 0.45                               # Non-maximum suppression threshold
+  max_detections: 100                               # Maximum number of detections to return
+  
+# Classes configuration
+classes:
+  names_file: "/home/arar/Documents/rectbot_ws/src/rectbot_cv/config/class.names" # Path to file with class names
+  # Alternatively, list classes directly:
+  names: 
+    - person
+    - bicycle
+    - car
+    - motorcycle
+    - airplane
+    - bus
+    - train
+    - truck
+    - boat
+  
+# ROS parameters
+ros:
+  color_image_topic: "/camera/color/image_raw"            # Input image topic
+  depth_image_topic: "/camera/depth/image_rect_raw"            # Input depth image topic
+  color_camera_info_topic: "/camera/color/camera_info"          # Camera info topic
+  depth_camera_info_topic: "/camera/depth/camera_info"          # Depth camera info topic
+  alinged_depth_topic: "/camera/aligned_depth_to_color/image_raw" # Aligned depth image topic
+  aligned_depth_info_topic: "/camera/aligned_depth_to_color/camera_info" # Aligned depth camera info topic
+  output_topic: "/yolo/detections"                  # Output detections topic
+  detection_topic: "/object_detection"                # Detection topic
+  visualization_topic: "/yolo/visualization"        # Visualization topic
+  frame_id: "camera_link"                           # Frame ID for the detections
+  publish_image: true                               # Whether to publish the visualization
+  publish_detections: true                          # Whether to publish the detections
+  
+# Visualization
+visualization:
+  draw_boxes: true                                  # Draw bounding boxes
+  draw_labels: true                                 # Draw class labels
+  draw_confidence: true                             # Draw confidence values
+  line_thickness: 2                                 # Line thickness for boxes
+  font_scale: 0.5                                   # Font scale for text
+
+# Camera calibration parameters
+calibration:
+  # Intrinsic camera parameters for color camera
+  intrinsics:
+    color:
+      width: 640                                    # Image width
+      height: 480                                   # Image height
+      fx: 610.228                                   # Focal length in x-direction
+      fy: 608.879                                    # Focal length in y-direction
+      cx: 322.654                                   # Principal point in x-direction
+      cy: 241.166                                     # Principal point in y-direction
+      model_id: 2
+      k1: 0.0                                      # Radial distortion coefficient k1
+      k2: 0.0                                      # Radial distortion coefficient k2
+      p1: 0.0                                      # Tangential distortion coefficient p1
+      p2: 0.0                                      # Tangential distortion coefficient p2
+      k3: 0.0                                      # Radial distortion coefficient k3
+      k4: 0.0                                      # Radial distortion coefficient k4
+      k5: 0.0                                      # Radial distortion coefficient k5
+      k6: 0.0                                      # Radial distortion coefficient k6
+      xi: 0.0                                      # Skew coefficient xi
+      s: 0.0                                       # Skew coefficient s
+    depth:
+      width: 640                                    # Image width
+      height: 480                                   # Image height
+      fx: 383.788                                   # Focal length in x-direction
+      fy: 383.788                                   # Focal length in y-direction
+      cx: 319.705                                   # Principal point in x-direction
+      cy: 237.47                                     # Principal point in y-direction
+      model_id: 4
+      k1: 0.0                                      # Radial distortion coefficient k1
+      k2: 0.0                                      # Radial distortion coefficient k2
+      p1: 0.0                                      # Tangential distortion coefficient p1
+      p2: 0.0                                      # Tangential distortion coefficient p2
+      k3: 0.0                                      # Radial distortion coefficient k3
+      k4: 0.0                                      # Radial distortion coefficient k4
+      k5: 0.0                                      # Radial distortion coefficient k5
+      k6: 0.0                                      # Radial distortion coefficient k6
+      xi: 0.0                                      # Skew coefficient xi
+      s: 0.0                                       # Skew coefficient s
+  # Extrinsic transformation matrices
+  extrinsics:
+    # 4x4 transformation matrix from color camera frame to depth camera frame
+    color2depth:
+      rotation_matrix: [0.999982, 0.0060318, -0.000184892,
+                        -0.00603145, 0.99998, 0.00186557,
+                        0.000196141, -0.00186442, 0.999998]  # Default identity matrix, replace with actual values
+      translation_vector: [-0.0145489, -0.000241322, 0.000259099]  # Default zero vector, replace with actual values
+      
+    # 4x4 transformation matrix from depth camera frame to color camera frame
+    depth2color:
+      rotation_matrix: [0.999982, -0.00603145, 0.000196141,
+                        0.0060318, 0.99998, -0.00186442,
+                        -0.000184892, 0.00186557, 0.999998]  # Default identity matrix, replace with actual values
+      translation_vector: [0.0145502, 0.000153083, -0.000256695]  # Default zero vector, replace with actual values
+    # intrinsics:
+    # # Intrinsic camera parameters for color camera
+    

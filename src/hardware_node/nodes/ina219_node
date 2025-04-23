@@ -21,7 +21,7 @@ def main():
     rospy.init_node('ina219')
     volt_msg = Float32()
     pub_volt = rospy.Publisher('batt_volt', Float32, queue_size=100)
-    rate = rospy.Rate(0.5)
+    rate = rospy.Rate(0.2)
     while not rospy.is_shutdown():
         bus_voltage = ina219.bus_voltage
         volt_msg.data = bus_voltage

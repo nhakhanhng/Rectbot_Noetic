@@ -121,7 +121,7 @@
   </transmission>
 
   <link name="left_wing_link">
-    <inertial>
+    <inertial> 
       <origin xyz="0.083733 0.023264 0.002" rpy="0 0 0" />
       <mass value="0.02" />
       <inertia ixx="6.983090931E-06" ixy="-5.077687122E-06" ixz="0"
@@ -250,14 +250,18 @@
 
   <link name="camera_link">
     <inertial>
-      <origin xyz="-0.013049 0.00024621 0.0099394" rpy="0 0 0" />
+      <!-- <origin xyz="-0.013049 0.00024621 0.0099394" rpy="0 0 0" /> -->
+      <origin xyz="0.0 -0.025 0.0" rpy="0 0 0" />
+      <!-- <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/> -->
+      
       <mass value="0.26" />
       <inertia ixx="15.84796210E-05" ixy="0" ixz="0"
                iyy="22.91790311E-06" iyz="0"
                izz="15.89676439E-05" />
     </inertial>
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- <origin xyz="0 0 0" rpy="0 0 0" /> -->
+      <origin xyz="-0.01 -0.0175 0.0" rpy="0 0 0" />
       <geometry>
         <mesh filename="package://rectbot_description/meshes/camera_link.STL" />
       </geometry>
@@ -274,7 +278,9 @@
   </link>
 
   <joint name="camera_joint" type="fixed">
-    <origin xyz="0.082529 -0.0026396 0.1145" rpy="0 0 0" />
+    <!-- <origin xyz="0.082529 -0.0026396 0.1145" rpy="0 0 0" /> -->
+    <origin xyz="0.12085 0.0175 0.09" rpy="0.0 0.0 0.0"/>
+    
     <parent link="base_link" />
     <child link="camera_link" />
     <axis xyz="0 0 0" />
@@ -306,7 +312,7 @@
   </link>
 
   <joint name="lidar_joint" type="fixed">
-    <origin xyz="-0.0068617 0 0.155" rpy="0 0 3.14" />
+    <origin xyz="-0.0068617 0 0.103" rpy="0 0 3.14" />
     <parent link="base_link" />
     <child link="lidar_link" />
     <axis xyz="0 0 0" />

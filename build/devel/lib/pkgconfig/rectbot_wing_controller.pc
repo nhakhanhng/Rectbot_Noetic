@@ -1,0 +1,8 @@
+prefix=/home/arar/Documents/rectbot_ws/build/devel
+
+Name: rectbot_wing_controller
+Description: Description of rectbot_wing_controller
+Version: 1.2.3
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: rospy std_msgs

@@ -7,7 +7,7 @@
 
   <!-- AMCL -->
 
-  <include file="$(find rectbot_navigation)/launch/amcl.launch"/>
+  <!-- <include file="$(find rectbot_navigation)/launch/amcl.launch"/> -->
 
   <!-- move_base -->
 

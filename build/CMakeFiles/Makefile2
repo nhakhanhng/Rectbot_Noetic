@@ -3469,6 +3469,363 @@ rectbot_description/preinstall:
 .PHONY : rectbot_description/preinstall
 
 #=============================================================================
+# Directory level rules for directory rectbot_cv
+
+# Convenience name for "all" pass in the directory.
+rectbot_cv/all: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all
+rectbot_cv/all: rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all
+
+.PHONY : rectbot_cv/all
+
+# Convenience name for "clean" pass in the directory.
+rectbot_cv/clean: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_lisp.dir/clean
+rectbot_cv/clean: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_cpp.dir/clean
+rectbot_cv/clean: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_nodejs.dir/clean
+rectbot_cv/clean: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/clean
+rectbot_cv/clean: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_eus.dir/clean
+rectbot_cv/clean: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_py.dir/clean
+rectbot_cv/clean: rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/clean
+
+.PHONY : rectbot_cv/clean
+
+# Convenience name for "preinstall" pass in the directory.
+rectbot_cv/preinstall:
+
+.PHONY : rectbot_cv/preinstall
+
+#=============================================================================
+# Target rules for target rectbot_cv/CMakeFiles/vision_msgs_generate_messages_lisp.dir
+
+# All Build rule for target.
+rectbot_cv/CMakeFiles/vision_msgs_generate_messages_lisp.dir/all:
+	$(MAKE) -f rectbot_cv/CMakeFiles/vision_msgs_generate_messages_lisp.dir/build.make rectbot_cv/CMakeFiles/vision_msgs_generate_messages_lisp.dir/depend
+	$(MAKE) -f rectbot_cv/CMakeFiles/vision_msgs_generate_messages_lisp.dir/build.make rectbot_cv/CMakeFiles/vision_msgs_generate_messages_lisp.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/arar/Documents/rectbot_ws/build/CMakeFiles --progress-num= "Built target vision_msgs_generate_messages_lisp"
+.PHONY : rectbot_cv/CMakeFiles/vision_msgs_generate_messages_lisp.dir/all
+
+# Build rule for subdir invocation for target.
+rectbot_cv/CMakeFiles/vision_msgs_generate_messages_lisp.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/arar/Documents/rectbot_ws/build/CMakeFiles 0
+	$(MAKE) -f CMakeFiles/Makefile2 rectbot_cv/CMakeFiles/vision_msgs_generate_messages_lisp.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/arar/Documents/rectbot_ws/build/CMakeFiles 0
+.PHONY : rectbot_cv/CMakeFiles/vision_msgs_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+vision_msgs_generate_messages_lisp: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_lisp.dir/rule
+
+.PHONY : vision_msgs_generate_messages_lisp
+
+# clean rule for target.
+rectbot_cv/CMakeFiles/vision_msgs_generate_messages_lisp.dir/clean:
+	$(MAKE) -f rectbot_cv/CMakeFiles/vision_msgs_generate_messages_lisp.dir/build.make rectbot_cv/CMakeFiles/vision_msgs_generate_messages_lisp.dir/clean
+.PHONY : rectbot_cv/CMakeFiles/vision_msgs_generate_messages_lisp.dir/clean
+
+# clean rule for target.
+clean: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_lisp.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target rectbot_cv/CMakeFiles/vision_msgs_generate_messages_cpp.dir
+
+# All Build rule for target.
+rectbot_cv/CMakeFiles/vision_msgs_generate_messages_cpp.dir/all:
+	$(MAKE) -f rectbot_cv/CMakeFiles/vision_msgs_generate_messages_cpp.dir/build.make rectbot_cv/CMakeFiles/vision_msgs_generate_messages_cpp.dir/depend
+	$(MAKE) -f rectbot_cv/CMakeFiles/vision_msgs_generate_messages_cpp.dir/build.make rectbot_cv/CMakeFiles/vision_msgs_generate_messages_cpp.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/arar/Documents/rectbot_ws/build/CMakeFiles --progress-num= "Built target vision_msgs_generate_messages_cpp"
+.PHONY : rectbot_cv/CMakeFiles/vision_msgs_generate_messages_cpp.dir/all
+
+# Build rule for subdir invocation for target.
+rectbot_cv/CMakeFiles/vision_msgs_generate_messages_cpp.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/arar/Documents/rectbot_ws/build/CMakeFiles 0
+	$(MAKE) -f CMakeFiles/Makefile2 rectbot_cv/CMakeFiles/vision_msgs_generate_messages_cpp.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/arar/Documents/rectbot_ws/build/CMakeFiles 0
+.PHONY : rectbot_cv/CMakeFiles/vision_msgs_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+vision_msgs_generate_messages_cpp: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_cpp.dir/rule
+
+.PHONY : vision_msgs_generate_messages_cpp
+
+# clean rule for target.
+rectbot_cv/CMakeFiles/vision_msgs_generate_messages_cpp.dir/clean:
+	$(MAKE) -f rectbot_cv/CMakeFiles/vision_msgs_generate_messages_cpp.dir/build.make rectbot_cv/CMakeFiles/vision_msgs_generate_messages_cpp.dir/clean
+.PHONY : rectbot_cv/CMakeFiles/vision_msgs_generate_messages_cpp.dir/clean
+
+# clean rule for target.
+clean: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_cpp.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target rectbot_cv/CMakeFiles/vision_msgs_generate_messages_nodejs.dir
+
+# All Build rule for target.
+rectbot_cv/CMakeFiles/vision_msgs_generate_messages_nodejs.dir/all:
+	$(MAKE) -f rectbot_cv/CMakeFiles/vision_msgs_generate_messages_nodejs.dir/build.make rectbot_cv/CMakeFiles/vision_msgs_generate_messages_nodejs.dir/depend
+	$(MAKE) -f rectbot_cv/CMakeFiles/vision_msgs_generate_messages_nodejs.dir/build.make rectbot_cv/CMakeFiles/vision_msgs_generate_messages_nodejs.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/arar/Documents/rectbot_ws/build/CMakeFiles --progress-num= "Built target vision_msgs_generate_messages_nodejs"
+.PHONY : rectbot_cv/CMakeFiles/vision_msgs_generate_messages_nodejs.dir/all
+
+# Build rule for subdir invocation for target.
+rectbot_cv/CMakeFiles/vision_msgs_generate_messages_nodejs.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/arar/Documents/rectbot_ws/build/CMakeFiles 0
+	$(MAKE) -f CMakeFiles/Makefile2 rectbot_cv/CMakeFiles/vision_msgs_generate_messages_nodejs.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/arar/Documents/rectbot_ws/build/CMakeFiles 0
+.PHONY : rectbot_cv/CMakeFiles/vision_msgs_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+vision_msgs_generate_messages_nodejs: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_nodejs.dir/rule
+
+.PHONY : vision_msgs_generate_messages_nodejs
+
+# clean rule for target.
+rectbot_cv/CMakeFiles/vision_msgs_generate_messages_nodejs.dir/clean:
+	$(MAKE) -f rectbot_cv/CMakeFiles/vision_msgs_generate_messages_nodejs.dir/build.make rectbot_cv/CMakeFiles/vision_msgs_generate_messages_nodejs.dir/clean
+.PHONY : rectbot_cv/CMakeFiles/vision_msgs_generate_messages_nodejs.dir/clean
+
+# clean rule for target.
+clean: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_nodejs.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir
+
+# All Build rule for target.
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_wing_controller/CMakeFiles/std_msgs_generate_messages_eus.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_wing_controller/CMakeFiles/std_msgs_generate_messages_cpp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_wing_controller/CMakeFiles/std_msgs_generate_messages_lisp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_wing_controller/CMakeFiles/std_msgs_generate_messages_nodejs.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_wing_controller/CMakeFiles/std_msgs_generate_messages_py.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_teleop/CMakeFiles/geometry_msgs_generate_messages_eus.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_teleop/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_teleop/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_teleop/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_teleop/CMakeFiles/geometry_msgs_generate_messages_py.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_hardware_interface/CMakeFiles/roscpp_generate_messages_py.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_hardware_interface/CMakeFiles/roscpp_generate_messages_nodejs.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_hardware_interface/CMakeFiles/roscpp_generate_messages_eus.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_hardware_interface/CMakeFiles/roscpp_generate_messages_lisp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_hardware_interface/CMakeFiles/sensor_msgs_generate_messages_py.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_hardware_interface/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_hardware_interface/CMakeFiles/roscpp_generate_messages_cpp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_hardware_interface/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_hardware_interface/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_hardware_interface/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_hardware_interface/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_hardware_interface/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_hardware_interface/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_hardware_interface/CMakeFiles/sensor_msgs_generate_messages_eus.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_hardware_interface/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: hardware_node/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: hardware_node/CMakeFiles/actionlib_msgs_generate_messages_lisp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: hardware_node/CMakeFiles/actionlib_msgs_generate_messages_eus.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: hardware_node/CMakeFiles/actionlib_generate_messages_py.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: hardware_node/CMakeFiles/actionlib_msgs_generate_messages_nodejs.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: hardware_node/CMakeFiles/tf_generate_messages_py.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: hardware_node/CMakeFiles/actionlib_generate_messages_eus.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: hardware_node/CMakeFiles/tf_generate_messages_eus.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: hardware_node/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: hardware_node/CMakeFiles/actionlib_generate_messages_cpp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: hardware_node/CMakeFiles/tf_generate_messages_cpp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: hardware_node/CMakeFiles/actionlib_msgs_generate_messages_py.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: hardware_node/CMakeFiles/tf_generate_messages_lisp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: hardware_node/CMakeFiles/tf2_msgs_generate_messages_eus.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: hardware_node/CMakeFiles/tf_generate_messages_nodejs.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: hardware_node/CMakeFiles/tf2_msgs_generate_messages_nodejs.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: hardware_node/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: hardware_node/CMakeFiles/tf2_msgs_generate_messages_py.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: hardware_node/CMakeFiles/actionlib_generate_messages_lisp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: hardware_node/CMakeFiles/actionlib_generate_messages_nodejs.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_lisp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_cpp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_nodejs.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_eus.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_py.dir/all
+	$(MAKE) -f rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/build.make rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/depend
+	$(MAKE) -f rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/build.make rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/arar/Documents/rectbot_ws/build/CMakeFiles --progress-num=19,20 "Built target rectbot_object_mapping_node"
+.PHONY : rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all
+
+# Include target in all.
+all: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/arar/Documents/rectbot_ws/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/arar/Documents/rectbot_ws/build/CMakeFiles 0
+.PHONY : rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/rule
+
+# Convenience name for target.
+rectbot_object_mapping_node: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/rule
+
+.PHONY : rectbot_object_mapping_node
+
+# clean rule for target.
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/clean:
+	$(MAKE) -f rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/build.make rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/clean
+.PHONY : rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/clean
+
+# clean rule for target.
+clean: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target rectbot_cv/CMakeFiles/vision_msgs_generate_messages_eus.dir
+
+# All Build rule for target.
+rectbot_cv/CMakeFiles/vision_msgs_generate_messages_eus.dir/all:
+	$(MAKE) -f rectbot_cv/CMakeFiles/vision_msgs_generate_messages_eus.dir/build.make rectbot_cv/CMakeFiles/vision_msgs_generate_messages_eus.dir/depend
+	$(MAKE) -f rectbot_cv/CMakeFiles/vision_msgs_generate_messages_eus.dir/build.make rectbot_cv/CMakeFiles/vision_msgs_generate_messages_eus.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/arar/Documents/rectbot_ws/build/CMakeFiles --progress-num= "Built target vision_msgs_generate_messages_eus"
+.PHONY : rectbot_cv/CMakeFiles/vision_msgs_generate_messages_eus.dir/all
+
+# Build rule for subdir invocation for target.
+rectbot_cv/CMakeFiles/vision_msgs_generate_messages_eus.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/arar/Documents/rectbot_ws/build/CMakeFiles 0
+	$(MAKE) -f CMakeFiles/Makefile2 rectbot_cv/CMakeFiles/vision_msgs_generate_messages_eus.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/arar/Documents/rectbot_ws/build/CMakeFiles 0
+.PHONY : rectbot_cv/CMakeFiles/vision_msgs_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+vision_msgs_generate_messages_eus: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_eus.dir/rule
+
+.PHONY : vision_msgs_generate_messages_eus
+
+# clean rule for target.
+rectbot_cv/CMakeFiles/vision_msgs_generate_messages_eus.dir/clean:
+	$(MAKE) -f rectbot_cv/CMakeFiles/vision_msgs_generate_messages_eus.dir/build.make rectbot_cv/CMakeFiles/vision_msgs_generate_messages_eus.dir/clean
+.PHONY : rectbot_cv/CMakeFiles/vision_msgs_generate_messages_eus.dir/clean
+
+# clean rule for target.
+clean: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_eus.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target rectbot_cv/CMakeFiles/vision_msgs_generate_messages_py.dir
+
+# All Build rule for target.
+rectbot_cv/CMakeFiles/vision_msgs_generate_messages_py.dir/all:
+	$(MAKE) -f rectbot_cv/CMakeFiles/vision_msgs_generate_messages_py.dir/build.make rectbot_cv/CMakeFiles/vision_msgs_generate_messages_py.dir/depend
+	$(MAKE) -f rectbot_cv/CMakeFiles/vision_msgs_generate_messages_py.dir/build.make rectbot_cv/CMakeFiles/vision_msgs_generate_messages_py.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/arar/Documents/rectbot_ws/build/CMakeFiles --progress-num= "Built target vision_msgs_generate_messages_py"
+.PHONY : rectbot_cv/CMakeFiles/vision_msgs_generate_messages_py.dir/all
+
+# Build rule for subdir invocation for target.
+rectbot_cv/CMakeFiles/vision_msgs_generate_messages_py.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/arar/Documents/rectbot_ws/build/CMakeFiles 0
+	$(MAKE) -f CMakeFiles/Makefile2 rectbot_cv/CMakeFiles/vision_msgs_generate_messages_py.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/arar/Documents/rectbot_ws/build/CMakeFiles 0
+.PHONY : rectbot_cv/CMakeFiles/vision_msgs_generate_messages_py.dir/rule
+
+# Convenience name for target.
+vision_msgs_generate_messages_py: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_py.dir/rule
+
+.PHONY : vision_msgs_generate_messages_py
+
+# clean rule for target.
+rectbot_cv/CMakeFiles/vision_msgs_generate_messages_py.dir/clean:
+	$(MAKE) -f rectbot_cv/CMakeFiles/vision_msgs_generate_messages_py.dir/build.make rectbot_cv/CMakeFiles/vision_msgs_generate_messages_py.dir/clean
+.PHONY : rectbot_cv/CMakeFiles/vision_msgs_generate_messages_py.dir/clean
+
+# clean rule for target.
+clean: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_py.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir
+
+# All Build rule for target.
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_wing_controller/CMakeFiles/std_msgs_generate_messages_eus.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_wing_controller/CMakeFiles/std_msgs_generate_messages_cpp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_wing_controller/CMakeFiles/std_msgs_generate_messages_lisp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_wing_controller/CMakeFiles/std_msgs_generate_messages_nodejs.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_wing_controller/CMakeFiles/std_msgs_generate_messages_py.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_teleop/CMakeFiles/geometry_msgs_generate_messages_eus.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_teleop/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_teleop/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_teleop/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_teleop/CMakeFiles/geometry_msgs_generate_messages_py.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_hardware_interface/CMakeFiles/roscpp_generate_messages_py.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_hardware_interface/CMakeFiles/roscpp_generate_messages_nodejs.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_hardware_interface/CMakeFiles/roscpp_generate_messages_eus.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_hardware_interface/CMakeFiles/roscpp_generate_messages_lisp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_hardware_interface/CMakeFiles/sensor_msgs_generate_messages_py.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_hardware_interface/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_hardware_interface/CMakeFiles/roscpp_generate_messages_cpp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_hardware_interface/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_hardware_interface/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_hardware_interface/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_hardware_interface/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_hardware_interface/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_hardware_interface/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_hardware_interface/CMakeFiles/sensor_msgs_generate_messages_eus.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_hardware_interface/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: hardware_node/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: hardware_node/CMakeFiles/actionlib_msgs_generate_messages_lisp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: hardware_node/CMakeFiles/actionlib_msgs_generate_messages_eus.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: hardware_node/CMakeFiles/actionlib_generate_messages_py.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: hardware_node/CMakeFiles/actionlib_msgs_generate_messages_nodejs.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: hardware_node/CMakeFiles/tf_generate_messages_py.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: hardware_node/CMakeFiles/actionlib_generate_messages_eus.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: hardware_node/CMakeFiles/tf_generate_messages_eus.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: hardware_node/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: hardware_node/CMakeFiles/actionlib_generate_messages_cpp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: hardware_node/CMakeFiles/tf_generate_messages_cpp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: hardware_node/CMakeFiles/actionlib_msgs_generate_messages_py.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: hardware_node/CMakeFiles/tf_generate_messages_lisp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: hardware_node/CMakeFiles/tf2_msgs_generate_messages_eus.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: hardware_node/CMakeFiles/tf_generate_messages_nodejs.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: hardware_node/CMakeFiles/tf2_msgs_generate_messages_nodejs.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: hardware_node/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: hardware_node/CMakeFiles/tf2_msgs_generate_messages_py.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: hardware_node/CMakeFiles/actionlib_generate_messages_lisp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: hardware_node/CMakeFiles/actionlib_generate_messages_nodejs.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_lisp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_cpp.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_nodejs.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_eus.dir/all
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all: rectbot_cv/CMakeFiles/vision_msgs_generate_messages_py.dir/all
+	$(MAKE) -f rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/build.make rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/depend
+	$(MAKE) -f rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/build.make rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/arar/Documents/rectbot_ws/build/CMakeFiles --progress-num=16,17,18 "Built target rectbot_object_detection_node"
+.PHONY : rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all
+
+# Include target in all.
+all: rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/arar/Documents/rectbot_ws/build/CMakeFiles 3
+	$(MAKE) -f CMakeFiles/Makefile2 rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/arar/Documents/rectbot_ws/build/CMakeFiles 0
+.PHONY : rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/rule
+
+# Convenience name for target.
+rectbot_object_detection_node: rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/rule
+
+.PHONY : rectbot_object_detection_node
+
+# clean rule for target.
+rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/clean:
+	$(MAKE) -f rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/build.make rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/clean
+.PHONY : rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/clean
+
+# clean rule for target.
+clean: rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
 # Special targets to cleanup operation of make.
 
 # Special rule to run CMake to check the build system integrity.

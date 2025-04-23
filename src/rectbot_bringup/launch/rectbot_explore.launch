@@ -1,0 +1,5 @@
+<launch>
+    <!-- <include file="$(find rectbot_bringup)/launch/rectbot_bringup.launch" /> -->
+    <include file="$(find rectbot_slam)/launch/rectbot_cartographer.launch" />
+    <include file="$(find rectbot_navigation)/launch/move_base.launch" />
+</launch>

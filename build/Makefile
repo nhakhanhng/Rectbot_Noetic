@@ -1389,6 +1389,97 @@ gazebo_msgs_generate_messages_py/fast:
 	$(MAKE) -f rectbot_gazebo/CMakeFiles/gazebo_msgs_generate_messages_py.dir/build.make rectbot_gazebo/CMakeFiles/gazebo_msgs_generate_messages_py.dir/build
 .PHONY : gazebo_msgs_generate_messages_py/fast
 
+#=============================================================================
+# Target rules for targets named vision_msgs_generate_messages_lisp
+
+# Build rule for target.
+vision_msgs_generate_messages_lisp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 vision_msgs_generate_messages_lisp
+.PHONY : vision_msgs_generate_messages_lisp
+
+# fast build rule for target.
+vision_msgs_generate_messages_lisp/fast:
+	$(MAKE) -f rectbot_cv/CMakeFiles/vision_msgs_generate_messages_lisp.dir/build.make rectbot_cv/CMakeFiles/vision_msgs_generate_messages_lisp.dir/build
+.PHONY : vision_msgs_generate_messages_lisp/fast
+
+#=============================================================================
+# Target rules for targets named vision_msgs_generate_messages_cpp
+
+# Build rule for target.
+vision_msgs_generate_messages_cpp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 vision_msgs_generate_messages_cpp
+.PHONY : vision_msgs_generate_messages_cpp
+
+# fast build rule for target.
+vision_msgs_generate_messages_cpp/fast:
+	$(MAKE) -f rectbot_cv/CMakeFiles/vision_msgs_generate_messages_cpp.dir/build.make rectbot_cv/CMakeFiles/vision_msgs_generate_messages_cpp.dir/build
+.PHONY : vision_msgs_generate_messages_cpp/fast
+
+#=============================================================================
+# Target rules for targets named vision_msgs_generate_messages_nodejs
+
+# Build rule for target.
+vision_msgs_generate_messages_nodejs: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 vision_msgs_generate_messages_nodejs
+.PHONY : vision_msgs_generate_messages_nodejs
+
+# fast build rule for target.
+vision_msgs_generate_messages_nodejs/fast:
+	$(MAKE) -f rectbot_cv/CMakeFiles/vision_msgs_generate_messages_nodejs.dir/build.make rectbot_cv/CMakeFiles/vision_msgs_generate_messages_nodejs.dir/build
+.PHONY : vision_msgs_generate_messages_nodejs/fast
+
+#=============================================================================
+# Target rules for targets named rectbot_object_mapping_node
+
+# Build rule for target.
+rectbot_object_mapping_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rectbot_object_mapping_node
+.PHONY : rectbot_object_mapping_node
+
+# fast build rule for target.
+rectbot_object_mapping_node/fast:
+	$(MAKE) -f rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/build.make rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/build
+.PHONY : rectbot_object_mapping_node/fast
+
+#=============================================================================
+# Target rules for targets named vision_msgs_generate_messages_eus
+
+# Build rule for target.
+vision_msgs_generate_messages_eus: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 vision_msgs_generate_messages_eus
+.PHONY : vision_msgs_generate_messages_eus
+
+# fast build rule for target.
+vision_msgs_generate_messages_eus/fast:
+	$(MAKE) -f rectbot_cv/CMakeFiles/vision_msgs_generate_messages_eus.dir/build.make rectbot_cv/CMakeFiles/vision_msgs_generate_messages_eus.dir/build
+.PHONY : vision_msgs_generate_messages_eus/fast
+
+#=============================================================================
+# Target rules for targets named vision_msgs_generate_messages_py
+
+# Build rule for target.
+vision_msgs_generate_messages_py: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 vision_msgs_generate_messages_py
+.PHONY : vision_msgs_generate_messages_py
+
+# fast build rule for target.
+vision_msgs_generate_messages_py/fast:
+	$(MAKE) -f rectbot_cv/CMakeFiles/vision_msgs_generate_messages_py.dir/build.make rectbot_cv/CMakeFiles/vision_msgs_generate_messages_py.dir/build
+.PHONY : vision_msgs_generate_messages_py/fast
+
+#=============================================================================
+# Target rules for targets named rectbot_object_detection_node
+
+# Build rule for target.
+rectbot_object_detection_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rectbot_object_detection_node
+.PHONY : rectbot_object_detection_node
+
+# fast build rule for target.
+rectbot_object_detection_node/fast:
+	$(MAKE) -f rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/build.make rectbot_cv/CMakeFiles/rectbot_object_detection_node.dir/build
+.PHONY : rectbot_object_detection_node/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -1496,6 +1587,13 @@ help:
 	@echo "... gazebo_msgs_generate_messages_lisp"
 	@echo "... gazebo_msgs_generate_messages_nodejs"
 	@echo "... gazebo_msgs_generate_messages_py"
+	@echo "... vision_msgs_generate_messages_lisp"
+	@echo "... vision_msgs_generate_messages_cpp"
+	@echo "... vision_msgs_generate_messages_nodejs"
+	@echo "... rectbot_object_mapping_node"
+	@echo "... vision_msgs_generate_messages_eus"
+	@echo "... vision_msgs_generate_messages_py"
+	@echo "... rectbot_object_detection_node"
 .PHONY : help
 
 
