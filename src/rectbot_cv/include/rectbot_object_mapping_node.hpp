@@ -29,8 +29,30 @@
 // Include the message type for your object detection
 // Example: #include <vision_msgs/Detection2DArray.h>
 // Adjust this according to what object detection system you're using
+#include "rectbot_cv/PoseObject.h"
+#include "rectbot_cv/PoseObjectArray.h"
+
+
 #include <vision_msgs/Detection2DArray.h>
 #include <vision_msgs/Detection3DArray.h>
+
+
+#include "BYTETracker.h"
+
+struct BodyPart
+{
+    bool head = false;
+    bool body = false;
+    bool arm = false;
+    bool leg = false;
+};
+
+struct PoseObjectPosition {
+    int track_id;
+    float score;
+    geometry_msgs::Point position;
+    BodyPart body_part;
+};
 
 class RectbotObjectMapper
 {
@@ -40,7 +62,7 @@ class RectbotObjectMapper
         void loadParameters();
         void depthImageCallback(const sensor_msgs::ImageConstPtr& msg);
         void depth2colorAlignedCallback(const sensor_msgs::ImageConstPtr& msg);
-        void detectionCallback(const vision_msgs::Detection2DArrayConstPtr& msg);
+        void detectionCallback(const rectbot_cv::PoseObjectArrayConstPtr& msg);
         void depthImageInfoCallback(const sensor_msgs::CameraInfoConstPtr& msg);
         void colorImageInfoCallback(const sensor_msgs::CameraInfoConstPtr& msg);
         void depth2colorAlignedInfoCallback(const sensor_msgs::CameraInfoConstPtr& msg);
@@ -52,7 +74,7 @@ class RectbotObjectMapper
         void logCalibrationMatrix();
         void publishMarkers();
         void publishTransform();
-        bool isOldObject(geometry_msgs::PointStamped position,int label_id, int &obj_idx);
+        bool isOldObject(geometry_msgs::PointStamped position,int track_id, int &obj_idx);
 
 
     private:
@@ -69,7 +91,7 @@ class RectbotObjectMapper
         image_geometry::PinholeCameraModel depth_camera_model_;
         image_geometry::PinholeCameraModel color_camera_model_;
         image_geometry::PinholeCameraModel depth2color_aligned_camera_model_;
-        std::vector<vision_msgs::Detection2D> detections_msg_;
+        std::vector<rectbot_cv::PoseObject> detections_msg_;
         sensor_msgs::ImageConstPtr depth_image_msg_;
         sensor_msgs::ImageConstPtr depth2color_aligned_image_msg_;
         sensor_msgs::CameraInfoConstPtr depth_info_;
@@ -99,7 +121,9 @@ class RectbotObjectMapper
         tf2_ros::Buffer tf_buffer_;
         tf2_ros::TransformListener tf_listener_;
 
-        std::vector<vision_msgs::ObjectHypothesisWithPose> objects_positions_;
+        std::vector<PoseObjectPosition> objects_positions_;
+        //ByteTrack
+        bytetrack_cpp::BYTETracker tracker_;
         // std::vector<vision_msgs::Detection3D> objects_positions_3d_;
         int markers_id_;
 };

@@ -1,0 +1,57 @@
+#!/usr/bin/env python2
+
+import rospy
+import serial
+from std_msgs.msg import Float32
+
+def read_angle_from_serial(port, baudrate):
+    try:
+        ser = serial.Serial(port, baudrate, timeout=1)
+        # rospy.loginfo("Serial port opened successfully.")
+        print "Serial port opened successfully."
+        return ser
+    except serial.SerialException as e:
+        # rospy.logerr(f"Failed to open serial port")
+        print "Failed to open serial port: {}".format(e)
+        return None
+
+def mic_array_node():
+    rospy.init_node('mic_array')
+    port = rospy.get_param('~port', '/dev/k210')
+    baudrate = rospy.get_param('~baudrate', 115200)
+    pub = rospy.Publisher('sound_direction', Float32, queue_size=10)
+
+    ser = read_angle_from_serial(port, baudrate)
+    if not ser:
+        rospy.signal_shutdown("Failed to open serial port.")
+        return
+
+    # rate = rospy.Rate(1)  # 10 Hz
+    while not rospy.is_shutdown():
+        try:
+            if ser.in_waiting > 0:
+                # angle = 0.0
+                line = ser.readline().decode('utf-8').strip()
+                data_parts = line.split(';')
+                if len(data_parts) > 0:
+                    line = data_parts[0] 
+                angle = (float(line) - 180.0) % 360.0
+                angle = (angle - 360.0) if angle > 180.0 else angle
+                angle = -angle
+                # angle = angle * (3.141592653589793 / 180.0)  # Convert degrees to radians
+                # rospy.loginfo("Angle: {}".format(angle))
+                pub.publish(angle)
+        except ValueError:
+            rospy.logwarn("Received invalid data from serial.")
+        except serial.SerialException as e:
+            rospy.logerr("Serial error: {}".format(e))
+            break
+        # rate.sleep()
+
+    ser.close()
+
+if __name__ == '__main__':
+    try:
+        mic_array_node()
+    except rospy.ROSInterruptException:
+        pass

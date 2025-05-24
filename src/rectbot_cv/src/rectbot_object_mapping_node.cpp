@@ -6,7 +6,7 @@
 
 
 RectbotObjectMapper::RectbotObjectMapper():
-    tf_listener_(tf_buffer_)
+    tf_listener_(tf_buffer_),tracker_()
 {
     loadParameters();
     // Print all loaded parameters
@@ -94,11 +94,11 @@ void RectbotObjectMapper::depth2colorAlignedInfoCallback(const sensor_msgs::Came
 }
 
 
-void RectbotObjectMapper::detectionCallback(const vision_msgs::Detection2DArrayConstPtr& msg)
+void RectbotObjectMapper::detectionCallback(const rectbot_cv::PoseObjectArrayConstPtr& msg)
 {
-    detections_msg_ = msg->detections;
+    detections_msg_ = msg->objects;
     // processDetections();
-    ROS_INFO("Received %zu detections", detections_msg_.size());
+    // ROS_INFO("Received %zu detections", detections_msg_.size());
     processD2CAligned();
 }
 
@@ -333,29 +333,29 @@ void RectbotObjectMapper::processDetections()
     }
 }
 
-bool RectbotObjectMapper::isOldObject(geometry_msgs::PointStamped position,int label_id, int &obj_idx) 
+bool RectbotObjectMapper::isOldObject(geometry_msgs::PointStamped position,int track_id, int &obj_idx) 
 {
-    // Check if the object is old
-    obj_idx = -1;
-    for (int i = 0; i < objects_positions_.size(); i++) {
-        vision_msgs::ObjectHypothesisWithPose obj = objects_positions_[i];
-        if (obj.id == label_id) {
-            // Calculate Euclidean distance between detection centers
-            float dx = position.point.x - obj.pose.pose.position.x;
-            float dy = position.point.y - obj.pose.pose.position.y;
-            float dz = position.point.z - obj.pose.pose.position.z;
+    // // Check if the object is old
+    // obj_idx = -1;
+    // for (int i = 0; i < objects_positions_.size(); i++) {
+    //     vision_msgs::ObjectHypothesisWithPose obj = objects_positions_[i];
+    //     if (obj.id == track_id) {
+    //         // Calculate Euclidean distance between detection centers
+    //         // float dx = position.point.x - obj.pose.pose.position.x;
+    //         // float dy = position.point.y - obj.pose.pose.position.y;
+    //         // float dz = position.point.z - obj.pose.pose.position.z;
 
-            float distance = std::sqrt(dx*dx + dy*dy + dz*dz);
-            ROS_INFO("Distance: %f", distance);
-            // If the distance is below a threshold, consider it the same object
+    //         // float distance = std::sqrt(dx*dx + dy*dy + dz*dz);
+    //         // ROS_INFO("Distance: %f", distance);
+    //         // // If the distance is below a threshold, consider it the same object
 
-            float distance_threshold = 0.1f;  // Pixel distance threshold, adjust as needed
-            if (distance < distance_threshold) {
-                obj_idx = i;
-                return true;
-            }
-        }
-    }
+    //         // float distance_threshold = 0.1f;  // Pixel distance threshold, adjust as needed
+    //         // if (distance < distance_threshold) {
+    //             obj_idx = i;
+    //             return true;
+    //         // }
+    //     }
+    // }
     return false;
 }
 
@@ -378,13 +378,14 @@ void RectbotObjectMapper::publishMarkers() {
     m.lifetime = ros::Duration(0);
     m.frame_locked = true;
     int new_id = 0;
+    ROS_INFO("Object size: %d",objects_positions_.size());
     for (auto &obj : objects_positions_) {
         m.id = new_id++;
         m.type = visualization_msgs::Marker::CUBE;
         m.action = visualization_msgs::Marker::ADD;
-        m.pose.position.x = obj.pose.pose.position.x;
-        m.pose.position.y = obj.pose.pose.position.y;
-        m.pose.position.z = obj.pose.pose.position.z;
+        m.pose.position.x = obj.position.x;
+        m.pose.position.y = obj.position.y;
+        m.pose.position.z = obj.position.z;
         m.pose.orientation.x = 0;
         m.pose.orientation.y = 0;
         m.pose.orientation.z = 0;
@@ -415,9 +416,9 @@ void RectbotObjectMapper::publishTransform()
         
     
         //publish object tf
-        transformStamped.transform.translation.x = obj.pose.pose.position.x;
-        transformStamped.transform.translation.y = obj.pose.pose.position.y;
-        transformStamped.transform.translation.z = obj.pose.pose.position.z;
+        transformStamped.transform.translation.x = obj.position.x;
+        transformStamped.transform.translation.y = obj.position.y;
+        transformStamped.transform.translation.z = obj.position.z;
         transformStamped.transform.rotation.x = 0.0;    
         transformStamped.transform.rotation.y = 0.0;
         transformStamped.transform.rotation.z = 0.0;
@@ -467,18 +468,44 @@ void RectbotObjectMapper::processD2CAligned()
     // Now we can process the detections with the extrinsic matrix
     int new_id = 0;
     float center_point[3] = {0};
+
+
+    //Bytetrack all detected object
+    std::vector<bytetrack_cpp::Object> bytetrack_objects;
     for (auto det : detections_msg_) {
+        bytetrack_cpp::Object obj;
+        obj.label = det.detection.results[0].id;
+        obj.rect = cv::Rect(det.detection.bbox.center.x - det.detection.bbox.size_x/2, det.detection.bbox.center.y - det.detection.bbox.size_y/2, det.detection.bbox.size_x, det.detection.bbox.size_y);
+        obj.prob = det.detection.results[0].score;
+        for (auto & kp : det.keypoints) {
+            bytetrack_cpp::KeyPoint kpt;
+            kpt.x = kp.x.data;
+            kpt.y = kp.y.data;
+            kpt.score = kp.score.data;
+            obj.keypoints.push_back(kpt);
+        }
+        bytetrack_objects.push_back(obj);
+    }
+
+    const std::vector<bytetrack_cpp::STrack> output_track_objs = tracker_.update(bytetrack_objects);
+    ROS_INFO("Detect objects: %ld, Output Tracker: %ld\r\n", bytetrack_objects.size(),
+            output_track_objs.size());
+    objects_positions_.clear();
+
+    for (auto obj : output_track_objs) {
         int obj_idx = -1;
-        float depth_value = depth2color_image.at<uint16_t>(det.bbox.center.y, det.bbox.center.x);
-        float depth_pixel[2] = {det.bbox.center.x, det.bbox.center.y};
+        float depth_pixel[2] = {obj.tlwh[0] + obj.tlwh[2]/2, obj.tlwh[1] + obj.tlwh[3]/2};
+        printf("Depth pixel: %f,%f\r\n",depth_pixel[0],depth_pixel[1]);
+        float depth_value = depth2color_image.at<uint16_t>(depth_pixel[1],depth_pixel[0]);
         rs2_deproject_pixel_to_point(center_point, &color_intrinsics_ ,depth_pixel, depth_value * 0.001f);
-        // Create a TransformBroadcaster instance
-        geometry_msgs::TransformStamped transform;
+        // printf("Center point: %f,%f,%f\r\n",center_point[0],center_point[1],center_point[2]);
+        // Transform the point
+         geometry_msgs::TransformStamped transform;
         try {
             transform = tf_buffer_.lookupTransform(
                 "map",           // Target frame
                 depth2color_aligned_frame_id_,           // Source frame
-                det.header.stamp// Get the latest transform
+                detections_msg_[0].detection.header.stamp// Get the latest transform
         );
         }
             catch (tf2::TransformException &ex) {
@@ -486,50 +513,71 @@ void RectbotObjectMapper::processD2CAligned()
             ros::Duration(1.0).sleep();
             continue;
         }
-        // ROS_INFO("Before transform: %f,%f",center_point[2],-center_point[0]);
-        // Transform the point
+
         geometry_msgs::PointStamped point_in_cam_link;
         point_in_cam_link.header.frame_id = depth2color_aligned_frame_id_;
-        point_in_cam_link.header.stamp = det.header.stamp;
+        point_in_cam_link.header.stamp = detections_msg_[0].detection.header.stamp;
 
         point_in_cam_link.point.x = center_point[2];
         point_in_cam_link.point.y = -center_point[0];
         point_in_cam_link.point.z = -center_point[1];
         geometry_msgs::PointStamped point_in_map;
-        float bbox_area_in_pix = det.bbox.size_x * det.bbox.size_y;
+        // float bbox_area_in_pix = det.detection.bbox.size_x * det.bbox.size_y;
         tf2::doTransform(point_in_cam_link, point_in_map, transform);
         point_in_map.header.frame_id = "map";
-        // det.header.stamp = point_in_cam_link.header.stamp;
-        // det.header.frame_id = point_in_map.header.frame_id;
-        // det.bbox.center.x = point_in_map.point.x;
-        // det.bbox.center.y = point_in_map.point.y;
-
-        // ROS_INFO("Header of det: %s",det.header.frame_id);
-        ROS_INFO("Center position of point: %f,%f",det.bbox.center.x,det.bbox.center.y);
-        
-        // ROS_INFO("Updated object position: %d", det.results[0].id);
-        if (isOldObject(point_in_map,det.results[0].id, obj_idx)) {
-            // ROS_INFO("Old object detected: %d", det.results[0].id);
-            // Create a marker for the object
-            // if (point_in_cam_link.point.x <= objects_positions_[obj_idx].bbox.center.x/2) {
-                // objects_positions_[obj_idx].header.stamp = det.header.stamp;
-                objects_positions_[obj_idx].pose.pose.position.x = point_in_map.point.x;
-                objects_positions_[obj_idx].pose.pose.position.y = point_in_map.point.y;
-                objects_positions_[obj_idx].pose.pose.position.z = point_in_map.point.z;
-            // }
-            continue;
-        }
+        printf("Point in map: %f,%f,%f\r\n",point_in_map.point.x,point_in_map.point.y,point_in_map.point.z);
         // Create a marker for the object
-        ROS_INFO("New object detected: %d", det.results[0].id);
-        vision_msgs::ObjectHypothesisWithPose new_obj;
+        // ROS_INFO("New object detected: %d", det.results[0].id);
+        PoseObjectPosition new_obj;
         // new_obj.header = det.header;
         // new_obj.pose.header = det.header;
-        new_obj.id = det.results[0].id;
-        new_obj.score = det.results[0].score;
-        new_obj.pose.pose.position.x = point_in_map.point.x;
-        new_obj.pose.pose.position.y = point_in_map.point.y;
-        new_obj.pose.pose.position.z = point_in_map.point.z;
+        new_obj.track_id = obj.track_id;
+        new_obj.score = obj.score;
+        new_obj.position.x = point_in_map.point.x;
+        new_obj.position.y = point_in_map.point.y;
+        new_obj.position.z = point_in_map.point.z;
+        // Get indices of keypoints with score above a threshold
+        std::vector<int> high_score_keypoints_indices;
+        float score_threshold = 0.7; // Adjust the threshold as needed
+        for (size_t i = 0; i < obj.keypoints.size(); ++i) {
+            if (obj.keypoints[i].score > score_threshold) {
+            // high_score_keypoints_indices.push_back(i);
+            if (i > 4) {
+                if (i > 10) {
+                    if (i >12) {
+                        new_obj.body_part.leg = true;
+                    }
+                    else {
+                        new_obj.body_part.body = true;
+                    }
+                }
+                else {
+                    new_obj.body_part.arm = true;
+                }
+            }
+            else {
+                new_obj.body_part.head = true;
+            }
+            }
+        }
         objects_positions_.push_back(new_obj);
+    }
+    for (const auto& obj : objects_positions_) {
+        ROS_INFO("Object ID: %d", obj.track_id);
+        ROS_INFO("Position: x=%.2f, y=%.2f, z=%.2f", obj.position.x, obj.position.y, obj.position.z);
+        ROS_INFO("Body Parts:");
+        if (obj.body_part.head) {
+            ROS_INFO(" - Head");
+        }
+        if (obj.body_part.arm) {
+            ROS_INFO(" - Arm");
+        }
+        if (obj.body_part.body) {
+            ROS_INFO(" - Body");
+        }
+        if (obj.body_part.leg) {
+            ROS_INFO(" - Leg");
+        }
     }
     publishMarkers();
     // publishTransform();

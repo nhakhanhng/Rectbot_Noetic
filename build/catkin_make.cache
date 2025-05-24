@@ -1,2 +1,2 @@
-hardware_node:rectbot_bridge:rectbot_bringup:rectbot_cv:rectbot_description:rectbot_gazebo:rectbot_hardware_interface:rectbot_navigation:rectbot_slam:rectbot_teleop:rectbot_wing_controller:roboclaw_node
+hardware_node:rectbot_bridge:rectbot_bringup:rectbot_cv:rectbot_description:rectbot_gazebo:rectbot_hardware_interface:rectbot_navigation:rectbot_slam:rectbot_sound:rectbot_teleop:rectbot_wing_controller:roboclaw_node
 -DCATKIN_DEVEL_PREFIX=/home/arar/Documents/rectbot_ws/devel -DCMAKE_INSTALL_PREFIX=/home/arar/Documents/rectbot_ws/install -G Unix Makefiles

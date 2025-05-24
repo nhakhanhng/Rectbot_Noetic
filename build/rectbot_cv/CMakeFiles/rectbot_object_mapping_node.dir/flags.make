@@ -6,5 +6,5 @@ CXX_FLAGS =  -std=c++14 -O3 -O3 -DNDEBUG   -std=gnu++14
 
 CXX_DEFINES = -DOPENCV_TRAITS_ENABLE_DEPRECATED -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\"rectbot_cv\"
 
-CXX_INCLUDES = -I/home/arar/Documents/rectbot_ws/src/rectbot_cv/include -I/home/arar/Documents/catkin_ws/src/vision_opencv/cv_bridge/include -I/home/arar/Documents/catkin_ws/src/vision_opencv/image_geometry/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -isystem /usr/local/include -isystem /usr/local/include/opencv -I/usr/local/cuda/include -I/usr/include/aarch-linux-gnu 
+CXX_INCLUDES = -I/home/arar/Documents/rectbot_ws/devel/include -I/home/arar/Documents/rectbot_ws/src/rectbot_cv/include -I/home/arar/Documents/rectbot_ws/src/rectbot_cv/components/ByteTrack/include -I/home/arar/Documents/catkin_ws/src/vision_opencv/cv_bridge/include -I/home/arar/Documents/catkin_ws/src/vision_opencv/image_geometry/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -isystem /usr/local/include -isystem /usr/local/include/opencv -I/usr/local/cuda/include -I/usr/include/aarch-linux-gnu -I/usr/local/include/eigen3 
 

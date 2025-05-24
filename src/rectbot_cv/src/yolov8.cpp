@@ -26,16 +26,14 @@ YOLOv8::YOLOv8(const std::string& engine_file_path)
 {
     std::ifstream file(engine_file_path, std::ios::binary);
     assert(file.good());
-    printf("File found\r\n");
     file.seekg(0, std::ios::end);
     auto size = file.tellg();
     file.seekg(0, std::ios::beg);
-    printf("SIZE: %d\r\n", size);
+    std::cout << "SIze: " << size << std::endl;
     char* trtModelStream = new char[size];
     assert(trtModelStream);
     file.read(trtModelStream, size);
     file.close();
-    printf("Close file\r\n");
     initLibNvInferPlugins(&this->gLogger, "");
     this->runtime = nvinfer1::createInferRuntime(this->gLogger);
     assert(this->runtime != nullptr);
@@ -48,7 +46,7 @@ YOLOv8::YOLOv8(const std::string& engine_file_path)
     assert(this->context != nullptr);
     cudaStreamCreate(&this->stream);
     this->num_bindings = this->engine->getNbBindings();
-    printf("Create stream\r\n");
+
     for (int i = 0; i < this->num_bindings; ++i) {
         Binding            binding;
         nvinfer1::Dims     dims;
@@ -211,7 +209,7 @@ void YOLOv8::Infer()
     cudaStreamSynchronize(this->stream);
 }
 //----------------------------------------------------------------------------------------
-void YOLOv8::PostProcess(std::vector<Object>& objs, float score_thres, float iou_thres, int topk, int num_labels)
+void YOLOv8::PostProcessDetect(std::vector<Object>& objs, float score_thres, float iou_thres, int topk, int num_labels)
 {
     objs.clear();
     auto num_channels = this->output_bindings[0].dims.d[1];
@@ -256,7 +254,7 @@ void YOLOv8::PostProcess(std::vector<Object>& objs, float score_thres, float iou
 
             bboxes.push_back(bbox);
             labels.push_back(label);
-            // scores.push_back(score);
+            scores.push_back(score);
         }
     }
 
@@ -273,8 +271,93 @@ void YOLOv8::PostProcess(std::vector<Object>& objs, float score_thres, float iou
         }
         Object obj;
         obj.rect  = bboxes[i];
-        // obj.prob  = scores[i];
+        obj.prob  = scores[i];
         obj.label = labels[i];
+        objs.push_back(obj);
+        cnt += 1;
+    }
+}
+
+void YOLOv8::PostProcessPose(std::vector<PoseObject>& objs, float score_thres, float iou_thres, int topk, int num_labels)
+{
+    objs.clear();
+    auto num_channels = this->output_bindings[0].dims.d[1];
+    auto num_anchors  = this->output_bindings[0].dims.d[2];
+
+    auto& dw     = this->pparam.dw;
+    auto& dh     = this->pparam.dh;
+    auto& width  = this->pparam.width;
+    auto& height = this->pparam.height;
+    auto& ratio  = this->pparam.ratio;
+
+    std::vector<cv::Rect> bboxes;
+    std::vector<float>    scores;
+    std::vector<int>      labels;
+    std::vector<std::vector<det::KeyPoint>> keypoint_poses;
+    std::vector<int>      indices;
+
+    cv::Mat output = cv::Mat(num_channels, num_anchors, CV_32F, static_cast<float*>(this->host_ptrs[0]));
+    output         = output.t();
+    for (int i = 0; i < num_anchors; i++) {
+        auto  row_ptr    = output.row(i).ptr<float>();
+        auto  bboxes_ptr = row_ptr;
+        auto  scores_ptr = row_ptr + 4;
+        auto    kps_ptr = row_ptr + 5;
+        // auto  max_s_ptr  = std::max_element(scores_ptr, scores_ptr + num_labels);
+        float score      = *scores_ptr;
+        if (score > score_thres) {
+            float x = *bboxes_ptr++ - dw;
+            float y = *bboxes_ptr++ - dh;
+            float w = *bboxes_ptr++;
+            float h = *bboxes_ptr;
+
+            float x0 = clamp((x - 0.5f * w) * ratio, 0.f, width);
+            float y0 = clamp((y - 0.5f * h) * ratio, 0.f, height);
+            float x1 = clamp((x + 0.5f * w) * ratio, 0.f, width);
+            float y1 = clamp((y + 0.5f * h) * ratio, 0.f, height);
+
+            int              label = 0; //person
+            cv::Rect_<float> bbox;
+            bbox.x      = x0;
+            bbox.y      = y0;
+            bbox.width  = x1 - x0;
+            bbox.height = y1 - y0;
+
+            std::vector<det::KeyPoint> keypoints;
+
+            for (int k = 0;k < this->numKPs; k++) {
+                float KPx = (*(kps_ptr + k * 3) - dw) * ratio;
+                float KPy = (*(kps_ptr + k * 3 + 1) - dh) * ratio;
+                float KPs = *(kps_ptr + k * 3 + 2);
+                KPx = clamp(KPx, 0.f, width);
+                KPy = clamp(KPy, 0.f, height);
+                det::KeyPoint kp = {KPx, KPy, KPs};
+                keypoints.push_back(kp);
+            }
+
+            bboxes.push_back(bbox);
+            labels.push_back(label);
+            scores.push_back(score);
+            keypoint_poses.push_back(keypoints);
+        }
+    }
+
+#ifdef BATCHED_NMS
+    cv::dnn::NMSBoxesBatched(bboxes, scores, labels, score_thres, iou_thres, indices);
+#else
+    cv::dnn::NMSBoxes(bboxes, scores, score_thres, iou_thres, indices);
+#endif
+
+    int cnt = 0;
+    for (auto& i : indices) {
+        if (cnt >= topk) {
+            break;
+        }
+        PoseObject obj;
+        obj.rect  = bboxes[i];
+        obj.prob  = scores[i];
+        obj.label = 0;
+        obj.keypoints = keypoint_poses[i];
         objs.push_back(obj);
         cnt += 1;
     }
@@ -287,7 +370,7 @@ void YOLOv8::DrawObjects(cv::Mat& bgr, const std::vector<Object>& objs)
     for (auto& obj : objs) {
         cv::rectangle(bgr, obj.rect, cv::Scalar(255, 0, 0));
 
-        sprintf(text, "%s ", class_names[obj.label]);
+        sprintf(text, "%s:%d %.1f%%", class_names[obj.label],obj.id, obj.prob * 100);
 
         int      baseLine   = 0;
         cv::Size label_size = cv::getTextSize(text, cv::FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseLine);
@@ -301,7 +384,61 @@ void YOLOv8::DrawObjects(cv::Mat& bgr, const std::vector<Object>& objs)
 
         cv::rectangle(bgr, cv::Rect(cv::Point(x, y), cv::Size(label_size.width, label_size.height + baseLine)), cv::Scalar(255, 255, 255), -1);
 
-        // cv::putText(bgr, text, cv::Point(x, y + label_size.height), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 0));
+        cv::putText(bgr, text, cv::Point(x, y + label_size.height), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 0));
+    }
+}
+//----------------------------------------------------------------------------------------
+
+
+void YOLOv8::DrawPoseObjects(cv::Mat& bgr, const std::vector<PoseObject>& objs,float kps_thres)
+{
+    char text[256];
+    // printf("DrawPoseObjects\n");
+
+    for (auto& obj : objs) {
+        cv::rectangle(bgr, obj.rect, cv::Scalar(255, 0, 0));
+
+        sprintf(text, "%s:%d %.1f%%", class_names[obj.label],obj.id, obj.prob * 100);
+        // printf("Text: %s\n", text);
+
+        int      baseLine   = 0;
+        cv::Size label_size = cv::getTextSize(text, cv::FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseLine);
+
+        int x = (int)obj.rect.x;
+        int y = (int)obj.rect.y - label_size.height - baseLine;
+
+        if (y < 0)        y = 0;
+        if (y > bgr.rows) y = bgr.rows;
+        if (x + label_size.width > bgr.cols) x = bgr.cols - label_size.width;
+
+        cv::rectangle(bgr, cv::Rect(cv::Point(x, y), cv::Size(label_size.width, label_size.height + baseLine)), cv::Scalar(255, 255, 255), -1);
+
+        cv::putText(bgr, text, cv::Point(x, y + label_size.height), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 0));
+        
+        for (int k = 0;k < this->numKPs + 2;k++) {
+            if (k < this->numKPs) {
+                if (obj.keypoints[k].score > kps_thres) {
+                    cv::Scalar kpsColor = cv::Scalar(KPS_COLORS[k][0], KPS_COLORS[k][1], KPS_COLORS[k][2]);
+                    cv::circle(bgr, cv::Point(obj.keypoints[k].x,obj.keypoints[k].y), 5, kpsColor, -1);
+                }
+
+                auto &ske = SKELETON[k];
+                int pos1X = std::round(obj.keypoints[(ske[0] - 1)].x);
+                int pos1Y = std::round(obj.keypoints[(ske[0] - 1)].y);
+
+                int pos2X = std::round(obj.keypoints[(ske[1] - 1)].x);
+                int pos2Y = std::round(obj.keypoints[(ske[1] - 1)].y);
+
+                float pos1S = obj.keypoints[(ske[0] - 1)].score;
+                float pos2S = obj.keypoints[(ske[1] - 1)].score;
+
+                if (pos1S > kps_thres && pos2S > kps_thres) {
+                    cv::Scalar limbColor = cv::Scalar(LIMB_COLORS[k][0], LIMB_COLORS[k][1], LIMB_COLORS[k][2]);
+                    cv::line(bgr, {pos1X, pos1Y}, {pos2X, pos2Y}, limbColor, 2);
+                }
+            }
+        }
+
     }
 }
 //----------------------------------------------------------------------------------------

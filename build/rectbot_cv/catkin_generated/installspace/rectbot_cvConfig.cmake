@@ -177,7 +177,7 @@ foreach(library ${libraries})
   endif()
 endforeach()
 
-set(rectbot_cv_EXPORTED_TARGETS "")
+set(rectbot_cv_EXPORTED_TARGETS "rectbot_cv_generate_messages_cpp;rectbot_cv_generate_messages_eus;rectbot_cv_generate_messages_lisp;rectbot_cv_generate_messages_nodejs;rectbot_cv_generate_messages_py")
 # create dummy targets for exported code generation targets to make life of users easier
 foreach(t ${rectbot_cv_EXPORTED_TARGETS})
   if(NOT TARGET ${t})
@@ -185,7 +185,7 @@ foreach(t ${rectbot_cv_EXPORTED_TARGETS})
   endif()
 endforeach()
 
-set(depends "roscpp;std_msgs;sensor_msgs;cv_bridge;image_transport;vision_msgs;visualization_msgs;image_geometry;geometry_msgs;tf;tf2;tf2_ros")
+set(depends "roscpp;std_msgs;sensor_msgs;cv_bridge;image_transport;vision_msgs;visualization_msgs;image_geometry;geometry_msgs;tf;tf2;tf2_ros;message_runtime")
 foreach(depend ${depends})
   string(REPLACE " " ";" depend_list ${depend})
   # the package name of the dependency must be kept in a unique variable so that it is not overwritten in recursive calls
@@ -214,7 +214,7 @@ foreach(depend ${depends})
   list(APPEND rectbot_cv_EXPORTED_TARGETS ${${rectbot_cv_dep}_EXPORTED_TARGETS})
 endforeach()
 
-set(pkg_cfg_extras "")
+set(pkg_cfg_extras "rectbot_cv-msg-extras.cmake")
 foreach(extra ${pkg_cfg_extras})
   if(NOT IS_ABSOLUTE ${extra})
     set(extra ${rectbot_cv_DIR}/${extra})

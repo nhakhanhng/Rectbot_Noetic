@@ -101,6 +101,21 @@ struct Object {
     cv::Rect_<float> rect;
     int              label = 0;
     float            prob  = 0.0;
+    int id = 0;
+};
+
+struct KeyPoint {
+    float x;
+    float y;
+    float score;
+};
+
+struct PoseObject {
+    cv::Rect_<float> rect;
+    int              label = 0;
+    float            prob  = 0.0;
+    int id = 0;
+    std::vector<det::KeyPoint> keypoints;
 };
 
 struct PreParam {

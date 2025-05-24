@@ -25,6 +25,7 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   tf2
   tf2_ros
+  message_generation
 )
 
 # Find CUDA
@@ -36,26 +37,57 @@ message(STATUS "CUDA Headers: \n${CUDA_INCLUDE_DIRS}\n")
 # Find OpenCV
 find_package(OpenCV REQUIRED)
 
+
+#Eigen
+find_package(Eigen3 REQUIRED)
+message(STATUS "Eigen3 Libs: \n${EIGEN3_INCLUDE_DIRS}\n")
+
 # TensorRT
 set(TensorRT_INCLUDE_DIRS /usr/include /usr/include/aarch-linux-gnu)
 set(TensorRT_LIBRARIES /usr/lib/aarch64-linux-gnu)
 message(STATUS "TensorRT Libs: \n\n${TensorRT_LIBRARIES}\n")
 message(STATUS "TensorRT Headers: \n${TensorRT_INCLUDE_DIRS}\n")
 
+
+file(GLOB BYTE_TRACK_HEADERS components/ByteTrack/include/*.h)
+file(GLOB BYTE_TRACK_SOURCES components/ByteTrack/src/*.cpp)
+
+# Define the include directory for ByteTrack
+set(BYTE_TRACK_INCLUDE_DIR components/ByteTrack/include)
+
+add_message_files(
+  FILES
+  KeyPoint.msg
+  PoseObject.msg
+  PoseObjectArray.msg
+)
+
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+  geometry_msgs
+  vision_msgs
+  # rectbot_cv
+)
+
+
 # ROS catkin package configuration
 catkin_package(
-  INCLUDE_DIRS include
-  CATKIN_DEPENDS roscpp std_msgs sensor_msgs cv_bridge image_transport vision_msgs visualization_msgs image_geometry geometry_msgs tf tf2 tf2_ros
+  INCLUDE_DIRS include ${BYTE_TRACK_INCLUDE_DIR}
+  CATKIN_DEPENDS roscpp std_msgs sensor_msgs cv_bridge image_transport vision_msgs visualization_msgs image_geometry geometry_msgs tf tf2 tf2_ros message_runtime
 )
 
 # Include directories from both projects
 include_directories(
   include
+  ${BYTE_TRACK_INCLUDE_DIR}
+  # ${BYTE_TRACK_HEADERS}
   ${catkin_INCLUDE_DIRS}
   ${Boost_INCLUDE_DIRS}
   ${CUDA_INCLUDE_DIRS}
   ${OpenCV_INCLUDE_DIRS}
   ${TensorRT_INCLUDE_DIRS}
+  ${EIGEN3_INCLUDE_DIRS}
 )
 
 # Link directories
@@ -65,6 +97,8 @@ link_directories(
   ${TensorRT_LIBRARIES}
 )
 
+
+
 # Add the executable with all required source files
 add_executable(rectbot_object_detection_node
   src/rectbot_object_detection_node.cpp
@@ -73,7 +107,10 @@ add_executable(rectbot_object_detection_node
 
 add_executable(rectbot_object_mapping_node
   src/rectbot_object_mapping_node.cpp
+  ${BYTE_TRACK_SOURCES}
 )
+
+
 
 add_dependencies(rectbot_object_detection_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(rectbot_object_mapping_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
@@ -116,13 +153,17 @@ install(TARGETS rectbot_object_detection_node rectbot_object_mapping_node
 )
 
 
+# Removed src/yolov8.cpp as it is a source file and not an executable script
 install(PROGRAMS
-  src/yolov8.cpp
-  src/main.cpp
+  # src/main.cpp
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
 install(DIRECTORY include/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+)
+
+install(DIRECTORY components/ByteTrack/include/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )
 

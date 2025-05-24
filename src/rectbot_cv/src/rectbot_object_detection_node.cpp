@@ -22,7 +22,7 @@ RectbotObjectDetectionNode::RectbotObjectDetectionNode() {
     // Initialize subscribers and publishers
     image_sub_ = nh_.subscribe(input_topic_, 1, &RectbotObjectDetectionNode::imageCallback, this);
     processed_pub_ = nh_.advertise<sensor_msgs::Image>(output_topic_, 1);
-    detection_pub_ = nh_.advertise<vision_msgs::Detection2DArray>(detection_topic_, 1);
+    detection_pub_ = nh_.advertise<rectbot_cv::PoseObjectArray>(detection_topic_, 1);
     
     ROS_INFO("RectbotObjectDetectionNode initialized with YOLO model: %s", model_path_.c_str());
     detector_->MakePipe(true);
@@ -51,13 +51,14 @@ void RectbotObjectDetectionNode::imageCallback(const sensor_msgs::ImageConstPtr&
 
 
         // Start time measurement for FPS calculation
-        auto start = std::chrono::high_resolution_clock::now();
         // Run object detection
         // std::vector<Detection> detections = detector_->detect(cv_ptr->image);
+        // ROS_INFO("Image size: %d x %d\n", cv_ptr->image.cols, cv_ptr->image.rows);
         detector_->CopyFromMat(cv_ptr->image);
+        auto start = std::chrono::high_resolution_clock::now();
         detector_->Infer();
-        std::vector<Object> objs;
-        detector_->PostProcess(objs, conf_threshold_, nms_threshold_, 100, 80);
+        std::vector<det::PoseObject> objs;
+        detector_->PostProcessPose(objs, conf_threshold_, nms_threshold_, 100, 80);
         // End time measurement and calculate FPS
         auto end = std::chrono::high_resolution_clock::now();
         auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
@@ -69,17 +70,7 @@ void RectbotObjectDetectionNode::imageCallback(const sensor_msgs::ImageConstPtr&
         std::string fps_text = "FPS: " + std::to_string(fps);
         cv::putText(output_image, fps_text, cv::Point(10, 30), cv::FONT_HERSHEY_SIMPLEX, 
                     1.0, cv::Scalar(0, 255, 0), 2);
-
-        // // Log FPS occasionally
-        // static int frame_count = 0;
-        // static float total_fps = 0;
-        // frame_count++;
-        // total_fps += fps;
-        // if (frame_count % 30 == 0) {
-        //     ROS_INFO("Average FPS over last 30 frames: %.2f", total_fps / 30);
-        //     total_fps = 0;
-        // }
-        detector_->DrawObjects(output_image, objs);
+        detector_->DrawPoseObjects(output_image, objs,0.7);
         // printf("Detected %lu objects\n", objs.size());
         
         // Publish processed image
@@ -88,26 +79,32 @@ void RectbotObjectDetectionNode::imageCallback(const sensor_msgs::ImageConstPtr&
         out_msg.encoding = sensor_msgs::image_encodings::BGR8;
         out_msg.image = output_image;
         processed_pub_.publish(out_msg.toImageMsg());
-        vision_msgs::Detection2DArray detection_array_msg;
-        vision_msgs::Detection2D detection;
-        detection.header = msg->header;
+        rectbot_cv::PoseObjectArray pose_obj_array_msg;
+        rectbot_cv::PoseObject pose_obj_msg;
+        pose_obj_msg.detection.header = msg->header;
 
         // Publish detection resultsObjectDetectionNodet.x + obj.rect.width / 2;
         for (auto & obj : objs) {
-            detection.bbox.center.y = obj.rect.y + obj.rect.height / 2;
-            detection.bbox.size_x = obj.rect.width;
-            detection.bbox.size_y = obj.rect.height;
-            
+            pose_obj_msg.detection.bbox.center.y = obj.rect.y + obj.rect.height / 2;
+            pose_obj_msg.detection.bbox.size_x = obj.rect.width;
+            pose_obj_msg.detection.bbox.size_y = obj.rect.height;
+            for (auto & kp : obj.keypoints) {
+                rectbot_cv::KeyPoint kpt;
+                kpt.x.data = kp.x;
+                kpt.y.data = kp.y;
+                kpt.score.data = kp.score;
+                pose_obj_msg.keypoints.push_back(kpt);
+            }
             vision_msgs::ObjectHypothesisWithPose hypothesis;
             hypothesis.id = obj.label;
             hypothesis.score = obj.prob;
-            detection.results.push_back(hypothesis);
-            detection_array_msg.detections.push_back(detection);
+            pose_obj_msg.detection.results.push_back(hypothesis);
+            pose_obj_array_msg.objects.push_back(pose_obj_msg);
             
         }
         
-        
-        detection_pub_.publish(detection_array_msg);
+        // pose_obj_array_msg.header = msg->header;
+        detection_pub_.publish(pose_obj_array_msg);
         
     } catch (cv_bridge::Exception& e) {
         ROS_ERROR("cv_bridge exception: %s", e.what());
@@ -115,11 +112,11 @@ void RectbotObjectDetectionNode::imageCallback(const sensor_msgs::ImageConstPtr&
 }
 
 int main(int argc, char** argv) {
-    ros::init(argc, argv, "rectbot_cv_node");
+    ros::init(argc, argv, "rectbot_object_detection_node");
     
     RectbotObjectDetectionNode node;
     
     ros::spin();
     
-    return 0;
+    return 1;
 }

@@ -81,14 +81,144 @@ rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/src/rectbot_object_mapping
 rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/src/rectbot_object_mapping_node.cpp.o.provides.build: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/src/rectbot_object_mapping_node.cpp.o
 
 
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/BYTETracker.cpp.o: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/flags.make
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/BYTETracker.cpp.o: /home/arar/Documents/rectbot_ws/src/rectbot_cv/components/ByteTrack/src/BYTETracker.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/arar/Documents/rectbot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/BYTETracker.cpp.o"
+	cd /home/arar/Documents/rectbot_ws/build/rectbot_cv && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/BYTETracker.cpp.o -c /home/arar/Documents/rectbot_ws/src/rectbot_cv/components/ByteTrack/src/BYTETracker.cpp
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/BYTETracker.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/BYTETracker.cpp.i"
+	cd /home/arar/Documents/rectbot_ws/build/rectbot_cv && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/arar/Documents/rectbot_ws/src/rectbot_cv/components/ByteTrack/src/BYTETracker.cpp > CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/BYTETracker.cpp.i
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/BYTETracker.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/BYTETracker.cpp.s"
+	cd /home/arar/Documents/rectbot_ws/build/rectbot_cv && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/arar/Documents/rectbot_ws/src/rectbot_cv/components/ByteTrack/src/BYTETracker.cpp -o CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/BYTETracker.cpp.s
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/BYTETracker.cpp.o.requires:
+
+.PHONY : rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/BYTETracker.cpp.o.requires
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/BYTETracker.cpp.o.provides: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/BYTETracker.cpp.o.requires
+	$(MAKE) -f rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/build.make rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/BYTETracker.cpp.o.provides.build
+.PHONY : rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/BYTETracker.cpp.o.provides
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/BYTETracker.cpp.o.provides.build: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/BYTETracker.cpp.o
+
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/STrack.cpp.o: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/flags.make
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/STrack.cpp.o: /home/arar/Documents/rectbot_ws/src/rectbot_cv/components/ByteTrack/src/STrack.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/arar/Documents/rectbot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/STrack.cpp.o"
+	cd /home/arar/Documents/rectbot_ws/build/rectbot_cv && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/STrack.cpp.o -c /home/arar/Documents/rectbot_ws/src/rectbot_cv/components/ByteTrack/src/STrack.cpp
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/STrack.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/STrack.cpp.i"
+	cd /home/arar/Documents/rectbot_ws/build/rectbot_cv && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/arar/Documents/rectbot_ws/src/rectbot_cv/components/ByteTrack/src/STrack.cpp > CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/STrack.cpp.i
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/STrack.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/STrack.cpp.s"
+	cd /home/arar/Documents/rectbot_ws/build/rectbot_cv && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/arar/Documents/rectbot_ws/src/rectbot_cv/components/ByteTrack/src/STrack.cpp -o CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/STrack.cpp.s
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/STrack.cpp.o.requires:
+
+.PHONY : rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/STrack.cpp.o.requires
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/STrack.cpp.o.provides: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/STrack.cpp.o.requires
+	$(MAKE) -f rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/build.make rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/STrack.cpp.o.provides.build
+.PHONY : rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/STrack.cpp.o.provides
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/STrack.cpp.o.provides.build: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/STrack.cpp.o
+
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/kalmanFilter.cpp.o: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/flags.make
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/kalmanFilter.cpp.o: /home/arar/Documents/rectbot_ws/src/rectbot_cv/components/ByteTrack/src/kalmanFilter.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/arar/Documents/rectbot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/kalmanFilter.cpp.o"
+	cd /home/arar/Documents/rectbot_ws/build/rectbot_cv && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/kalmanFilter.cpp.o -c /home/arar/Documents/rectbot_ws/src/rectbot_cv/components/ByteTrack/src/kalmanFilter.cpp
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/kalmanFilter.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/kalmanFilter.cpp.i"
+	cd /home/arar/Documents/rectbot_ws/build/rectbot_cv && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/arar/Documents/rectbot_ws/src/rectbot_cv/components/ByteTrack/src/kalmanFilter.cpp > CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/kalmanFilter.cpp.i
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/kalmanFilter.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/kalmanFilter.cpp.s"
+	cd /home/arar/Documents/rectbot_ws/build/rectbot_cv && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/arar/Documents/rectbot_ws/src/rectbot_cv/components/ByteTrack/src/kalmanFilter.cpp -o CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/kalmanFilter.cpp.s
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/kalmanFilter.cpp.o.requires:
+
+.PHONY : rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/kalmanFilter.cpp.o.requires
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/kalmanFilter.cpp.o.provides: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/kalmanFilter.cpp.o.requires
+	$(MAKE) -f rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/build.make rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/kalmanFilter.cpp.o.provides.build
+.PHONY : rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/kalmanFilter.cpp.o.provides
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/kalmanFilter.cpp.o.provides.build: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/kalmanFilter.cpp.o
+
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/lapjv.cpp.o: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/flags.make
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/lapjv.cpp.o: /home/arar/Documents/rectbot_ws/src/rectbot_cv/components/ByteTrack/src/lapjv.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/arar/Documents/rectbot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/lapjv.cpp.o"
+	cd /home/arar/Documents/rectbot_ws/build/rectbot_cv && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/lapjv.cpp.o -c /home/arar/Documents/rectbot_ws/src/rectbot_cv/components/ByteTrack/src/lapjv.cpp
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/lapjv.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/lapjv.cpp.i"
+	cd /home/arar/Documents/rectbot_ws/build/rectbot_cv && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/arar/Documents/rectbot_ws/src/rectbot_cv/components/ByteTrack/src/lapjv.cpp > CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/lapjv.cpp.i
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/lapjv.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/lapjv.cpp.s"
+	cd /home/arar/Documents/rectbot_ws/build/rectbot_cv && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/arar/Documents/rectbot_ws/src/rectbot_cv/components/ByteTrack/src/lapjv.cpp -o CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/lapjv.cpp.s
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/lapjv.cpp.o.requires:
+
+.PHONY : rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/lapjv.cpp.o.requires
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/lapjv.cpp.o.provides: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/lapjv.cpp.o.requires
+	$(MAKE) -f rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/build.make rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/lapjv.cpp.o.provides.build
+.PHONY : rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/lapjv.cpp.o.provides
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/lapjv.cpp.o.provides.build: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/lapjv.cpp.o
+
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/utils.cpp.o: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/flags.make
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/utils.cpp.o: /home/arar/Documents/rectbot_ws/src/rectbot_cv/components/ByteTrack/src/utils.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/arar/Documents/rectbot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/utils.cpp.o"
+	cd /home/arar/Documents/rectbot_ws/build/rectbot_cv && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/utils.cpp.o -c /home/arar/Documents/rectbot_ws/src/rectbot_cv/components/ByteTrack/src/utils.cpp
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/utils.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/utils.cpp.i"
+	cd /home/arar/Documents/rectbot_ws/build/rectbot_cv && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/arar/Documents/rectbot_ws/src/rectbot_cv/components/ByteTrack/src/utils.cpp > CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/utils.cpp.i
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/utils.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/utils.cpp.s"
+	cd /home/arar/Documents/rectbot_ws/build/rectbot_cv && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/arar/Documents/rectbot_ws/src/rectbot_cv/components/ByteTrack/src/utils.cpp -o CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/utils.cpp.s
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/utils.cpp.o.requires:
+
+.PHONY : rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/utils.cpp.o.requires
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/utils.cpp.o.provides: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/utils.cpp.o.requires
+	$(MAKE) -f rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/build.make rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/utils.cpp.o.provides.build
+.PHONY : rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/utils.cpp.o.provides
+
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/utils.cpp.o.provides.build: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/utils.cpp.o
+
+
 # Object files for target rectbot_object_mapping_node
 rectbot_object_mapping_node_OBJECTS = \
-"CMakeFiles/rectbot_object_mapping_node.dir/src/rectbot_object_mapping_node.cpp.o"
+"CMakeFiles/rectbot_object_mapping_node.dir/src/rectbot_object_mapping_node.cpp.o" \
+"CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/BYTETracker.cpp.o" \
+"CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/STrack.cpp.o" \
+"CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/kalmanFilter.cpp.o" \
+"CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/lapjv.cpp.o" \
+"CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/utils.cpp.o"
 
 # External object files for target rectbot_object_mapping_node
 rectbot_object_mapping_node_EXTERNAL_OBJECTS =
 
 /home/arar/Documents/rectbot_ws/devel/lib/rectbot_cv/rectbot_object_mapping_node: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/src/rectbot_object_mapping_node.cpp.o
+/home/arar/Documents/rectbot_ws/devel/lib/rectbot_cv/rectbot_object_mapping_node: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/BYTETracker.cpp.o
+/home/arar/Documents/rectbot_ws/devel/lib/rectbot_cv/rectbot_object_mapping_node: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/STrack.cpp.o
+/home/arar/Documents/rectbot_ws/devel/lib/rectbot_cv/rectbot_object_mapping_node: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/kalmanFilter.cpp.o
+/home/arar/Documents/rectbot_ws/devel/lib/rectbot_cv/rectbot_object_mapping_node: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/lapjv.cpp.o
+/home/arar/Documents/rectbot_ws/devel/lib/rectbot_cv/rectbot_object_mapping_node: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/utils.cpp.o
 /home/arar/Documents/rectbot_ws/devel/lib/rectbot_cv/rectbot_object_mapping_node: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/build.make
 /home/arar/Documents/rectbot_ws/devel/lib/rectbot_cv/rectbot_object_mapping_node: /home/arar/Documents/catkin_ws/devel/lib/libcv_bridge.so
 /home/arar/Documents/rectbot_ws/devel/lib/rectbot_cv/rectbot_object_mapping_node: /opt/ros/melodic/lib/libimage_transport.so
@@ -185,7 +315,7 @@ rectbot_object_mapping_node_EXTERNAL_OBJECTS =
 /home/arar/Documents/rectbot_ws/devel/lib/rectbot_cv/rectbot_object_mapping_node: /usr/local/lib/libopencv_core.so.3.4.0
 /home/arar/Documents/rectbot_ws/devel/lib/rectbot_cv/rectbot_object_mapping_node: /usr/local/lib/libopencv_cudev.so.3.4.0
 /home/arar/Documents/rectbot_ws/devel/lib/rectbot_cv/rectbot_object_mapping_node: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/arar/Documents/rectbot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable /home/arar/Documents/rectbot_ws/devel/lib/rectbot_cv/rectbot_object_mapping_node"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/arar/Documents/rectbot_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable /home/arar/Documents/rectbot_ws/devel/lib/rectbot_cv/rectbot_object_mapping_node"
 	cd /home/arar/Documents/rectbot_ws/build/rectbot_cv && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/rectbot_object_mapping_node.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -194,6 +324,11 @@ rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/build: /home/arar/Document
 .PHONY : rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/build
 
 rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/requires: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/src/rectbot_object_mapping_node.cpp.o.requires
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/requires: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/BYTETracker.cpp.o.requires
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/requires: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/STrack.cpp.o.requires
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/requires: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/kalmanFilter.cpp.o.requires
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/requires: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/lapjv.cpp.o.requires
+rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/requires: rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/components/ByteTrack/src/utils.cpp.o.requires
 
 .PHONY : rectbot_cv/CMakeFiles/rectbot_object_mapping_node.dir/requires
 

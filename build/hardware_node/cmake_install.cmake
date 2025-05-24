@@ -69,6 +69,10 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/hardware_node" TYPE PROGRAM FILES "/home/arar/Documents/rectbot_ws/build/hardware_node/catkin_generated/installspace/mic_array_node")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/hardware_node" TYPE DIRECTORY FILES "/home/arar/Documents/rectbot_ws/src/hardware_node/launch")
 endif()
 

@@ -50,6 +50,7 @@ catkin_install_python(PROGRAMS
   nodes/bno08x_node
   nodes/ina219_node
   nodes/servokit16_node
+  nodes/mic_array_node
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

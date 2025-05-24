@@ -1,0 +1,7 @@
+set(rectbot_sound_SETUP_PY_SETUP_MODULE "distutils.core")
+set(rectbot_sound_SETUP_PY_VERSION "0.0.0")
+set(rectbot_sound_SETUP_PY_SCRIPTS "")
+set(rectbot_sound_SETUP_PY_PACKAGES "rectbot_sound")
+set(rectbot_sound_SETUP_PY_PACKAGE_DIRS "nodes/rectbot_sound")
+set(rectbot_sound_SETUP_PY_MODULES "")
+set(rectbot_sound_SETUP_PY_MODULE_DIRS "")

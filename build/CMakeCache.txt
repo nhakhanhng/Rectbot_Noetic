@@ -480,6 +480,9 @@ EMPY_EXECUTABLE:FILEPATH=/usr/bin/empy
 //Empy script
 EMPY_SCRIPT:STRING=/usr/bin/empy
 
+//The directory containing a CMake configuration file for Eigen3.
+Eigen3_DIR:PATH=/usr/local/share/eigen3/cmake
+
 //Path to a file.
 FreeImage_INCLUDE_DIRS:PATH=/usr/include
 
@@ -1094,6 +1097,12 @@ rectbot_slam_BINARY_DIR:STATIC=/home/arar/Documents/rectbot_ws/build/rectbot_sla
 rectbot_slam_SOURCE_DIR:STATIC=/home/arar/Documents/rectbot_ws/src/rectbot_slam
 
 //Value Computed by CMake
+rectbot_sound_BINARY_DIR:STATIC=/home/arar/Documents/rectbot_ws/build/rectbot_sound
+
+//Value Computed by CMake
+rectbot_sound_SOURCE_DIR:STATIC=/home/arar/Documents/rectbot_ws/src/rectbot_sound
+
+//Value Computed by CMake
 rectbot_teleop_BINARY_DIR:STATIC=/home/arar/Documents/rectbot_ws/build/rectbot_teleop
 
 //Value Computed by CMake
@@ -1179,6 +1188,9 @@ visualization_msgs_DIR:PATH=/opt/ros/melodic/share/visualization_msgs/cmake
 
 //The directory containing a CMake configuration file for xmlrpcpp.
 xmlrpcpp_DIR:PATH=/opt/ros/melodic/share/xmlrpcpp/cmake
+
+//Dependencies for target
+yolov8_LIB_DEPENDS:STATIC=
 
 
 ########################
@@ -1514,7 +1526,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=16
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=17
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

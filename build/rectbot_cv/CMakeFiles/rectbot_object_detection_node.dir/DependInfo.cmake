@@ -19,7 +19,9 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
+  "/home/arar/Documents/rectbot_ws/devel/include"
   "/home/arar/Documents/rectbot_ws/src/rectbot_cv/include"
+  "/home/arar/Documents/rectbot_ws/src/rectbot_cv/components/ByteTrack/include"
   "/home/arar/Documents/catkin_ws/src/vision_opencv/cv_bridge/include"
   "/home/arar/Documents/catkin_ws/src/vision_opencv/image_geometry/include"
   "/opt/ros/melodic/include"
@@ -28,6 +30,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/usr/local/include/opencv"
   "/usr/local/cuda/include"
   "/usr/include/aarch-linux-gnu"
+  "/usr/local/include/eigen3"
   )
 
 # Targets to which this target links.

@@ -38,7 +38,47 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/rectbot_cv/msg" TYPE FILE FILES
+    "/home/arar/Documents/rectbot_ws/src/rectbot_cv/msg/KeyPoint.msg"
+    "/home/arar/Documents/rectbot_ws/src/rectbot_cv/msg/PoseObject.msg"
+    "/home/arar/Documents/rectbot_ws/src/rectbot_cv/msg/PoseObjectArray.msg"
+    )
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/rectbot_cv/cmake" TYPE FILE FILES "/home/arar/Documents/rectbot_ws/build/rectbot_cv/catkin_generated/installspace/rectbot_cv-msg-paths.cmake")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/arar/Documents/rectbot_ws/devel/include/rectbot_cv")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/roseus/ros" TYPE DIRECTORY FILES "/home/arar/Documents/rectbot_ws/devel/share/roseus/ros/rectbot_cv")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/common-lisp/ros" TYPE DIRECTORY FILES "/home/arar/Documents/rectbot_ws/devel/share/common-lisp/ros/rectbot_cv")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/gennodejs/ros" TYPE DIRECTORY FILES "/home/arar/Documents/rectbot_ws/devel/share/gennodejs/ros/rectbot_cv")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  execute_process(COMMAND "/usr/bin/python2" -m compileall "/home/arar/Documents/rectbot_ws/devel/lib/python2.7/dist-packages/rectbot_cv")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages" TYPE DIRECTORY FILES "/home/arar/Documents/rectbot_ws/devel/lib/python2.7/dist-packages/rectbot_cv")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/arar/Documents/rectbot_ws/build/rectbot_cv/catkin_generated/installspace/rectbot_cv.pc")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/rectbot_cv/cmake" TYPE FILE FILES "/home/arar/Documents/rectbot_ws/build/rectbot_cv/catkin_generated/installspace/rectbot_cv-msg-extras.cmake")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -93,14 +133,11 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/rectbot_cv" TYPE PROGRAM FILES
-    "/home/arar/Documents/rectbot_ws/src/rectbot_cv/src/yolov8.cpp"
-    "/home/arar/Documents/rectbot_ws/src/rectbot_cv/src/main.cpp"
-    )
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/rectbot_cv" TYPE DIRECTORY FILES "/home/arar/Documents/rectbot_ws/src/rectbot_cv/include/")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/rectbot_cv" TYPE DIRECTORY FILES "/home/arar/Documents/rectbot_ws/src/rectbot_cv/include/")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/rectbot_cv" TYPE DIRECTORY FILES "/home/arar/Documents/rectbot_ws/src/rectbot_cv/components/ByteTrack/include/")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)

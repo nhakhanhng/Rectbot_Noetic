@@ -1,0 +1,237 @@
+#!/usr/bin/env python2
+import rospy
+import math
+from geometry_msgs.msg import PoseStamped, PointStamped, Twist
+from nav_msgs.msg import Odometry, OccupancyGrid
+from std_msgs.msg import Float32
+
+# from CostmapChecker import CostmapChecker
+
+class BearingPerpMoveNode(object):
+    def __init__(self):
+        rospy.init_node("bearing_perp_move_node")
+        # self.costmap_checker = CostmapChecker()
+
+        # Subscribers
+        self.sub_bearing_deg = rospy.Subscriber("/sound_direction", Float32, self.bearing_deg_cb)
+        self.sub_odom = rospy.Subscriber("/odometry/filtered", Odometry, self.odom_cb)
+
+        # Publishers
+        self.pub_source_confirmed = rospy.Publisher("/sound_source_confirmed", PointStamped, queue_size=1)
+        self.pub_cmd_vel = rospy.Publisher("/cmd_vel", Twist, queue_size=1)
+
+        self.costmap = None
+        rospy.Subscriber("/move_base/local_costmap/costmap", OccupancyGrid, self.costmap_cb)
+
+
+        # State vars
+        self.current_pose = None
+        self.first_bearing_rad = None
+        self.first_pose = None
+        self.second_bearing_rad = None
+        self.second_pose = None
+
+        self.state = "WAIT_FIRST_BEARING"
+        self.target_yaw = None
+        self.move_distance = 0.3  # meters
+        self.distance_tolerance = 0.05  # meters
+        self.test_move_distance = 0.3 
+        self.yaw_tolerance = math.radians(2)
+        
+        self.robot_radius = 0.15
+        self.safe_cost_threshold = 30 
+
+        self.start_position = None
+
+    def costmap_cb(self, msg):
+        rospy.loginfo("Received costmap")
+        self.costmap = msg
+
+    def odom_cb(self, msg):
+        self.current_pose = msg.pose.pose
+        
+    def is_pose_safe(self, x, y, costmap):
+        info = costmap.info
+        data = costmap.data
+
+        map_x = int((x - info.origin.position.x) / info.resolution)
+        map_y = int((y - info.origin.position.y) / info.resolution)
+        radius_cells = int(self.robot_radius / info.resolution)
+        width = info.width
+        height = info.height
+
+        for dx in range(-radius_cells, radius_cells + 1):
+            for dy in range(-radius_cells, radius_cells + 1):
+                cx = map_x + dx
+                cy = map_y + dy
+                if cx < 0 or cy < 0 or cx >= width or cy >= height:
+                    return False
+                idx = cy * width + cx
+                rospy.loginfo("Checking costmap index cost: {:.2f}".format(data[idx]))
+                if data[idx] >= self.safe_cost_threshold:
+                    return False
+        return True
+        
+    def select_safe_direction(self):
+        angle_offsets = [math.radians(i) for i in range(-45, 50, 5)]  
+
+        angle_offsets.sort(key=lambda x: abs(x))
+
+        for offset in angle_offsets:
+            test_yaw = self.wrap_to_pi(self.start_yaw + offset)
+            test_x = self.current_pose.position.x + self.test_move_distance * math.cos(test_yaw)
+            test_y = self.current_pose.position.y + self.test_move_distance * math.sin(test_yaw)
+
+            if self.is_pose_safe(test_x, test_y, self.costmap):
+                rospy.loginfo("Testing yaw: {:.2f} degrees".format(math.degrees(test_yaw)))
+                return test_yaw
+
+        return None
+
+    def bearing_deg_cb(self, msg):
+        if self.current_pose is None:
+            rospy.logwarn("Waiting for odometry...")
+            return
+
+        bearing_rad = math.radians(msg.data)
+        self.bearing_rad_robot = bearing_rad
+
+        yaw = self.quat_to_yaw(self.current_pose.orientation)
+        bearing_global = self.wrap_to_pi(bearing_rad + yaw)
+    
+        if self.state == "WAIT_FIRST_BEARING":
+            self.first_bearing_rad = bearing_global
+            self.first_pose = self.current_pose
+            rospy.loginfo("Received first bearing: {:.2f}".format(math.degrees(self.bearing_rad_robot)))
+            
+            self.start_rotation_to_perp()
+            self.state = "ROTATING"
+
+        elif self.state == "WAIT_SECOND_BEARING":
+            self.second_bearing_rad = bearing_global
+            self.second_pose = self.current_pose
+            rospy.loginfo("Received second bearing: {:.2f}".format(math.degrees(self.bearing_rad_robot)))
+            self.compute_and_publish_intersection()
+            self.state = "DONE"
+
+    def start_rotation_to_perp(self):
+        del_angle = 0
+        perp_angle = float(self.bearing_rad_robot)
+        if perp_angle < math.pi and perp_angle > 0:
+            del_angle = -math.pi/2 + perp_angle
+        else:
+            del_angle =math.pi/2 + perp_angle
+        current_yaw = self.quat_to_yaw(self.current_pose.orientation)
+        self.start_yaw = current_yaw + del_angle
+        rospy.loginfo("Delta angle: {:.2f} degrees".format(math.degrees(del_angle)))
+        rospy.loginfo("Start yaw: {:.2f} degrees".format(math.degrees(self.start_yaw)))
+        # current_yaw = self.quat_to_yaw(self.current_pose.orientation)
+        rospy.loginfo("Current yaw: {:.2f} degrees".format(math.degrees(current_yaw)))
+        self.target_yaw = self.select_safe_direction()
+        # self.target_yaw = self.start_yaw 
+        if (self.target_yaw is None):
+            rospy.logwarn("No safe direction found, stopping")
+            # self.target_yaw = current_yaw
+            return
+        # else:
+        #     self.target_yaw = self.wrap_to_pi(self.target_yaw)
+        rospy.loginfo("Target yaw set to: {:.2f}".format(math.degrees(self.target_yaw)))
+        rospy.loginfo("Rotating to perpendicular angle: {:.2f}".format(math.degrees(perp_angle)))
+
+    def update(self):
+        if self.current_pose is None:
+            return
+
+        if self.state == "ROTATING":
+            yaw = self.quat_to_yaw(self.current_pose.orientation)
+            angle_diff = self.wrap_to_pi(self.target_yaw - yaw)
+            rospy.loginfo("Angle difference: {:.2f} degrees".format(math.degrees(angle_diff)))
+            twist = Twist()
+
+            if abs(angle_diff) > self.yaw_tolerance:
+                twist.angular.z = 0.3 if angle_diff > 0 else -0.3
+                self.pub_cmd_vel.publish(twist)
+            else:
+                twist.angular.z = 0.0
+                self.pub_cmd_vel.publish(twist)
+                rospy.loginfo("Rotation complete, moving forward")
+                self.start_position = self.current_pose.position
+                self.state = "MOVING_FORWARD"
+
+        elif self.state == "MOVING_FORWARD":
+            dist = self.distance_from_start()
+            twist = Twist()
+
+            if dist < self.move_distance - self.distance_tolerance:
+                twist.linear.x = 0.2
+                # self.pub_cmd_vel.publish(twist)
+            else:
+                twist.linear.x = 0.0
+                self.pub_cmd_vel.publish(twist)
+                rospy.loginfo("Moved forward {:.2f}m, stopping for second bearing".format(dist))
+                self.state = "WAIT_SECOND_BEARING"
+
+    def distance_from_start(self):
+        dx = self.current_pose.position.x - self.start_position.x
+        dy = self.current_pose.position.y - self.start_position.y
+        return math.sqrt(dx*dx + dy*dy)
+
+    def compute_and_publish_intersection(self):
+        if self.first_pose is None or self.second_pose is None:
+            rospy.logwarn("Not enough data to compute intersection")
+            return
+
+        pb1 = (self.first_pose.position.x, self.first_pose.position.y, self.first_bearing_rad)
+        pb2 = (self.second_pose.position.x, self.second_pose.position.y, self.second_bearing_rad)
+        rospy.loginfo("First point: x={:.3f}, y={:.3f}, bearing={:.2f} degrees".format(
+            pb1[0], pb1[1], math.degrees(pb1[2])))
+        rospy.loginfo("Second point: x={:.3f}, y={:.3f}, bearing={:.2f} degrees".format(
+            pb2[0], pb2[1], math.degrees(pb2[2])))
+        intersect = self.intersect_bearings(pb1, pb2)
+        if intersect is None:
+            rospy.logwarn("Cannot compute intersection (bearings nearly parallel)")
+            return
+
+        pt_msg = PointStamped()
+        pt_msg.header.stamp = rospy.Time.now()
+        pt_msg.header.frame_id = "odom"
+        pt_msg.point.x = intersect[0]
+        pt_msg.point.y = intersect[1]
+        pt_msg.point.z = 0
+        self.pub_source_confirmed.publish(pt_msg)
+        rospy.loginfo("Confirmed source location: x={:.3f}, y={:.3f}".format(intersect[0], intersect[1]))
+
+    @staticmethod
+    def quat_to_yaw(q):
+        siny = 2.0 * (q.w * q.z + q.x * q.y)
+        cosy = 1.0 - 2.0 * (q.y * q.y + q.z * q.z)
+        return math.atan2(siny, cosy)
+
+    @staticmethod
+    def wrap_to_pi(angle):
+        return math.atan2(math.sin(angle), math.cos(angle))
+    @staticmethod
+    def to_degrees(radians):
+        return math.degrees(radians)
+    @staticmethod
+    def intersect_bearings(pb1, pb2):
+        x1, y1, b1 = pb1
+        x2, y2, b2 = pb2
+
+        tan_b1 = math.tan(b1)
+        tan_b2 = math.tan(b2)
+        denom = tan_b1 - tan_b2
+
+        if abs(denom) < 1e-5:
+            return None
+
+        x = (tan_b1 * x1 - tan_b2 * x2 + y2 - y1) / denom
+        y = tan_b1 * (x - x1) + y1
+        return (x, y)
+
+if __name__ == "__main__":
+    node = BearingPerpMoveNode()
+    rate = rospy.Rate(10)
+    while not rospy.is_shutdown():
+        node.update()
+        rate.sleep()

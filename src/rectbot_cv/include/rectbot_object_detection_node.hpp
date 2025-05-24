@@ -12,6 +12,9 @@
 #include <visualization_msgs/MarkerArray.h>
 #include <chrono>
 
+#include "rectbot_cv/PoseObject.h"
+#include "rectbot_cv/PoseObjectArray.h"
+
 #include "yolov8.hpp"  // Include YOLOv8 header
 
 class RectbotObjectDetectionNode {
