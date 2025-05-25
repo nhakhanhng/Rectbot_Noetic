@@ -1,0 +1,143 @@
+#!/usr/bin/env python
+import rospy
+import tf
+import numpy as np
+from geometry_msgs.msg import PoseStamped
+from nav_msgs.msg import Odometry, GetPlan
+from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
+import actionlib
+
+class CandidateNavigatorCircle:
+    def __init__(self):
+        rospy.init_node('candidate_navigator_circle')
+        # Parameters
+        self.frame_id = rospy.get_param('~frame_id', 'map')
+        self.radius = rospy.get_param('~radius', 1.0)  # radius of circle
+        self.num_candidates = rospy.get_param('~num_candidates', 8)  # 4 to 8
+        self.yaw = rospy.get_param('~fixed_yaw', 0.0)
+
+        # State
+        self.current_source = None  # center of circle
+        self.source_sub = rospy.Subscriber('/sound_source_pose', PoseStamped, self.source_cb)
+        self.odom_sub = rospy.Subscriber('/odom', Odometry, self.odom_cb)
+        self.current_odom = None
+
+        # Action client and service
+        self.make_plan = rospy.ServiceProxy('/move_base/make_plan', GetPlan)
+        self.move_base_ac = actionlib.SimpleActionClient('move_base', MoveBaseAction)
+        rospy.loginfo('Waiting for move_base...')
+        self.move_base_ac.wait_for_server()
+        rospy.loginfo('Connected to move_base.')
+
+        self.rate = rospy.Rate(0.2)  # one cycle every 5s
+
+    def source_cb(self, msg):
+        # update center position
+        self.current_source = msg.pose.position
+
+    def odom_cb(self, msg):
+        self.current_odom = msg
+
+    def generate_circle_candidates(self):
+        x0 = self.current_source.x
+        y0 = self.current_source.y
+        pts = []
+        for i in range(self.num_candidates):
+            theta = 2 * np.pi * i / float(self.num_candidates)
+            x = x0 + self.radius * np.cos(theta)
+            y = y0 + self.radius * np.sin(theta)
+            if self.is_feasible(x, y):
+                pts.append((x, y))
+        return pts
+
+    def is_feasible(self, x, y):
+        if not self.current_odom:
+            return False
+        start = PoseStamped()
+        start.header.frame_id = self.frame_id
+        start.header.stamp = rospy.Time.now()
+        start.pose = self.current_odom.pose.pose
+        goal = PoseStamped()
+        goal.header.frame_id = self.frame_id
+        goal.header.stamp = rospy.Time.now()
+        goal.pose.position.x = x
+        goal.pose.position.y = y
+        quat = tf.transformations.quaternion_from_euler(0, 0, self.yaw)
+        goal.pose.orientation.x = quat[0]
+        goal.pose.orientation.y = quat[1]
+        goal.pose.orientation.z = quat[2]
+        goal.pose.orientation.w = quat[3]
+        try:
+            resp = self.make_plan(start=start, goal=goal, tolerance=0.1)
+            return len(resp.plan.poses) > 0
+        except rospy.ServiceException:
+            rospy.logwarn('make_plan service failed')
+            return False
+
+    def publish_candidates(self):
+        marker_pub = rospy.Publisher('/candidate_markers', visualization_msgs.msg.MarkerArray, queue_size=10)
+        marker_array = visualization_msgs.msg.MarkerArray()
+
+        candidates = self.generate_circle_candidates()
+        for i, (x, y) in enumerate(candidates):
+            marker = visualization_msgs.msg.Marker()
+            marker.header.frame_id = self.frame_id
+            marker.header.stamp = rospy.Time.now()
+            marker.ns = "candidates"
+            marker.id = i
+            marker.type = visualization_msgs.msg.Marker.SPHERE
+            marker.action = visualization_msgs.msg.Marker.ADD
+            marker.pose.position.x = x
+            marker.pose.position.y = y
+            marker.pose.position.z = 0
+            marker.pose.orientation.x = 0.0
+            marker.pose.orientation.y = 0.0
+            marker.pose.orientation.z = 0.0
+            marker.pose.orientation.w = 1.0
+            marker.scale.x = 0.2
+            marker.scale.y = 0.2
+            marker.scale.z = 0.2
+            marker.color.a = 1.0
+            marker.color.r = 0.0
+            marker.color.g = 1.0
+            marker.color.b = 0.0
+            marker_array.markers.append(marker)
+
+        marker_pub.publish(marker_array)
+    
+    def send_goal(self, x, y):
+        goal = MoveBaseGoal()
+        goal.target_pose.header.frame_id = self.frame_id
+        goal.target_pose.header.stamp = rospy.Time.now()
+        goal.target_pose.pose.position.x = x
+        goal.target_pose.pose.position.y = y
+        quat = tf.transformations.quaternion_from_euler(0, 0, self.yaw)
+        goal.target_pose.pose.orientation.x = quat[0]
+        goal.target_pose.pose.orientation.y = quat[1]
+        goal.target_pose.pose.orientation.z = quat[2]
+        goal.target_pose.pose.orientation.w = quat[3]
+        self.move_base_ac.send_goal(goal)
+        self.move_base_ac.wait_for_result(rospy.Duration(60.0))
+
+    def spin(self):
+        while not rospy.is_shutdown():
+            if self.current_source and self.current_odom:
+                rospy.loginfo('Generating %d circle candidates around (%.2f, %.2f)',
+                              self.num_candidates, self.current_source.x, self.current_source.y)
+                candidates = self.generate_circle_candidates()
+                for x, y in candidates:
+                    # if self.is_feasible(x, y):
+                    #     rospy.loginfo('Navigating to candidate (%.2f, %.2f)', x, y)
+                    #     self.send_goal(x, y)
+                    #     state = self.move_base_ac.get_state()
+                    #     if state == actionlib.GoalStatus.SUCCEEDED:
+                    #         rospy.loginfo('Reached (%.2f, %.2f)', x, y)
+                    #     else:
+                    #         rospy.logwarn('Failed to reach (%.2f, %.2f)', x, y)
+                # reset to wait for next sound detection
+                self.current_source = None
+            self.rate.sleep()
+
+if __name__ == '__main__':
+    nav = CandidateNavigatorCircle()
+    nav.spin()

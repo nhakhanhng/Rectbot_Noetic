@@ -5,6 +5,8 @@ import numpy as np
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import PoseStamped, PointStamped
 from std_msgs.msg import Float64 as Float
+
+from filterpy.kalman import ExtendedKalmanFilter as EKF
 # from sound_msgs.msg import SoundDirectionStamped
 
 class BearingEKF(object):
