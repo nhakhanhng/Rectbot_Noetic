@@ -61,10 +61,14 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/rectbot_sound" TYPE PROGRAM FILES "/home/arar/Documents/rectbot_ws/build/rectbot_sound/catkin_generated/installspace/bearing_node")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/rectbot_sound" TYPE PROGRAM FILES "/home/arar/Documents/rectbot_ws/build/rectbot_sound/catkin_generated/installspace/bearing_EKF_node")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/rectbot_sound" TYPE PROGRAM FILES "/home/arar/Documents/rectbot_ws/build/rectbot_sound/catkin_generated/installspace/bearing_perp_move_node")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/rectbot_sound" TYPE PROGRAM FILES "/home/arar/Documents/rectbot_ws/build/rectbot_sound/catkin_generated/installspace/bearing_candidate_node")
 endif()
 

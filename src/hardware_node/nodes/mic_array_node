@@ -26,20 +26,34 @@ def mic_array_node():
         rospy.signal_shutdown("Failed to open serial port.")
         return
 
+    samples = []
     # rate = rospy.Rate(1)  # 10 Hz
     while not rospy.is_shutdown():
         try:
             if ser.in_waiting > 0:
-                # angle = 0.0
-                line = ser.readline().decode('utf-8').strip()
-                data_parts = line.split(';')
-                if len(data_parts) > 0:
-                    line = data_parts[0] 
-                angle = (float(line) - 180.0) % 360.0
-                angle = (angle - 360.0) if angle > 180.0 else angle
-                angle = -angle
-                # angle = angle * (3.141592653589793 / 180.0)  # Convert degrees to radians
-                # rospy.loginfo("Angle: {}".format(angle))
+                samples = []
+                sample_count = 0
+                while sample_count < 20:
+                    try:
+                        line = ser.readline().decode('utf-8').strip()
+                        # print "Received line: {}".format(line)  # Debugging line
+                        data_parts = line.split(';')
+                        if len(data_parts) > 0:
+                            line = data_parts[0]
+                            sample_angle = (float(line) - 180.0) % 360.0
+                            sample_angle = (sample_angle - 360.0) if sample_angle > 180.0 else sample_angle
+                            sample_angle = -sample_angle
+
+                            if len(samples) == 0 or abs(sample_angle - sum(samples) / len(samples)) <= 20:
+                                samples.append(sample_angle)
+                            sample_count += 1
+                    except ValueError:
+                        # rospy.logwarn("Received invalid data from serial.")
+                        continue
+                if len(samples) <= sample_count / 2:
+                    rospy.logwarn("Not enough valid samples received.")
+                    continue
+                angle = sum(samples) / len(samples)
                 pub.publish(angle)
         except ValueError:
             rospy.logwarn("Received invalid data from serial.")

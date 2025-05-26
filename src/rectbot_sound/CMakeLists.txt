@@ -106,7 +106,7 @@ catkin_python_setup()
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES rectbot_sound
- CATKIN_DEPENDS rospy std_msgs nav_msgs geometry_msgs
+ CATKIN_DEPENDS rospy std_msgs nav_msgs geometry_msgs visualization_msgs move_base_msgs
 #  DEPENDS system_lib
 )
 
@@ -162,8 +162,9 @@ include_directories(
 ## in contrast to setup.py, you can choose the destination
 catkin_install_python(PROGRAMS
   nodes/bearing_init_node
-  nodes/bearing_node
+  nodes/bearing_EKF_node
   nodes/bearing_perp_move_node
+  nodes/bearing_candidate_node
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

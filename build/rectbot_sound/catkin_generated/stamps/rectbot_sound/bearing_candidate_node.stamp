@@ -2,28 +2,25 @@
 import rospy
 import tf
 import numpy as np
-from geometry_msgs.msg import PoseStamped, PointStamped
-from nav_msgs.msg import Odometry
-from nav_msgs.srv import GetPlan
+from geometry_msgs.msg import PoseStamped
+from nav_msgs.msg import Odometry, GetPlan
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from visualization_msgs.msg import Marker, MarkerArray
 import actionlib
 
 class CandidateNavigatorCircle:
     def __init__(self):
-        rospy.init_node('bearing_candidate_node')
+        rospy.init_node('candidate_navigator_circle')
         # Parameters
-        self.frame_id = rospy.get_param('~frame_id', 'odom')
-        self.radius = rospy.get_param('~radius', 0.8)  # radius of circle
+        self.frame_id = rospy.get_param('~frame_id', 'map')
+        self.radius = rospy.get_param('~radius', 1.0)  # radius of circle
         self.num_candidates = rospy.get_param('~num_candidates', 8)  # 4 to 8
         self.yaw = rospy.get_param('~fixed_yaw', 0.0)
 
         # State
         self.current_source = None  # center of circle
-        self.source_sub = rospy.Subscriber('/sound_source_confirmed', PointStamped, self.source_cb)
+        self.source_sub = rospy.Subscriber('/sound_source_pose', PoseStamped, self.source_cb)
         self.odom_sub = rospy.Subscriber('/odom', Odometry, self.odom_cb)
-        
-        self.marker_pub = rospy.Publisher('/candidate_markers', MarkerArray, queue_size=10)
         self.current_odom = None
 
         # Action client and service
@@ -35,28 +32,9 @@ class CandidateNavigatorCircle:
 
         self.rate = rospy.Rate(0.2)  # one cycle every 5s
 
-    def __del__(self):
-        # Delete all markers when the object is destroyed
-        # marker_pub = rospy.Publisher('/candidate_markers', MarkerArray, queue_size=10)
-        marker_array = MarkerArray()
-
-        # Create delete markers for all possible IDs
-        for i in range(self.num_candidates):
-            marker = Marker()
-            marker.header.frame_id = self.frame_id
-            marker.header.stamp = rospy.Time.now()
-            marker.ns = "candidates"
-            marker.id = i
-            marker.action = Marker.DELETE
-            marker_array.markers.append(marker)
-
-        self.marker_pub.publish(marker_array)
-        rospy.loginfo("Deleted all markers.")
-    
     def source_cb(self, msg):
         # update center position
-        # self.current_source = msg.pose.position
-        self.current_source = msg.point
+        self.current_source = msg.pose.position
 
     def odom_cb(self, msg):
         self.current_odom = msg
@@ -69,7 +47,6 @@ class CandidateNavigatorCircle:
             theta = 2 * np.pi * i / float(self.num_candidates)
             x = x0 + self.radius * np.cos(theta)
             y = y0 + self.radius * np.sin(theta)
-            # pts.append((x, y))
             if self.is_feasible(x, y):
                 pts.append((x, y))
         return pts
@@ -93,17 +70,16 @@ class CandidateNavigatorCircle:
         goal.pose.orientation.w = quat[3]
         try:
             resp = self.make_plan(start=start, goal=goal, tolerance=0.1)
-            rospy.loginfo('Plan generated with %d poses', len(resp.plan.poses))
             return len(resp.plan.poses) > 0
         except rospy.ServiceException:
             rospy.logwarn('make_plan service failed')
             return False
 
     def publish_candidates(self):
+        marker_pub = rospy.Publisher('/candidate_markers', MarkerArray, queue_size=10)
         marker_array = MarkerArray()
 
         candidates = self.generate_circle_candidates()
-        rospy.loginfo('Generated %d candidates around (%.2f, %.2f)', len(candidates), self.current_source.x, self.current_source.y)
         for i, (x, y) in enumerate(candidates):
             marker = Marker()
             marker.header.frame_id = self.frame_id
@@ -128,7 +104,7 @@ class CandidateNavigatorCircle:
             marker.color.b = 0.0
             marker_array.markers.append(marker)
 
-        self.marker_pub.publish(marker_array)
+        marker_pub.publish(marker_array)
     
     def send_goal(self, x, y):
         goal = MoveBaseGoal()
@@ -149,19 +125,18 @@ class CandidateNavigatorCircle:
             if self.current_source and self.current_odom:
                 rospy.loginfo('Generating %d circle candidates around (%.2f, %.2f)',
                               self.num_candidates, self.current_source.x, self.current_source.y)
-                # candidates = self.generate_circle_candidates()
-                self.publish_candidates()
-                # for x, y in candidates:
-                #     pass  # Placeholder to avoid unused variable error
-                #     if self.is_feasible(x, y):
-                #         rospy.loginfo('Navigating to candidate (%.2f, %.2f)', x, y)
-                #         self.send_goal(x, y)
-                #         state = self.move_base_ac.get_state()
-                #         if state == actionlib.GoalStatus.SUCCEEDED:
-                #             rospy.loginfo('Reached (%.2f, %.2f)', x, y)
-                #         else:
-                #             rospy.logwarn('Failed to reach (%.2f, %.2f)', x, y)
-                # self.current_source = None
+                candidates = self.generate_circle_candidates()
+                for x, y in candidates:
+                    pass  # Placeholder to avoid unused variable error
+                    # if self.is_feasible(x, y):
+                    #     rospy.loginfo('Navigating to candidate (%.2f, %.2f)', x, y)
+                    #     self.send_goal(x, y)
+                    #     state = self.move_base_ac.get_state()
+                    #     if state == actionlib.GoalStatus.SUCCEEDED:
+                    #         rospy.loginfo('Reached (%.2f, %.2f)', x, y)
+                    #     else:
+                    #         rospy.logwarn('Failed to reach (%.2f, %.2f)', x, y)
+                self.current_source = None
                 self.current_source = None
             self.rate.sleep()
 

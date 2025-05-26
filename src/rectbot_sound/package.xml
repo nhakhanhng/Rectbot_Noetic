@@ -57,6 +57,8 @@
   <exec_depend>std_msgs</exec_depend>
   <depend>nav_msgs</depend>
   <depend>geometry_msgs</depend>
+  <depend>visualization_msgs</depend>
+  <depend>move_base_msgs</depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

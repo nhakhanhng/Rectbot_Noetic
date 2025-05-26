@@ -1,0 +1,12 @@
+<launch>
+    <!-- Bearing Init Node -->
+    <node pkg="rectbot_sound" type="bearing_perp_move_node" name="bearing_perp_move_node" output="screen">
+        <!-- Add parameters or remappings here if needed -->
+    </node>
+
+    <!-- Bearing Candidate Node -->
+    <node pkg="rectbot_sound" type="bearing_candidate_node" name="bearing_candidate_node" output="screen">
+        <!-- Add parameters or remappings here if needed -->
+    </node>
+
+</launch>

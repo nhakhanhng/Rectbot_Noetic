@@ -5,4 +5,4 @@ Description: Description of rectbot_sound
 Version: 0.0.0
 Cflags: 
 Libs: -L${prefix}/lib 
-Requires: rospy std_msgs nav_msgs geometry_msgs
+Requires: rospy std_msgs nav_msgs geometry_msgs visualization_msgs move_base_msgs

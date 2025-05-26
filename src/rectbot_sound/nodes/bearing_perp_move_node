@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 import rospy
 import math
-from geometry_msgs.msg import PoseStamped, PointStamped, Twist
+from geometry_msgs.msg import PoseStamped, PointStamped, Twist, Point
 from nav_msgs.msg import Odometry, OccupancyGrid
 from std_msgs.msg import Float32
+from visualization_msgs.msg import Marker
 
 # from CostmapChecker import CostmapChecker
 
@@ -19,7 +20,7 @@ class BearingPerpMoveNode(object):
         # Publishers
         self.pub_source_confirmed = rospy.Publisher("/sound_source_confirmed", PointStamped, queue_size=1)
         self.pub_cmd_vel = rospy.Publisher("/cmd_vel", Twist, queue_size=1)
-
+        self.marker_pub = rospy.Publisher("/bearing_markers", Marker, queue_size=10)
         self.costmap = None
         rospy.Subscriber("/move_base/local_costmap/costmap", OccupancyGrid, self.costmap_cb)
 
@@ -43,6 +44,9 @@ class BearingPerpMoveNode(object):
 
         self.start_position = None
 
+    def __del__(self):
+        self.delete_all_bearing_markers()
+    
     def costmap_cb(self, msg):
         rospy.loginfo("Received costmap")
         self.costmap = msg
@@ -73,9 +77,9 @@ class BearingPerpMoveNode(object):
         return True
         
     def select_safe_direction(self):
-        angle_offsets = [math.radians(i) for i in range(-45, 50, 5)]  
+        angle_offsets = [math.radians(i) for i in range(-90, 95, 5)]  # Expanded range to cover more angles
 
-        angle_offsets.sort(key=lambda x: abs(x))
+        angle_offsets.sort(key=lambda x: abs(x))  # Prioritize smaller offsets for minimal rotation
 
         for offset in angle_offsets:
             test_yaw = self.wrap_to_pi(self.start_yaw + offset)
@@ -83,10 +87,41 @@ class BearingPerpMoveNode(object):
             test_y = self.current_pose.position.y + self.test_move_distance * math.sin(test_yaw)
 
             if self.is_pose_safe(test_x, test_y, self.costmap):
-                rospy.loginfo("Testing yaw: {:.2f} degrees".format(math.degrees(test_yaw)))
+                rospy.loginfo("Safe direction found at yaw: {:.2f} degrees".format(math.degrees(test_yaw)))
                 return test_yaw
 
+        rospy.logwarn("No safe direction found")
         return None
+
+
+    def publish_bearing_marker(self, bearing_rad, pose, marker_id):
+
+        marker = Marker()
+        marker.header.frame_id = "odom"
+        marker.header.stamp = rospy.Time.now()
+        marker.ns = "bearing_marker"
+        marker.id = marker_id
+        marker.type = Marker.LINE_STRIP
+        marker.action = Marker.ADD
+        marker.scale.x = 0.05  # Line width
+        marker.color.r = 1.0
+        marker.color.g = 0.0
+        marker.color.b = 0.0 
+        marker.color.a = 1.0
+
+        start_point = pose.position
+        end_point = Point()
+        end_point.x = start_point.x + 2.0 * math.cos(bearing_rad)
+        end_point.y = start_point.y + 2.0 * math.sin(bearing_rad)
+        end_point.z = start_point.z
+
+        marker.points.append(start_point)
+        marker.points.append(end_point)
+        rospy.loginfo("Publishing bearing marker: id={}, start=({}, {}), end=({}, {})".format(
+            marker_id, start_point.x, start_point.y, end_point.x, end_point.y))
+        self.marker_pub.publish(marker)
+        
+        
 
     def bearing_deg_cb(self, msg):
         if self.current_pose is None:
@@ -97,20 +132,32 @@ class BearingPerpMoveNode(object):
         self.bearing_rad_robot = bearing_rad
 
         yaw = self.quat_to_yaw(self.current_pose.orientation)
-        bearing_global = self.wrap_to_pi(bearing_rad + yaw)
+        # bearing_global = self.wrap_to_pi(bearing_rad + yaw)
     
         if self.state == "WAIT_FIRST_BEARING":
-            self.first_bearing_rad = bearing_global
+            # self.first_bearing_rad = bearing_global
+            self.first_pose = self.current_pose
+            self.bearing_samples = []  # Reset for next collection
+            self.first_bearing_rad = self.wrap_to_pi(bearing_rad + yaw)
             self.first_pose = self.current_pose
             rospy.loginfo("Received first bearing: {:.2f}".format(math.degrees(self.bearing_rad_robot)))
-            
+            self.publish_bearing_marker(self.first_bearing_rad, self.current_pose, 1)
             self.start_rotation_to_perp()
             self.state = "ROTATING"
+            # self.state = "DONE"
 
         elif self.state == "WAIT_SECOND_BEARING":
-            self.second_bearing_rad = bearing_global
-            self.second_pose = self.current_pose
+            # self.second_bearing_rad = bearing_global
+            # self.second_pose = self.current_pose
+            if not hasattr(self, 'bearing_samples'):
+                self.bearing_samples = []
+            
+            self.bearing_samples.append(self.bearing_rad_robot)
+          
             rospy.loginfo("Received second bearing: {:.2f}".format(math.degrees(self.bearing_rad_robot)))
+            self.second_bearing_rad = self.wrap_to_pi(bearing_rad + yaw)
+            self.second_pose = self.current_pose
+            self.publish_bearing_marker(self.second_bearing_rad, self.current_pose, 2)
             self.compute_and_publish_intersection()
             self.state = "DONE"
 
@@ -163,13 +210,22 @@ class BearingPerpMoveNode(object):
             twist = Twist()
 
             if dist < self.move_distance - self.distance_tolerance:
-                twist.linear.x = 0.2
-                # self.pub_cmd_vel.publish(twist)
+                twist.linear.x = 0.05
+                self.pub_cmd_vel.publish(twist)
             else:
                 twist.linear.x = 0.0
                 self.pub_cmd_vel.publish(twist)
                 rospy.loginfo("Moved forward {:.2f}m, stopping for second bearing".format(dist))
                 self.state = "WAIT_SECOND_BEARING"
+
+    def delete_all_bearing_markers(self):
+        delete_marker = Marker()
+        delete_marker.header.frame_id = "odom"
+        delete_marker.header.stamp = rospy.Time.now()
+        delete_marker.ns = "bearing_marker"
+        delete_marker.action = Marker.DELETEALL
+        self.marker_pub.publish(delete_marker)
+        rospy.loginfo("Deleted all bearing markers")
 
     def distance_from_start(self):
         dx = self.current_pose.position.x - self.start_position.x
