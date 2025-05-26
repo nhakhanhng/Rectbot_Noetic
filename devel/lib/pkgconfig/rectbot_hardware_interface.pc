@@ -1,8 +1,8 @@
-prefix=/home/arar/Documents/rectbot_ws/devel
+prefix=/SLAM/rectbot_ws/devel
 
 Name: rectbot_hardware_interface
 Description: Description of rectbot_hardware_interface
 Version: 2.0.1
-Cflags: -I/home/arar/Documents/rectbot_ws/src/rectbot_hardware_interface/include -I/usr/include
+Cflags: -I/SLAM/rectbot_ws/src/rectbot_hardware_interface/include -I/usr/include
 Libs: -L${prefix}/lib 
 Requires: roscpp std_msgs sensor_msgs geometry_msgs trajectory_msgs cmake_modules hardware_interface controller_manager

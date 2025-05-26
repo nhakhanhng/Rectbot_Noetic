@@ -67,14 +67,14 @@ set(hardware_node_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(hardware_node_SOURCE_PREFIX /home/arar/Documents/rectbot_ws/src/hardware_node)
-  set(hardware_node_DEVEL_PREFIX /home/arar/Documents/rectbot_ws/devel)
+  set(hardware_node_SOURCE_PREFIX /SLAM/rectbot_ws/src/hardware_node)
+  set(hardware_node_DEVEL_PREFIX /SLAM/rectbot_ws/devel)
   set(hardware_node_INSTALL_PREFIX "")
   set(hardware_node_PREFIX ${hardware_node_DEVEL_PREFIX})
 else()
   set(hardware_node_SOURCE_PREFIX "")
   set(hardware_node_DEVEL_PREFIX "")
-  set(hardware_node_INSTALL_PREFIX /home/arar/Documents/rectbot_ws/install)
+  set(hardware_node_INSTALL_PREFIX /SLAM/rectbot_ws/install)
   set(hardware_node_PREFIX ${hardware_node_INSTALL_PREFIX})
 endif()
 
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/arar/Documents/rectbot_ws/install/lib;/home/arar/Documents/AStar_Plugin_ROS/devel/lib;/home/arar/Documents/rectbot_ws/devel/lib;/home/arar/Documents/catkin_ws/devel/lib;/opt/ros/melodic/lib)
+    foreach(path /SLAM/rectbot_ws/install/lib;/opt/ros/melodic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

@@ -1,4 +1,4 @@
-prefix=/home/arar/Documents/rectbot_ws/install
+prefix=/SLAM/rectbot_ws/install
 
 Name: rectbot_teleop
 Description: Description of rectbot_teleop

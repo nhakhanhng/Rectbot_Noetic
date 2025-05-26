@@ -1,8 +1,0 @@
-prefix=/home/arar/Documents/rectbot_ws/build/devel
-
-Name: hardware_node
-Description: Description of hardware_node
-Version: 0.4.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: rospy roslib tf std_msgs visualization_msgs geometry_msgs nav_msgs sensor_msgs std_srvs

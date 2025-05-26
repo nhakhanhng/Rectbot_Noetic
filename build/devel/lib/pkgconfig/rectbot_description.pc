@@ -1,8 +1,0 @@
-prefix=/home/arar/Documents/rectbot_ws/build/devel
-
-Name: rectbot_description
-Description: Description of rectbot_description
-Version: 1.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

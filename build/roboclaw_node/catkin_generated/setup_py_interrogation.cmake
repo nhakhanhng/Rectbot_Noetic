@@ -1,7 +1,0 @@
-set(roboclaw_node_SETUP_PY_SETUP_MODULE "distutils.core")
-set(roboclaw_node_SETUP_PY_VERSION "0.4.0")
-set(roboclaw_node_SETUP_PY_SCRIPTS "")
-set(roboclaw_node_SETUP_PY_PACKAGES "roboclaw_node")
-set(roboclaw_node_SETUP_PY_PACKAGE_DIRS "src/roboclaw_node")
-set(roboclaw_node_SETUP_PY_MODULES "")
-set(roboclaw_node_SETUP_PY_MODULE_DIRS "")

@@ -1,4 +1,4 @@
-prefix=/home/arar/Documents/rectbot_ws/install
+prefix=/SLAM/rectbot_ws/install
 
 Name: rectbot_wing_controller
 Description: Description of rectbot_wing_controller

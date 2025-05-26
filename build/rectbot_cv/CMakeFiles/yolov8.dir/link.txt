@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC  -std=c++14 -O3 -O3 -DNDEBUG  -shared -Wl,-soname,libyolov8.so -o /home/arar/Documents/rectbot_ws/devel/lib/libyolov8.so CMakeFiles/yolov8.dir/src/yolov8.cpp.o  -L/usr/local/cuda/lib64  -L/usr/local/cuda/lib64/libcudart.so 

@@ -1,8 +1,0 @@
-prefix=/home/arar/Documents/rectbot_ws/build/devel
-
-Name: rectbot_teleop
-Description: Description of rectbot_teleop
-Version: 0.4.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: rospy geometry_msgs
