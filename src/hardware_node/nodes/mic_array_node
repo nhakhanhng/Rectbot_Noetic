@@ -33,7 +33,7 @@ def mic_array_node():
             if ser.in_waiting > 0:
                 samples = []
                 sample_count = 0
-                while sample_count < 20:
+                while sample_count < 5:
                     try:
                         line = ser.readline().decode('utf-8').strip()
                         # print "Received line: {}".format(line)  # Debugging line
@@ -51,7 +51,7 @@ def mic_array_node():
                         # rospy.logwarn("Received invalid data from serial.")
                         continue
                 if len(samples) <= sample_count / 2:
-                    rospy.logwarn("Not enough valid samples received.")
+                    # rospy.logwarn("Not enough valid samples received.")
                     continue
                 angle = sum(samples) / len(samples)
                 pub.publish(angle)

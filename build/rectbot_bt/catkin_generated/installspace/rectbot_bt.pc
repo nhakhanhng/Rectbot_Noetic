@@ -1,8 +1,8 @@
-prefix=/SLAM/rectbot_ws/install
+prefix=/home/arar/Documents/rectbot_ws/install
 
 Name: rectbot_bt
 Description: Description of rectbot_bt
 Version: 0.0.0
 Cflags: -I${prefix}/include
 Libs: -L${prefix}/lib 
-Requires: roscpp rospy nav_msgs geometry_msgs
+Requires: roscpp rospy nav_msgs geometry_msgs behaviortree_cpp_v3 visualization_msgs move_base_msgs actionlib

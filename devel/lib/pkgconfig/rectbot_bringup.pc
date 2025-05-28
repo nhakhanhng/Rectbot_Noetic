@@ -1,4 +1,4 @@
-prefix=/SLAM/rectbot_ws/devel
+prefix=/home/arar/Documents/rectbot_ws/devel
 
 Name: rectbot_bringup
 Description: Description of rectbot_bringup

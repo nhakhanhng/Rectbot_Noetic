@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<root main_tree_to_execute="BehaviorTree">
+    <!-- ////////// -->
+    <BehaviorTree ID="BehaviorTree">
+        <!-- <ReactiveFallback> -->
+        <Sequence>
+            <Condition ID="CheckSound"/>
+            <Action ID="CancelAllGoal"/>
+            <!-- <RetryUntilSuccessful num_attempts="5"> -->
+                <Sequence>
+                    <Timeout msec="5000">
+                        <Action FirstDirection="{first_dir}" FirstRobotPos="{first_robot_pos}" ID="GetFirstDirection"/>
+                    </Timeout>
+                    <Action FirstDirection="{first_dir}" FirstRobotPos="{first_robot_pos}" ID="FindNextPosition" Position="{next_pos}"/>
+                    <Action ID="GotoPos" Position="{next_pos}"/>
+                    <Timeout msec="5000">
+                        <Action ID="GetSecondDirection" SecondDirection="{second_dir}" SecondRobotPos="{second_robot_pos}"/>
+                    </Timeout>
+                    <Action FirstDirection="{first_dir}" FirstRobotPos="{first_robot_pos}" ID="FindIntersectionPoint" InitSourcePos="" SecondDirection="{second_dir}" SecondRobotPos="{second_robot_pos}"/>
+                </Sequence>
+                <!-- </RetryUntilSuccessful> -->
+        </Sequence>
+        <!-- </ReactiveFallback> -->
+    </BehaviorTree>
+    <!-- ////////// -->
+    <TreeNodesModel>
+        <Action ID="CancelAllGoal"/>
+        <Condition ID="CheckObjects"/>
+        <Condition ID="CheckSound"/>
+        <Action ID="Docking"/>
+        <Action ID="ExploreMap"/>
+        <Action ID="FindIntersectionPoint">
+            <input_port name="FirstDirection"/>
+            <input_port name="FirstRobotPos"/>
+            <output_port name="InitSourcePos"/>
+            <input_port name="SecondDirection"/>
+            <input_port name="SecondRobotPos"/>
+        </Action>
+        <Action ID="FindNextPosition">
+            <input_port name="FirstDirection"/>
+            <input_port name="FirstRobotPos"/>
+            <output_port name="Position"/>
+        </Action>
+        <Action ID="FindObjects"/>
+        <Control ID="FindSoundPos"/>
+        <Action ID="FindSoundSource"/>
+        <Action ID="GetFirstDirection">
+            <output_port name="FirstDirection"/>
+            <output_port name="FirstRobotPos"/>
+        </Action>
+        <Action ID="GetSecondDirection">
+            <output_port name="SecondDirection"/>
+            <output_port name="SecondRobotPos"/>
+        </Action>
+        <Action ID="GotoHome"/>
+        <Action ID="GotoPos">
+            <input_port name="Position"/>
+        </Action>
+    </TreeNodesModel>
+    <!-- ////////// -->
+</root>

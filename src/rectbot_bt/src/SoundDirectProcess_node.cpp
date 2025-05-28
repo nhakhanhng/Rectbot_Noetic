@@ -1,68 +1,138 @@
 #include "SoundDirectProcess_node.hpp"
+#include <visualization_msgs/Marker.h>
+#include <geometry_msgs/PoseStamped.h>
+#include <tf/tf.h>
 #include <cmath>  
 
 
 
 
 GetDirection::GetDirection(const std::string& name, const BT::NodeConfiguration& config)
-  : BT::SyncActionNode(name, config), nh_() {}
+  : BT::SyncActionNode(name, config), nh_() {
+    marker_pub_ = nh_.advertise<visualization_msgs::Marker>("/sound_bearing_marker", 10);
+  }
 
 BT::NodeStatus GetDirection::tick()
 {
   // std::string topic = getDirectionTopic();
-  auto sound_msg = ros::topic::waitForMessage<std_msgs::Float32>('/sound_direction', nh_, ros::Duration(2.0));
+  // return BT::NodeStatus::SUCCESS; // TESTING TREE
+  auto sound_msg = ros::topic::waitForMessage<std_msgs::Float32>("/sound_direction", nh_, ros::Duration(2.0));
   if (!sound_msg)
   {
-    ROS_WARN("No direction received on: %s", topic.c_str());
+    ROS_WARN("No direction received on: %s", "/sound_direction");
     return BT::NodeStatus::FAILURE;
   }
+  double angle = sound_msg->data;
 
+  ROS_INFO("Received sound direction: %.2f degrees", angle);
   auto pose_msg = ros::topic::waitForMessage<nav_msgs::Odometry>(
-    "/odometr/filtered", nh_, ros::Duration(2.0));
+    "/odometry/filtered", nh_, ros::Duration(2.0));
   if (!pose_msg)
   {
-    ROS_WARN("No pose received from /odometr/filtered");
+    ROS_WARN("No pose received from /odometry/filtered");
     return BT::NodeStatus::FAILURE;
   }
-
-  setOutput(directionPortName(), sound_msg->data);
-  setOutput(posePortName(), pose_msg->pose.pose);
+  double robot_yaw = tf::getYaw(pose_msg->pose.pose.orientation);
+  double odom_angle =  angle * M_PI / 180.0 + robot_yaw;
+  if (directionPortName() == "FirstDirection")
+  {
+  publishBearingMarker(odom_angle, pose_msg->pose.pose, 1);
+  }
+  else 
+  {
+  publishBearingMarker(odom_angle, pose_msg->pose.pose, 2);
+  }
+  ROS_INFO("Calculated odom_angle: %.2f radians", odom_angle);
+  setOutput(directionPortName(), odom_angle);
+  setOutput(posPortName(), pose_msg->pose.pose);
 
   return BT::NodeStatus::SUCCESS;
+}
+
+void GetDirection::publishBearingMarker(double bearing_rad, const geometry_msgs::Pose& pose, int marker_id)
+{
+  visualization_msgs::Marker marker;
+  marker.header.frame_id = "odom";
+  marker.header.stamp = ros::Time::now();
+  marker.ns = "bearing_marker";
+  marker.id = marker_id;
+  marker.type = visualization_msgs::Marker::LINE_STRIP;
+  marker.action = visualization_msgs::Marker::ADD;
+  marker.scale.x = 0.05;  // Line width
+  marker.color.r = 1.0;
+  marker.color.g = 0.0;
+  marker.color.b = 0.0;
+  marker.color.a = 1.0;
+
+  geometry_msgs::Point start_point = pose.position;
+  geometry_msgs::Point end_point;
+  end_point.x = start_point.x + 2.0 * cos(bearing_rad);
+  end_point.y = start_point.y + 2.0 * sin(bearing_rad);
+  end_point.z = start_point.z;
+
+  marker.points.push_back(start_point);
+  marker.points.push_back(end_point);
+
+  ROS_INFO("Publishing bearing marker: id=%d, start=(%.2f, %.2f), end=(%.2f, %.2f)",
+           marker_id, start_point.x, start_point.y, end_point.x, end_point.y);
+
+  marker_pub_.publish(marker);
 }
 
 
 
 FindIntersectionPoint::FindIntersectionPoint(const std::string& name, const BT::NodeConfiguration& config)
-  : BT::SyncActionNode(name, config) {}
+  : BT::SyncActionNode(name, config) {
+    point_pub_ = nh_.advertise<geometry_msgs::PoseStamped>("/intersection_point", 10);
+  }
 
 BT::PortsList FindIntersectionPoint::providedPorts()
 {
   return {
-    BT::InputPort<geometry_msgs::Pose>("FirstRobotPose"),
-    BT::InputPort<geometry_msgs::Pose>("SecondRobotPose"),
+    BT::InputPort<geometry_msgs::Pose>("FirstRobotPos"),
+    BT::InputPort<geometry_msgs::Pose>("SecondRobotPos"),
     BT::InputPort<double>("FirstDirection"),
     BT::InputPort<double>("SecondDirection"),
-    BT::OutputPort<geometry_msgs::Pose>("InitSourcePose")
+    BT::OutputPort<geometry_msgs::Pose>("InitSourcePos")
   };
 }
 
 BT::NodeStatus FindIntersectionPoint::tick()
 {
   geometry_msgs::Pose pose1, pose2;
-  double angle1_deg, angle2_deg;
+  double angle1, angle2;
+  // return BT::NodeStatus::SUCCESS; //testing
 
-  if (!getInput("FirstRobotPose", pose1) ||
-      !getInput("SecondRobotPose", pose2) ||
-      !getInput("FirstDirection", angle1_deg) ||
-      !getInput("SecondDirection", angle2_deg))
+  if (!getInput("FirstRobotPos", pose1))
   {
-    ROS_ERROR("Missing required input");
+    ROS_ERROR("Missing required input: FirstRobotPose");
     return BT::NodeStatus::FAILURE;
   }
 
-  auto [dx1, dy1] = angleToUnitVector(angle1_deg);
-  auto [dx2, dy2] = angleToUnitVector(angle2_deg);
+  if (!getInput("SecondRobotPos", pose2))
+  {
+    ROS_ERROR("Missing required input: SecondRobotPose");
+    return BT::NodeStatus::FAILURE;
+  }
+
+  if (!getInput("FirstDirection", angle1))
+  {
+    ROS_ERROR("Missing required input: FirstDirection");
+    return BT::NodeStatus::FAILURE;
+  }
+
+  if (!getInput("SecondDirection", angle2))
+  {
+    ROS_ERROR("Missing required input: SecondDirection");
+    return BT::NodeStatus::FAILURE;
+  }
+
+  std::pair<double, double> dir1 = angleToUnitVector(angle1);
+  double dx1 = dir1.first;
+  double dy1 = dir1.second;
+  std::pair<double, double> dir2 = angleToUnitVector(angle2);
+  double dx2 = dir2.first;
+  double dy2 = dir2.second;
 
   double ix, iy;
   bool success = computeLineIntersection(
@@ -91,7 +161,9 @@ double v_norm = std::hypot(vx, vy);
 if (v_norm < 1e-6) return BT::NodeStatus::FAILURE;
 vx /= v_norm; vy /= v_norm;
 
-auto [dx2, dy2] = angleToUnitVector(angle2_deg);
+ dir2 = angleToUnitVector(angle2);
+ dx2 = dir2.first;
+ dy2 = dir2.second;
 double dot = vx * dx2 + vy * dy2;
 
 if (dot < 0.0) // behind
@@ -105,14 +177,27 @@ if (dot < 0.0) // behind
   intersection.position.y = iy;
   intersection.position.z = 0;
   intersection.orientation.w = 1.0;  // identity orientation
-
-  setOutput("InitSourcePose", intersection);
+  publishIntersectionPoint(intersection);
+  setOutput("InitSourcePos", intersection);
   return BT::NodeStatus::SUCCESS;
 }
 
-std::pair<double, double> FindIntersectionPoint::angleToUnitVector(double angle_deg)
+void FindIntersectionPoint::publishIntersectionPoint(const geometry_msgs::Pose& intersection)
 {
-  double angle_rad =  angle_deg * M_PI / 180.0;
+  geometry_msgs::PoseStamped intersection_msg;
+  intersection_msg.header.frame_id = "odom";
+  intersection_msg.header.stamp = ros::Time::now();
+  intersection_msg.pose = intersection;
+
+  ROS_INFO("Publishing intersection point: (%.2f, %.2f)", 
+           intersection.position.x, intersection.position.y);
+
+  point_pub_.publish(intersection_msg);
+}
+
+std::pair<double, double> FindIntersectionPoint::angleToUnitVector(double angle_rad)
+{
+  // double angle_rad =  angle_deg * M_PI / 180.0;
   return { cos(angle_rad), sin(angle_rad) };
 }
 
@@ -131,113 +216,64 @@ bool FindIntersectionPoint::computeLineIntersection(
   return true;
 }
 
-BT::NodeStatus FindNextPosition::tick()
+CheckSoundNode::CheckSoundNode(const std::string& name, const BT::NodeConfiguration& config)
+  : BT::ConditionNode(name, config), positive_count_(0), received_(false), last_direct_(0), current_direct_(0)
 {
-  geometry_msgs::Pose current_pose;
-  if (!getInput("CurrentPose", current_pose)) {
-    ROS_ERROR("FindNextPosition: Missing CurrentPose");
-    return BT::NodeStatus::FAILURE;
-  }
-
-  double yaw = tf::getYaw(current_pose.orientation);
-
-  std::vector<double> angle_offsets_deg;
-  for (int i = -90; i <= 90; i += 5) angle_offsets_deg.push_back(i);
-
-  // Sort offsets by absolute value to prioritize minimal turn
-  std::sort(angle_offsets_deg.begin(), angle_offsets_deg.end(),
-            [](double a, double b) { return std::abs(a) < std::abs(b); });
-
-  // Try FORWARD directions first
-  for (double offset_deg : angle_offsets_deg) {
-    double offset_rad = wrapToPi(offset_deg * M_PI / 180.0);
-    double test_yaw = wrapToPi(yaw + offset_rad);
-
-    double x = current_pose.position.x + test_move_distance_ * std::cos(test_yaw);
-    double y = current_pose.position.y + test_move_distance_ * std::sin(test_yaw);
-
-    if (isPoseSafe(x, y)) {
-      ROS_INFO("Safe FORWARD direction found: %.1f°", test_yaw * 180 / M_PI);
-      setOutput("NextPose", generatePose(x, y, test_yaw));
-      return BT::NodeStatus::SUCCESS;
-    }
-  }
-
-  // Try BACKWARD directions
-  for (double offset_deg : angle_offsets_deg) {
-    double offset_rad = wrapToPi(offset_deg * M_PI / 180.0);
-    double test_yaw = wrapToPi(yaw + offset_rad + M_PI);  // Flip 180°
-
-    double x = current_pose.position.x + test_move_distance_ * std::cos(test_yaw);
-    double y = current_pose.position.y + test_move_distance_ * std::sin(test_yaw);
-
-    if (isPoseSafe(x, y)) {
-      ROS_INFO("Safe BACKWARD direction found: %.1f°", test_yaw * 180 / M_PI);
-      setOutput("NextPose", generatePose(x, y, test_yaw));
-      return BT::NodeStatus::SUCCESS;
-    }
-  }
-
-  ROS_WARN("FindNextPosition: No safe direction found (forward or backward)");
-  return BT::NodeStatus::FAILURE;
+  sound_sub_ = nh_.subscribe("/sound_direction", 1, &CheckSoundNode::soundCallback, this);
 }
 
-#include "your_package/GotoPos.hpp"
-#include <ros/ros.h>
-#include <tf/tf.h>
-
-GotoPos::GotoPos(const std::string& name, const BT::NodeConfiguration& config)
-  : BT::SyncActionNode(name, config)
+BT::PortsList CheckSoundNode::providedPorts()
 {
-  ac_ = std::make_shared<MoveBaseClient>("move_base", true);
-
-  ROS_INFO("GotoPos: Đợi move_base...");
-  ac_->waitForServer();
-  ROS_INFO("GotoPos: Kết nối thành công với move_base");
+  return {};
 }
 
-BT::PortsList GotoPos::providedPorts()
+void CheckSoundNode::soundCallback(const std_msgs::Float32::ConstPtr& msg)
 {
-  return {
-    BT::InputPort<geometry_msgs::Pose>("goal_pose")
-  };
+  current_direct_ = msg->data;
+  received_ = true;
+  last_update_time_ = ros::Time::now();
+  ROS_INFO("[CheckSoundNode] Received sound direction: %.2f degrees", current_direct_);
+  float angle_diff = angleDifference(current_direct_, last_direct_);
+  ROS_INFO("[CheckSoundNode] Angle difference: %.2f degrees", angle_diff);
+  if (angle_diff < 25.0)  // within 10 degrees
+    positive_count_++;
+  else
+    positive_count_ = 0;  // reset if a single "false" is received
+  last_direct_ = current_direct_;
 }
 
-BT::NodeStatus GotoPos::tick()
+double CheckSoundNode::angleDifference(double angle1, double angle2)
 {
-  geometry_msgs::Pose goal_pose;
-  if (!getInput("goal_pose", goal_pose)) {
-    ROS_ERROR("GotoPos: miss input [goal_pose]");
-    return BT::NodeStatus::FAILURE;
-  }
+  double diff = angle1 - angle2;
+  while (diff > 180.0) diff -= 360.0;
+  while (diff < -180.0) diff += 360.0;
+  return abs(diff);
+}
 
-  move_base_msgs::MoveBaseGoal goal;
-  goal.target_pose.header.frame_id = "map";
-  goal.target_pose.header.stamp = ros::Time::now();
-  goal.target_pose.pose = goal_pose;
-
-  ROS_INFO("GotoPos:  (%.2f, %.2f)",
-           goal_pose.position.x, goal_pose.position.y);
-
-  ac_->sendGoal(goal);
-
-  bool finished = ac_->waitForResult(ros::Duration(30.0));
-
-  if (!finished)
+BT::NodeStatus CheckSoundNode::tick()
+{
+  // ros::Duration(10.0).sleep();
+  if (!received_)
   {
-    ROS_WARN("GotoPos: time out move_base");
-    ac_->cancelGoal();
+    ROS_WARN_THROTTLE(5.0, "[CheckSoundNode] No message received yet");
     return BT::NodeStatus::FAILURE;
   }
 
-  if (ac_->getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+  // Reset if timeout
+  if ((ros::Time::now() - last_update_time_).toSec() > timeout_sec_)
   {
-    ROS_INFO("GotoPos: Success");
+    ROS_WARN_THROTTLE(2.0, "[CheckSoundNode] Timeout since last message");
+    positive_count_ = 0;
+    return BT::NodeStatus::FAILURE;
+  }
+
+  if (positive_count_ >= required_count_)
+  {
+    ROS_INFO("[CheckSoundNode] Sound detected %d times, returning SUCCESS", positive_count_);
+    positive_count_ = 0;  // reset after success
     return BT::NodeStatus::SUCCESS;
   }
-  else
-  {
-    ROS_WARN("GotoPos: Fail - %s", ac_->getState().toString().c_str());
-    return BT::NodeStatus::FAILURE;
-  }
+
+  ROS_INFO_THROTTLE(1.0, "[CheckSoundNode] Detected %d / %d times", positive_count_, required_count_);
+  return BT::NodeStatus::FAILURE;
 }

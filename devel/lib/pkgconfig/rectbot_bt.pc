@@ -1,8 +1,8 @@
-prefix=/SLAM/rectbot_ws/devel
+prefix=/home/arar/Documents/rectbot_ws/devel
 
 Name: rectbot_bt
 Description: Description of rectbot_bt
 Version: 0.0.0
-Cflags: -I/SLAM/rectbot_ws/src/rectbot_bt/include
+Cflags: -I/home/arar/Documents/rectbot_ws/src/rectbot_bt/include
 Libs: -L${prefix}/lib 
-Requires: roscpp rospy nav_msgs geometry_msgs
+Requires: roscpp rospy nav_msgs geometry_msgs behaviortree_cpp_v3 visualization_msgs move_base_msgs actionlib

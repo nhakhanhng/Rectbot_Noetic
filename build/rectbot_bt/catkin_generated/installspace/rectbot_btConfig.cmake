@@ -67,14 +67,14 @@ set(rectbot_bt_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(rectbot_bt_SOURCE_PREFIX /SLAM/rectbot_ws/src/rectbot_bt)
-  set(rectbot_bt_DEVEL_PREFIX /SLAM/rectbot_ws/devel)
+  set(rectbot_bt_SOURCE_PREFIX /home/arar/Documents/rectbot_ws/src/rectbot_bt)
+  set(rectbot_bt_DEVEL_PREFIX /home/arar/Documents/rectbot_ws/devel)
   set(rectbot_bt_INSTALL_PREFIX "")
   set(rectbot_bt_PREFIX ${rectbot_bt_DEVEL_PREFIX})
 else()
   set(rectbot_bt_SOURCE_PREFIX "")
   set(rectbot_bt_DEVEL_PREFIX "")
-  set(rectbot_bt_INSTALL_PREFIX /SLAM/rectbot_ws/install)
+  set(rectbot_bt_INSTALL_PREFIX /home/arar/Documents/rectbot_ws/install)
   set(rectbot_bt_PREFIX ${rectbot_bt_INSTALL_PREFIX})
 endif()
 
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /SLAM/rectbot_ws/install/lib;/opt/ros/melodic/lib)
+    foreach(path /home/arar/Documents/rectbot_ws/install/lib;/home/arar/Documents/AStar_Plugin_ROS/devel/lib;/home/arar/Documents/rectbot_ws/devel/lib;/home/arar/Documents/catkin_ws/devel/lib;/opt/ros/melodic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -185,7 +185,7 @@ foreach(t ${rectbot_bt_EXPORTED_TARGETS})
   endif()
 endforeach()
 
-set(depends "roscpp;rospy;nav_msgs;geometry_msgs")
+set(depends "roscpp;rospy;nav_msgs;geometry_msgs;behaviortree_cpp_v3;visualization_msgs;move_base_msgs;actionlib")
 foreach(depend ${depends})
   string(REPLACE " " ";" depend_list ${depend})
   # the package name of the dependency must be kept in a unique variable so that it is not overwritten in recursive calls

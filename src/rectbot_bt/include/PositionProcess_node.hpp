@@ -5,6 +5,7 @@
 #include <geometry_msgs/Pose.h>
 #include <nav_msgs/OccupancyGrid.h>
 #include <ros/ros.h>
+#include <std_msgs/Float32.h>
 
 #include <move_base_msgs/MoveBaseAction.h>
 #include <actionlib/client/simple_action_client.h>
@@ -21,6 +22,7 @@ public:
 private:
   bool isPoseSafe(double x, double y);
   double wrapToPi(double angle);
+  double degreeToRadian(double degree) const { return degree * M_PI / 180.0; }
   geometry_msgs::Pose generatePose(double x, double y, double yaw);
 
   // Costmap
@@ -30,7 +32,7 @@ private:
   ros::NodeHandle nh_;
   ros::Subscriber costmap_sub_;
 
-  double test_move_distance_ = 1.0;  // meters
+  double test_move_distance_ = 0.5;  // meters
 };
 
 class GotoPos : public BT::SyncActionNode
@@ -46,5 +48,17 @@ private:
   std::shared_ptr<MoveBaseClient> ac_;
 };
 
+class CancelAllGoal : public BT::SyncActionNode
+{
+public:
+  CancelAllGoal(const std::string& name, const BT::NodeConfiguration& config);
+
+  static BT::PortsList providedPorts();
+  BT::NodeStatus tick() override;
+
+private:
+  using MoveBaseClient = actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>;
+  std::shared_ptr<MoveBaseClient> ac_;
+};
 
 #endif

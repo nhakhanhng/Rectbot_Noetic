@@ -167,7 +167,7 @@ class BearingPerpMoveNode(object):
         if perp_angle < math.pi and perp_angle > 0:
             del_angle = -math.pi/2 + perp_angle
         else:
-            del_angle =math.pi/2 + perp_angle
+            del_angle = math.pi/2 + perp_angle
         current_yaw = self.quat_to_yaw(self.current_pose.orientation)
         self.start_yaw = current_yaw + del_angle
         rospy.loginfo("Delta angle: {:.2f} degrees".format(math.degrees(del_angle)))

@@ -1,4 +1,4 @@
-prefix=/SLAM/rectbot_ws/install
+prefix=/home/arar/Documents/rectbot_ws/install
 
 Name: hardware_node
 Description: Description of hardware_node

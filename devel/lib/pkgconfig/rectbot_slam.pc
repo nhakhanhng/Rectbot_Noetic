@@ -1,8 +1,8 @@
-prefix=/SLAM/rectbot_ws/devel
+prefix=/home/arar/Documents/rectbot_ws/devel
 
 Name: rectbot_slam
 Description: Description of rectbot_slam
 Version: 1.2.0
-Cflags: -I/SLAM/rectbot_ws/src/rectbot_slam/include
+Cflags: -I/home/arar/Documents/rectbot_ws/src/rectbot_slam/include
 Libs: -L${prefix}/lib 
 Requires: roscpp sensor_msgs
