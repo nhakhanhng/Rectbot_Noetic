@@ -8,11 +8,11 @@ GlobalPlanner:
   use_quadratic: true
   use_grid_path: false
   old_navfn_behavior: false
-  lethal_cost: 253
+  lethal_cost: 200
   neutral_cost: 50
-  cost_factor: 3.0
+  cost_factor: 1.56
   publish_potential: false
-  default_tolerance: 0.3
+  # default_tolerance: 0.
   orientation_mode: 0
 
 # recovery_behaviors:

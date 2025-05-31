@@ -185,7 +185,7 @@ foreach(t ${rectbot_bt_EXPORTED_TARGETS})
   endif()
 endforeach()
 
-set(depends "roscpp;rospy;nav_msgs;geometry_msgs;behaviortree_cpp_v3;visualization_msgs;move_base_msgs;actionlib")
+set(depends "roscpp;rospy;nav_msgs;geometry_msgs;behaviortree_cpp_v3;visualization_msgs;move_base_msgs;actionlib;tf")
 foreach(depend ${depends})
   string(REPLACE " " ";" depend_list ${depend})
   # the package name of the dependency must be kept in a unique variable so that it is not overwritten in recursive calls

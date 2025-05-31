@@ -10,6 +10,10 @@
 #include <move_base_msgs/MoveBaseAction.h>
 #include <actionlib/client/simple_action_client.h>
 
+#include <move_base_msgs/MoveBaseAction.h>
+
+#include <nav_msgs/GetPlan.h>
+
 class FindNextPosition : public BT::SyncActionNode
 {
 public:
@@ -59,6 +63,38 @@ public:
 private:
   using MoveBaseClient = actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>;
   std::shared_ptr<MoveBaseClient> ac_;
+};
+
+class GenerateCircularCandidates : public BT::SyncActionNode
+{
+public:
+  GenerateCircularCandidates(const std::string& name, const BT::NodeConfiguration& config);
+
+  static BT::PortsList providedPorts();
+
+  BT::NodeStatus tick() override;
+  void publishCandidates(const std::vector<geometry_msgs::Pose>& candidates);
+
+private:
+  bool isPlanValid(const geometry_msgs::Pose& start, const geometry_msgs::Pose& goal);
+
+  ros::NodeHandle nh_;
+  ros::ServiceClient make_plan_client_;
+  ros::Publisher marker_pub_;
+};  
+
+
+class GetNextCandidate : public BT::SyncActionNode
+{
+public:
+  GetNextCandidate(const std::string& name, const BT::NodeConfiguration& config);
+
+  static BT::PortsList providedPorts();
+
+  BT::NodeStatus tick() override;
+
+private:
+  size_t current_index_ = 0;  // theo dõi vị trí candidate hiện tại
 };
 
 #endif

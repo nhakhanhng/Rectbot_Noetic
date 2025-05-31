@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   move_base_msgs
   actionlib
   geometry_msgs
+  tf
 )
 
 # find_package(behaviortree_cpp_v3 REQUIRED)
@@ -31,7 +32,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
  INCLUDE_DIRS include
 #  LIBRARIES rectbot_bt
- CATKIN_DEPENDS roscpp rospy nav_msgs geometry_msgs behaviortree_cpp_v3 visualization_msgs move_base_msgs actionlib
+ CATKIN_DEPENDS roscpp rospy nav_msgs geometry_msgs behaviortree_cpp_v3 visualization_msgs move_base_msgs actionlib tf
 #  DEPENDS system_lib
 )
 

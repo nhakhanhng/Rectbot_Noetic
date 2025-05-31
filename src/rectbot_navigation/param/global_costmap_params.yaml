@@ -4,13 +4,21 @@ global_costmap:
 
   update_frequency: 1.0
   publish_frequency: 1.0
-  transform_tolerance: 1.0
+  transform_tolerance: 0.5
   inflation_radius: 0.25
-  track_unknown_space: true
-  static_map: true
+  # track_unknown_space: true
+  # static_map: true
   rolling_window: false
   origin_x: -30.0
   origin_y: -30.0
   width: 60.0
   height: 60.0
- 
+  static_layer:
+    # enable: true
+    # map_topic: /map
+    # use_maximum: false
+    lethal_cost_threshold: 50
+    # subscribe_to_updates: true
+  
+  
+

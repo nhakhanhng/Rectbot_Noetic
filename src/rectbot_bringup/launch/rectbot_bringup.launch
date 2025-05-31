@@ -2,8 +2,6 @@
   <arg name="set_lidar_frame_id" default="lidar_link"/>
   <param name="publish_odom_frame" type="bool" value="false"/>
   <!-- <param name="publish_odom_frame" value="true"/> -->
-  <!-- SLAM -->
-  <include file="$(find rectbot_slam)/launch/rectbot_cartographer.launch" />
 
   <rosparam file="$(find rectbot_hardware_interface)/config/controllers.yaml" command="load"/>
   <rosparam file="$(find rectbot_hardware_interface)/config/joint_limits.yaml" command="load"/>
@@ -32,6 +30,9 @@
   <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization">
     <rosparam command="load" file="$(find rectbot_bringup)/config/localization_odom.yaml" />
   </node>   
+
+  <!-- SLAM -->
+  <include file="$(find rectbot_slam)/launch/rectbot_cartographer.launch" />
   <node name="RectbotHardwareInterface" pkg="rectbot_hardware_interface" type="rectbot_hardware_interface" output="screen"/>
 
   <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen"

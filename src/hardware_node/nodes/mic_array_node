@@ -44,7 +44,7 @@ def mic_array_node():
                             sample_angle = (sample_angle - 360.0) if sample_angle > 180.0 else sample_angle
                             sample_angle = -sample_angle
 
-                            if len(samples) == 0 or abs(sample_angle - sum(samples) / len(samples)) <= 20:
+                            if len(samples) == 0 or abs(sample_angle - sum(samples) / len(samples)) <= 25:
                                 samples.append(sample_angle)
                             sample_count += 1
                     except ValueError:

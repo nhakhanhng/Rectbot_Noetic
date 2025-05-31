@@ -5,4 +5,4 @@ Description: Description of rectbot_bt
 Version: 0.0.0
 Cflags: -I${prefix}/include
 Libs: -L${prefix}/lib 
-Requires: roscpp rospy nav_msgs geometry_msgs behaviortree_cpp_v3 visualization_msgs move_base_msgs actionlib
+Requires: roscpp rospy nav_msgs geometry_msgs behaviortree_cpp_v3 visualization_msgs move_base_msgs actionlib tf

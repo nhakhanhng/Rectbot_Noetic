@@ -27,6 +27,9 @@ int main(int argc, char** argv)
   factory.registerNodeType<GotoPos>("GotoPos");
   factory.registerNodeType<CancelAllGoal>("CancelAllGoal");
   factory.registerNodeType<CheckSoundNode>("CheckSound");
+  factory.registerNodeType<StoreDirectionsPose>("StoreDirectionPose");
+  factory.registerNodeType<GenerateCircularCandidates>("FindCandidatePos");
+  factory.registerNodeType<GetNextCandidate>("GetNextCandidate");
 
   // Load XML file path from ROS param
   ROS_INFO("Loading Behavior Tree XML file from parameter: bt_xml_file");
@@ -48,11 +51,11 @@ int main(int argc, char** argv)
   ros::Rate rate(10);
   while (ros::ok())
   {
-    tree.tickRoot();
-    if (status == BT::NodeStatus::SUCCESS)
-    {
-        break;
-    }
+    BT::NodeStatus status = tree.tickRoot();
+    // if (status == BT::NodeStatus::SUCCESS)
+    // {
+    //     break;
+    // }
     rate.sleep();
   }
 
