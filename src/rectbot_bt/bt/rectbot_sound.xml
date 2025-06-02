@@ -22,13 +22,14 @@
                         <Fallback>
                             <Sequence>
                                 <Action ID="GotoPos" Position="{candidate_pos}"/>
-                                <Action DirectionList="" ID="StoreDirectionPose" PosList=""/>
+                                <RetryUntilSuccessful num_attempts="3">
+                                    <Action DirectionList="" ID="StoreDirectionPose" InitPos="{init_pos}" PosList=""/>
+                                </RetryUntilSuccessful>
                             </Sequence>
                             <AlwaysSuccess/>
                         </Fallback>
                     </Sequence>
                 </KeepRunningUntilFailure>
-                <!-- <Action DirectionList="" ID="FindSourceLocation" PosList="" SourcePos=""/> -->
             </Sequence>
         </Sequence>
     </BehaviorTree>
@@ -58,11 +59,6 @@
         <Action ID="FindObjects"/>
         <Control ID="FindSoundPos"/>
         <Action ID="FindSoundSource"/>
-        <!-- <Action ID="FindSourceLocation">
-            <input_port name="DirectionList"/>
-            <input_port name="PosList"/>
-            <output_port name="SourcePos"/>
-        </Action> -->
         <Action ID="GetFirstDirection">
             <output_port name="FirstDirection" type="double"/>
             <output_port name="FirstRobotPos" type="geometry_msgs::Pose_&lt;std::allocator&lt;void&gt; &gt;"/>
@@ -81,6 +77,7 @@
         </Action>
         <Action ID="StoreDirectionPose">
             <output_port name="DirectionList"/>
+            <input_port name="InitPos"/>
             <output_port name="PosList"/>
         </Action>
     </TreeNodesModel>

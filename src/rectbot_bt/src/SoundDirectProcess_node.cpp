@@ -352,12 +352,21 @@ BT::PortsList StoreDirectionsPose::providedPorts()
 {
   return {
     BT::OutputPort<std::vector<std::vector<double>>>("DirectionList"),
-    BT::OutputPort<std::vector<geometry_msgs::Pose>>("PosList")
+    BT::OutputPort<std::vector<geometry_msgs::Pose>>("PosList"),
+    BT::OutputPort<std::vector<geometry_msgs::Pose>>("InitPos")
   };
 }
 
 BT::NodeStatus StoreDirectionsPose::tick()
 {
+
+  geometry_msgs::Pose init_position;
+
+  if (!getInput("InitPos", init_position))
+  {
+    ROS_WARN("Missing required input: InitPos");
+    return BT::NodeStatus::FAILURE;
+  }
   auto sound_msg = ros::topic::waitForMessage<std_msgs::Float32>("/sound_direction", nh_, ros::Duration(5.0));
   if (!sound_msg)
   {
@@ -372,12 +381,15 @@ BT::NodeStatus StoreDirectionsPose::tick()
     return BT::NodeStatus::FAILURE;
   }
 
+
+
   double direction = sound_msg->data;
   geometry_msgs::Pose current_pose = odom_msg->pose.pose;
   // Transform current_pose to map frame
   geometry_msgs::PoseStamped pose_in, pose_out;
   pose_in.header = odom_msg->header;
   pose_in.pose = current_pose;
+  
 
   try
   {
@@ -387,6 +399,30 @@ BT::NodeStatus StoreDirectionsPose::tick()
   catch (tf::TransformException& ex)
   {
     ROS_ERROR("Transform error: %s", ex.what());
+    return BT::NodeStatus::FAILURE;
+  }
+
+  // Calculate orientation from robot to init_position
+  double dx = init_position.position.x - pose_out.pose.position.x;
+  double dy = init_position.position.y - pose_out.pose.position.y;
+  double orientation_to_init = std::atan2(dy, dx);
+
+  // Normalize orientation to the range [-pi, pi]
+  while (orientation_to_init > M_PI) orientation_to_init -= 2 * M_PI;
+  while (orientation_to_init < -M_PI) orientation_to_init += 2 * M_PI;
+
+  ROS_INFO("Orientation from robot to init_position: %.2f radians", orientation_to_init);
+
+  // Compare sound direction with orientation to init_position
+  double angle_diff = std::fabs(direction * M_PI / 180.0 - orientation_to_init);
+  while (angle_diff > M_PI) angle_diff -= 2 * M_PI;
+  angle_diff = std::fabs(angle_diff);
+
+  ROS_INFO("Angle difference between sound direction and orientation to init_position: %.2f radians", angle_diff);
+
+  if (angle_diff > M_PI / 4)  // Example threshold: 45 degrees
+  {
+    ROS_WARN("Sound direction deviates significantly from orientation to init_position");
     return BT::NodeStatus::FAILURE;
   }
 
