@@ -16,6 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
   actionlib
   geometry_msgs
   tf
+  new_explore
 )
 
 # find_package(behaviortree_cpp_v3 REQUIRED)
@@ -32,7 +33,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
  INCLUDE_DIRS include
 #  LIBRARIES rectbot_bt
- CATKIN_DEPENDS roscpp rospy nav_msgs geometry_msgs behaviortree_cpp_v3 visualization_msgs move_base_msgs actionlib tf
+ CATKIN_DEPENDS roscpp rospy nav_msgs geometry_msgs behaviortree_cpp_v3 visualization_msgs move_base_msgs actionlib tf new_explore
 #  DEPENDS system_lib
 )
 
@@ -53,6 +54,7 @@ include_directories(
 add_executable(BT_node src/BT_node.cpp 
   src/PositionProcess_node.cpp
   src/SoundDirectProcess_node.cpp
+  src/ExploreActionNode.cpp
 ) 
 
 # add_dependencies(SoundDirectProcess_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})

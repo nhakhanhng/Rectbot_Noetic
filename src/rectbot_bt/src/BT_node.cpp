@@ -8,6 +8,7 @@
 // Include your custom BT node headers
 #include "PositionProcess_node.hpp"
 #include "SoundDirectProcess_node.hpp"
+#include "ExploreActionNode.hpp"
 
 int main(int argc, char** argv)
 {
@@ -30,6 +31,9 @@ int main(int argc, char** argv)
   factory.registerNodeType<StoreDirectionsPose>("StoreDirectionPose");
   factory.registerNodeType<GenerateCircularCandidates>("FindCandidatePos");
   factory.registerNodeType<GetNextCandidate>("GetNextCandidate");
+  factory.registerNodeType<FindSoundSource>("FindSoundSource");
+  factory.registerNodeType<ExploreActionNode>("ExploreMap");
+  factory.registerNodeType<IsNotFoundYet>("isNotFoundYet");
 
   // Load XML file path from ROS param
   ROS_INFO("Loading Behavior Tree XML file from parameter: bt_xml_file");
@@ -43,7 +47,7 @@ int main(int argc, char** argv)
   BT::Tree tree = factory.createTreeFromFile(xml_file, blackboard);
 
   // Logging
-  BT::StdCoutLogger logger(tree);
+  // BT::StdCoutLogger logger(tree);
   BT::PublisherZMQ publisher_zmq(tree);  // Optional: visualize via Groot
 
   ROS_INFO("Behavior Tree loaded: %s", xml_file.c_str());

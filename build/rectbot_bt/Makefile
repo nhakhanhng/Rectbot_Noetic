@@ -80,16 +80,6 @@ install/fast: preinstall/fast
 	/usr/bin/cmake -P cmake_install.cmake
 .PHONY : install/fast
 
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
-.PHONY : list_install_components
-
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
-
-.PHONY : list_install_components/fast
-
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
@@ -100,6 +90,17 @@ edit_cache:
 edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
+
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
 
 # Special rule for the target install/local
 install/local: preinstall
@@ -124,16 +125,15 @@ test/fast: test
 
 .PHONY : test/fast
 
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
 
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
 
-.PHONY : rebuild_cache/fast
+.PHONY : list_install_components/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -168,49 +168,124 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_eus.dir/rule:
-	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_eus.dir/rule
-.PHONY : rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_eus.dir/rule
+rectbot_bt/CMakeFiles/BT_node.dir/rule:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/BT_node.dir/rule
+.PHONY : rectbot_bt/CMakeFiles/BT_node.dir/rule
 
 # Convenience name for target.
-move_base_msgs_generate_messages_eus: rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_eus.dir/rule
+BT_node: rectbot_bt/CMakeFiles/BT_node.dir/rule
 
-.PHONY : move_base_msgs_generate_messages_eus
+.PHONY : BT_node
 
 # fast build rule for target.
-move_base_msgs_generate_messages_eus/fast:
-	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_eus.dir/build.make rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_eus.dir/build
-.PHONY : move_base_msgs_generate_messages_eus/fast
+BT_node/fast:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/BT_node.dir/build.make rectbot_bt/CMakeFiles/BT_node.dir/build
+.PHONY : BT_node/fast
 
 # Convenience name for target.
-rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_cpp.dir/rule:
-	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_cpp.dir/rule
-.PHONY : rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_cpp.dir/rule
+rectbot_bt/CMakeFiles/map_msgs_generate_messages_py.dir/rule:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/map_msgs_generate_messages_py.dir/rule
+.PHONY : rectbot_bt/CMakeFiles/map_msgs_generate_messages_py.dir/rule
 
 # Convenience name for target.
-move_base_msgs_generate_messages_cpp: rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_cpp.dir/rule
+map_msgs_generate_messages_py: rectbot_bt/CMakeFiles/map_msgs_generate_messages_py.dir/rule
 
-.PHONY : move_base_msgs_generate_messages_cpp
+.PHONY : map_msgs_generate_messages_py
 
 # fast build rule for target.
-move_base_msgs_generate_messages_cpp/fast:
-	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_cpp.dir/build.make rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_cpp.dir/build
-.PHONY : move_base_msgs_generate_messages_cpp/fast
+map_msgs_generate_messages_py/fast:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/map_msgs_generate_messages_py.dir/build.make rectbot_bt/CMakeFiles/map_msgs_generate_messages_py.dir/build
+.PHONY : map_msgs_generate_messages_py/fast
 
 # Convenience name for target.
-rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_lisp.dir/rule:
-	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_lisp.dir/rule
-.PHONY : rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_lisp.dir/rule
+rectbot_bt/CMakeFiles/map_msgs_generate_messages_nodejs.dir/rule:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/map_msgs_generate_messages_nodejs.dir/rule
+.PHONY : rectbot_bt/CMakeFiles/map_msgs_generate_messages_nodejs.dir/rule
 
 # Convenience name for target.
-move_base_msgs_generate_messages_lisp: rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_lisp.dir/rule
+map_msgs_generate_messages_nodejs: rectbot_bt/CMakeFiles/map_msgs_generate_messages_nodejs.dir/rule
 
-.PHONY : move_base_msgs_generate_messages_lisp
+.PHONY : map_msgs_generate_messages_nodejs
 
 # fast build rule for target.
-move_base_msgs_generate_messages_lisp/fast:
-	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_lisp.dir/build.make rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_lisp.dir/build
-.PHONY : move_base_msgs_generate_messages_lisp/fast
+map_msgs_generate_messages_nodejs/fast:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/map_msgs_generate_messages_nodejs.dir/build.make rectbot_bt/CMakeFiles/map_msgs_generate_messages_nodejs.dir/build
+.PHONY : map_msgs_generate_messages_nodejs/fast
+
+# Convenience name for target.
+rectbot_bt/CMakeFiles/map_msgs_generate_messages_lisp.dir/rule:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/map_msgs_generate_messages_lisp.dir/rule
+.PHONY : rectbot_bt/CMakeFiles/map_msgs_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+map_msgs_generate_messages_lisp: rectbot_bt/CMakeFiles/map_msgs_generate_messages_lisp.dir/rule
+
+.PHONY : map_msgs_generate_messages_lisp
+
+# fast build rule for target.
+map_msgs_generate_messages_lisp/fast:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/map_msgs_generate_messages_lisp.dir/build.make rectbot_bt/CMakeFiles/map_msgs_generate_messages_lisp.dir/build
+.PHONY : map_msgs_generate_messages_lisp/fast
+
+# Convenience name for target.
+rectbot_bt/CMakeFiles/map_msgs_generate_messages_eus.dir/rule:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/map_msgs_generate_messages_eus.dir/rule
+.PHONY : rectbot_bt/CMakeFiles/map_msgs_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+map_msgs_generate_messages_eus: rectbot_bt/CMakeFiles/map_msgs_generate_messages_eus.dir/rule
+
+.PHONY : map_msgs_generate_messages_eus
+
+# fast build rule for target.
+map_msgs_generate_messages_eus/fast:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/map_msgs_generate_messages_eus.dir/build.make rectbot_bt/CMakeFiles/map_msgs_generate_messages_eus.dir/build
+.PHONY : map_msgs_generate_messages_eus/fast
+
+# Convenience name for target.
+rectbot_bt/CMakeFiles/map_msgs_generate_messages_cpp.dir/rule:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/map_msgs_generate_messages_cpp.dir/rule
+.PHONY : rectbot_bt/CMakeFiles/map_msgs_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+map_msgs_generate_messages_cpp: rectbot_bt/CMakeFiles/map_msgs_generate_messages_cpp.dir/rule
+
+.PHONY : map_msgs_generate_messages_cpp
+
+# fast build rule for target.
+map_msgs_generate_messages_cpp/fast:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/map_msgs_generate_messages_cpp.dir/build.make rectbot_bt/CMakeFiles/map_msgs_generate_messages_cpp.dir/build
+.PHONY : map_msgs_generate_messages_cpp/fast
+
+# Convenience name for target.
+rectbot_bt/CMakeFiles/new_explore_generate_messages_cpp.dir/rule:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/new_explore_generate_messages_cpp.dir/rule
+.PHONY : rectbot_bt/CMakeFiles/new_explore_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+new_explore_generate_messages_cpp: rectbot_bt/CMakeFiles/new_explore_generate_messages_cpp.dir/rule
+
+.PHONY : new_explore_generate_messages_cpp
+
+# fast build rule for target.
+new_explore_generate_messages_cpp/fast:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/new_explore_generate_messages_cpp.dir/build.make rectbot_bt/CMakeFiles/new_explore_generate_messages_cpp.dir/build
+.PHONY : new_explore_generate_messages_cpp/fast
+
+# Convenience name for target.
+rectbot_bt/CMakeFiles/costmap_2d_generate_messages_eus.dir/rule:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/costmap_2d_generate_messages_eus.dir/rule
+.PHONY : rectbot_bt/CMakeFiles/costmap_2d_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+costmap_2d_generate_messages_eus: rectbot_bt/CMakeFiles/costmap_2d_generate_messages_eus.dir/rule
+
+.PHONY : costmap_2d_generate_messages_eus
+
+# fast build rule for target.
+costmap_2d_generate_messages_eus/fast:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/costmap_2d_generate_messages_eus.dir/build.make rectbot_bt/CMakeFiles/costmap_2d_generate_messages_eus.dir/build
+.PHONY : costmap_2d_generate_messages_eus/fast
 
 # Convenience name for target.
 rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_py.dir/rule:
@@ -228,6 +303,21 @@ move_base_msgs_generate_messages_py/fast:
 .PHONY : move_base_msgs_generate_messages_py/fast
 
 # Convenience name for target.
+rectbot_bt/CMakeFiles/costmap_2d_gencfg.dir/rule:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/costmap_2d_gencfg.dir/rule
+.PHONY : rectbot_bt/CMakeFiles/costmap_2d_gencfg.dir/rule
+
+# Convenience name for target.
+costmap_2d_gencfg: rectbot_bt/CMakeFiles/costmap_2d_gencfg.dir/rule
+
+.PHONY : costmap_2d_gencfg
+
+# fast build rule for target.
+costmap_2d_gencfg/fast:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/costmap_2d_gencfg.dir/build.make rectbot_bt/CMakeFiles/costmap_2d_gencfg.dir/build
+.PHONY : costmap_2d_gencfg/fast
+
+# Convenience name for target.
 rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_nodejs.dir/rule:
 	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_nodejs.dir/rule
 .PHONY : rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_nodejs.dir/rule
@@ -243,19 +333,169 @@ move_base_msgs_generate_messages_nodejs/fast:
 .PHONY : move_base_msgs_generate_messages_nodejs/fast
 
 # Convenience name for target.
-rectbot_bt/CMakeFiles/BT_node.dir/rule:
-	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/BT_node.dir/rule
-.PHONY : rectbot_bt/CMakeFiles/BT_node.dir/rule
+rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_cpp.dir/rule:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_cpp.dir/rule
+.PHONY : rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_cpp.dir/rule
 
 # Convenience name for target.
-BT_node: rectbot_bt/CMakeFiles/BT_node.dir/rule
+move_base_msgs_generate_messages_cpp: rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_cpp.dir/rule
 
-.PHONY : BT_node
+.PHONY : move_base_msgs_generate_messages_cpp
 
 # fast build rule for target.
-BT_node/fast:
-	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/BT_node.dir/build.make rectbot_bt/CMakeFiles/BT_node.dir/build
-.PHONY : BT_node/fast
+move_base_msgs_generate_messages_cpp/fast:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_cpp.dir/build.make rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_cpp.dir/build
+.PHONY : move_base_msgs_generate_messages_cpp/fast
+
+# Convenience name for target.
+rectbot_bt/CMakeFiles/costmap_2d_generate_messages_nodejs.dir/rule:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/costmap_2d_generate_messages_nodejs.dir/rule
+.PHONY : rectbot_bt/CMakeFiles/costmap_2d_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+costmap_2d_generate_messages_nodejs: rectbot_bt/CMakeFiles/costmap_2d_generate_messages_nodejs.dir/rule
+
+.PHONY : costmap_2d_generate_messages_nodejs
+
+# fast build rule for target.
+costmap_2d_generate_messages_nodejs/fast:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/costmap_2d_generate_messages_nodejs.dir/build.make rectbot_bt/CMakeFiles/costmap_2d_generate_messages_nodejs.dir/build
+.PHONY : costmap_2d_generate_messages_nodejs/fast
+
+# Convenience name for target.
+rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_eus.dir/rule:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_eus.dir/rule
+.PHONY : rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+move_base_msgs_generate_messages_eus: rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_eus.dir/rule
+
+.PHONY : move_base_msgs_generate_messages_eus
+
+# fast build rule for target.
+move_base_msgs_generate_messages_eus/fast:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_eus.dir/build.make rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_eus.dir/build
+.PHONY : move_base_msgs_generate_messages_eus/fast
+
+# Convenience name for target.
+rectbot_bt/CMakeFiles/new_explore_generate_messages_eus.dir/rule:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/new_explore_generate_messages_eus.dir/rule
+.PHONY : rectbot_bt/CMakeFiles/new_explore_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+new_explore_generate_messages_eus: rectbot_bt/CMakeFiles/new_explore_generate_messages_eus.dir/rule
+
+.PHONY : new_explore_generate_messages_eus
+
+# fast build rule for target.
+new_explore_generate_messages_eus/fast:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/new_explore_generate_messages_eus.dir/build.make rectbot_bt/CMakeFiles/new_explore_generate_messages_eus.dir/build
+.PHONY : new_explore_generate_messages_eus/fast
+
+# Convenience name for target.
+rectbot_bt/CMakeFiles/new_explore_generate_messages_lisp.dir/rule:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/new_explore_generate_messages_lisp.dir/rule
+.PHONY : rectbot_bt/CMakeFiles/new_explore_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+new_explore_generate_messages_lisp: rectbot_bt/CMakeFiles/new_explore_generate_messages_lisp.dir/rule
+
+.PHONY : new_explore_generate_messages_lisp
+
+# fast build rule for target.
+new_explore_generate_messages_lisp/fast:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/new_explore_generate_messages_lisp.dir/build.make rectbot_bt/CMakeFiles/new_explore_generate_messages_lisp.dir/build
+.PHONY : new_explore_generate_messages_lisp/fast
+
+# Convenience name for target.
+rectbot_bt/CMakeFiles/new_explore_generate_messages_nodejs.dir/rule:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/new_explore_generate_messages_nodejs.dir/rule
+.PHONY : rectbot_bt/CMakeFiles/new_explore_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+new_explore_generate_messages_nodejs: rectbot_bt/CMakeFiles/new_explore_generate_messages_nodejs.dir/rule
+
+.PHONY : new_explore_generate_messages_nodejs
+
+# fast build rule for target.
+new_explore_generate_messages_nodejs/fast:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/new_explore_generate_messages_nodejs.dir/build.make rectbot_bt/CMakeFiles/new_explore_generate_messages_nodejs.dir/build
+.PHONY : new_explore_generate_messages_nodejs/fast
+
+# Convenience name for target.
+rectbot_bt/CMakeFiles/new_explore_generate_messages_py.dir/rule:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/new_explore_generate_messages_py.dir/rule
+.PHONY : rectbot_bt/CMakeFiles/new_explore_generate_messages_py.dir/rule
+
+# Convenience name for target.
+new_explore_generate_messages_py: rectbot_bt/CMakeFiles/new_explore_generate_messages_py.dir/rule
+
+.PHONY : new_explore_generate_messages_py
+
+# fast build rule for target.
+new_explore_generate_messages_py/fast:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/new_explore_generate_messages_py.dir/build.make rectbot_bt/CMakeFiles/new_explore_generate_messages_py.dir/build
+.PHONY : new_explore_generate_messages_py/fast
+
+# Convenience name for target.
+rectbot_bt/CMakeFiles/costmap_2d_generate_messages_cpp.dir/rule:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/costmap_2d_generate_messages_cpp.dir/rule
+.PHONY : rectbot_bt/CMakeFiles/costmap_2d_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+costmap_2d_generate_messages_cpp: rectbot_bt/CMakeFiles/costmap_2d_generate_messages_cpp.dir/rule
+
+.PHONY : costmap_2d_generate_messages_cpp
+
+# fast build rule for target.
+costmap_2d_generate_messages_cpp/fast:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/costmap_2d_generate_messages_cpp.dir/build.make rectbot_bt/CMakeFiles/costmap_2d_generate_messages_cpp.dir/build
+.PHONY : costmap_2d_generate_messages_cpp/fast
+
+# Convenience name for target.
+rectbot_bt/CMakeFiles/costmap_2d_generate_messages_py.dir/rule:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/costmap_2d_generate_messages_py.dir/rule
+.PHONY : rectbot_bt/CMakeFiles/costmap_2d_generate_messages_py.dir/rule
+
+# Convenience name for target.
+costmap_2d_generate_messages_py: rectbot_bt/CMakeFiles/costmap_2d_generate_messages_py.dir/rule
+
+.PHONY : costmap_2d_generate_messages_py
+
+# fast build rule for target.
+costmap_2d_generate_messages_py/fast:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/costmap_2d_generate_messages_py.dir/build.make rectbot_bt/CMakeFiles/costmap_2d_generate_messages_py.dir/build
+.PHONY : costmap_2d_generate_messages_py/fast
+
+# Convenience name for target.
+rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_lisp.dir/rule:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_lisp.dir/rule
+.PHONY : rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+move_base_msgs_generate_messages_lisp: rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_lisp.dir/rule
+
+.PHONY : move_base_msgs_generate_messages_lisp
+
+# fast build rule for target.
+move_base_msgs_generate_messages_lisp/fast:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_lisp.dir/build.make rectbot_bt/CMakeFiles/move_base_msgs_generate_messages_lisp.dir/build
+.PHONY : move_base_msgs_generate_messages_lisp/fast
+
+# Convenience name for target.
+rectbot_bt/CMakeFiles/costmap_2d_generate_messages_lisp.dir/rule:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rectbot_bt/CMakeFiles/costmap_2d_generate_messages_lisp.dir/rule
+.PHONY : rectbot_bt/CMakeFiles/costmap_2d_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+costmap_2d_generate_messages_lisp: rectbot_bt/CMakeFiles/costmap_2d_generate_messages_lisp.dir/rule
+
+.PHONY : costmap_2d_generate_messages_lisp
+
+# fast build rule for target.
+costmap_2d_generate_messages_lisp/fast:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/costmap_2d_generate_messages_lisp.dir/build.make rectbot_bt/CMakeFiles/costmap_2d_generate_messages_lisp.dir/build
+.PHONY : costmap_2d_generate_messages_lisp/fast
 
 src/BT_node.o: src/BT_node.cpp.o
 
@@ -283,6 +523,33 @@ src/BT_node.s: src/BT_node.cpp.s
 src/BT_node.cpp.s:
 	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/BT_node.dir/build.make rectbot_bt/CMakeFiles/BT_node.dir/src/BT_node.cpp.s
 .PHONY : src/BT_node.cpp.s
+
+src/ExploreActionNode.o: src/ExploreActionNode.cpp.o
+
+.PHONY : src/ExploreActionNode.o
+
+# target to build an object file
+src/ExploreActionNode.cpp.o:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/BT_node.dir/build.make rectbot_bt/CMakeFiles/BT_node.dir/src/ExploreActionNode.cpp.o
+.PHONY : src/ExploreActionNode.cpp.o
+
+src/ExploreActionNode.i: src/ExploreActionNode.cpp.i
+
+.PHONY : src/ExploreActionNode.i
+
+# target to preprocess a source file
+src/ExploreActionNode.cpp.i:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/BT_node.dir/build.make rectbot_bt/CMakeFiles/BT_node.dir/src/ExploreActionNode.cpp.i
+.PHONY : src/ExploreActionNode.cpp.i
+
+src/ExploreActionNode.s: src/ExploreActionNode.cpp.s
+
+.PHONY : src/ExploreActionNode.s
+
+# target to generate assembly for a file
+src/ExploreActionNode.cpp.s:
+	cd /home/arar/Documents/rectbot_ws/build && $(MAKE) -f rectbot_bt/CMakeFiles/BT_node.dir/build.make rectbot_bt/CMakeFiles/BT_node.dir/src/ExploreActionNode.cpp.s
+.PHONY : src/ExploreActionNode.cpp.s
 
 src/PositionProcess_node.o: src/PositionProcess_node.cpp.o
 
@@ -346,20 +613,39 @@ help:
 	@echo "... depend"
 	@echo "... install/strip"
 	@echo "... install"
-	@echo "... list_install_components"
 	@echo "... edit_cache"
-	@echo "... install/local"
-	@echo "... test"
-	@echo "... move_base_msgs_generate_messages_eus"
-	@echo "... move_base_msgs_generate_messages_cpp"
-	@echo "... move_base_msgs_generate_messages_lisp"
 	@echo "... rebuild_cache"
-	@echo "... move_base_msgs_generate_messages_py"
-	@echo "... move_base_msgs_generate_messages_nodejs"
 	@echo "... BT_node"
+	@echo "... map_msgs_generate_messages_py"
+	@echo "... map_msgs_generate_messages_nodejs"
+	@echo "... map_msgs_generate_messages_lisp"
+	@echo "... map_msgs_generate_messages_eus"
+	@echo "... map_msgs_generate_messages_cpp"
+	@echo "... new_explore_generate_messages_cpp"
+	@echo "... costmap_2d_generate_messages_eus"
+	@echo "... move_base_msgs_generate_messages_py"
+	@echo "... costmap_2d_gencfg"
+	@echo "... move_base_msgs_generate_messages_nodejs"
+	@echo "... move_base_msgs_generate_messages_cpp"
+	@echo "... install/local"
+	@echo "... costmap_2d_generate_messages_nodejs"
+	@echo "... move_base_msgs_generate_messages_eus"
+	@echo "... new_explore_generate_messages_eus"
+	@echo "... new_explore_generate_messages_lisp"
+	@echo "... test"
+	@echo "... new_explore_generate_messages_nodejs"
+	@echo "... new_explore_generate_messages_py"
+	@echo "... list_install_components"
+	@echo "... costmap_2d_generate_messages_cpp"
+	@echo "... costmap_2d_generate_messages_py"
+	@echo "... move_base_msgs_generate_messages_lisp"
+	@echo "... costmap_2d_generate_messages_lisp"
 	@echo "... src/BT_node.o"
 	@echo "... src/BT_node.i"
 	@echo "... src/BT_node.s"
+	@echo "... src/ExploreActionNode.o"
+	@echo "... src/ExploreActionNode.i"
+	@echo "... src/ExploreActionNode.s"
 	@echo "... src/PositionProcess_node.o"
 	@echo "... src/PositionProcess_node.i"
 	@echo "... src/PositionProcess_node.s"

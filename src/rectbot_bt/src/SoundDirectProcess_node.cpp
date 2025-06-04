@@ -289,9 +289,9 @@ void CheckSoundNode::soundCallback(const std_msgs::Float32::ConstPtr& msg)
 {
   received_ = true;
   last_update_time_ = ros::Time::now();
-  ROS_INFO("[CheckSoundNode] Received sound direction: %.2f degrees", current_direct_);
+  // ROS_INFO("[CheckSoundNode] Received sound direction: %.2f degrees", current_direct_);
   float angle_diff = angleDifference(current_direct_, last_direct_);
-  ROS_INFO("[CheckSoundNode] Angle difference: %.2f degrees", angle_diff);
+  // ROS_INFO("[CheckSoundNode] Angle difference: %.2f degrees", angle_diff);
   if (angle_diff < 25.0)  // within 10 degrees
     positive_count_++;
   else
@@ -351,9 +351,9 @@ StoreDirectionsPose::StoreDirectionsPose(const std::string& name, const BT::Node
 BT::PortsList StoreDirectionsPose::providedPorts()
 {
   return {
-    BT::OutputPort<std::vector<std::vector<double>>>("DirectionList"),
+    BT::OutputPort<std::vector<double>>("DirectionList"),
     BT::OutputPort<std::vector<geometry_msgs::Pose>>("PosList"),
-    BT::OutputPort<std::vector<geometry_msgs::Pose>>("InitPos")
+    BT::InputPort<geometry_msgs::Pose>("InitPos")
   };
 }
 
@@ -420,7 +420,7 @@ BT::NodeStatus StoreDirectionsPose::tick()
 
   ROS_INFO("Angle difference between sound direction and orientation to init_position: %.2f radians", angle_diff);
 
-  if (angle_diff > M_PI / 4)  // Example threshold: 45 degrees
+  if (angle_diff > M_PI)  // Example threshold: 45 degrees
   {
     ROS_WARN("Sound direction deviates significantly from orientation to init_position");
     return BT::NodeStatus::FAILURE;
@@ -437,7 +437,7 @@ BT::NodeStatus StoreDirectionsPose::tick()
 
   // Cập nhật lại Blackboard
   setOutput("DirectionList", direction_list_);
-  setOutput("PoseList", pose_list_);
+  setOutput("PosList", pose_list_);
 
   return BT::NodeStatus::SUCCESS;
 }
@@ -473,27 +473,60 @@ void StoreDirectionsPose::publishSoundDirectionMarker(double direction, const ge
 }
 
 FindSoundSource::FindSoundSource(const std::string& name, const BT::NodeConfiguration& config)
-  : BT::SyncActionNode(name, config)
-{}
+  : BT::SyncActionNode(name, config), nh_()
+{
+  source_marker_pub_ = nh_.advertise<visualization_msgs::Marker>("/estimate_sound_source_pos", 10);
+}
 
 BT::PortsList FindSoundSource::providedPorts()
 {
   return {
-    BT::InputPort<std::vector<std::vector<double>>>("DirectionList"),
-    BT::InputPort<std::vector<geometry_msgs::Pose>>("PoseList"),
-    BT::OutputPort<geometry_msgs::Pose>("SourcePos")
+    BT::InputPort<std::vector<double>>("DirectionList"),
+    BT::InputPort<std::vector<geometry_msgs::Pose>>("PosList"),
+    BT::OutputPort<geometry_msgs::Pose>("SourcePos"),
+    BT::OutputPort<bool>("isFound")
   };
+}
+
+void FindSoundSource::publishSourceMarker(const geometry_msgs::Pose& source_pos)
+{
+  visualization_msgs::Marker marker;
+  marker.header.frame_id = "map";
+  marker.header.stamp = ros::Time::now();
+  marker.ns = "source_marker";
+  marker.id = 0;  // Single marker for the source
+  marker.type = visualization_msgs::Marker::SPHERE;
+  marker.action = visualization_msgs::Marker::ADD;
+  marker.pose = source_pos;
+  marker.scale.x = 0.5;  // Sphere diameter
+  marker.scale.y = 0.5;
+  marker.scale.z = 0.5;
+  marker.color.r = 0.0;
+  marker.color.g = 1.0;
+  marker.color.b = 0.0;
+  marker.color.a = 1.0;
+
+  ROS_INFO("Publishing source marker at (%.2f, %.2f)", 
+           source_pos.position.x, source_pos.position.y);
+
+  source_marker_pub_.publish(marker);
 }
 
 BT::NodeStatus FindSoundSource::tick()
 {
-  std::vector<std::vector<double>> directions_list;
+  std::vector<double> directions_list;
   std::vector<geometry_msgs::Pose> poses;
 
-  if (!getInput("DirectionList", directions_list) ||
-      !getInput("PoseList", poses))
+  if (!getInput("DirectionList", directions_list))
   {
-    throw BT::RuntimeError("FindSoundSource: Missing input ports");
+    ROS_ERROR("Missing required input: DirectionList");
+    return BT::NodeStatus::FAILURE;
+  }
+
+  if (!getInput("PosList", poses))
+  {
+    ROS_ERROR("Missing required input: PosList");
+    return BT::NodeStatus::FAILURE;
   }
 
   if (directions_list.size() != poses.size() || directions_list.size() < 2)
@@ -510,8 +543,8 @@ BT::NodeStatus FindSoundSource::tick()
     for (size_t j = i + 1; j < directions_list.size(); ++j)
     {
       // Giả sử directions_list[i] và directions_list[j] chỉ chứa 1 góc duy nhất
-      double angle_i = directions_list[i][0];
-      double angle_j = directions_list[j][0];
+      double angle_i = directions_list[i];
+      double angle_j = directions_list[j];
 
       std::pair<double,double> di = angleToUnitVector(angle_i);
       double dx_i = di.first;
@@ -556,11 +589,34 @@ BT::NodeStatus FindSoundSource::tick()
   source_pos.position.z = 0.0;
   source_pos.orientation.w = 1.0;  // identity quaternion
 
+  // Publish the source marker
+  publishSourceMarker(source_pos);
+
+  setOutput("isFound", true);  // Indicate that the source was found
   setOutput("SourcePos", source_pos);
 
   return BT::NodeStatus::SUCCESS;
 }
 
+IsNotFoundYet::IsNotFoundYet(const std::string& name, const BT::NodeConfiguration& config)
+    : BT::ConditionNode(name, config)
+{}
+
+BT::PortsList IsNotFoundYet::providedPorts()
+{
+    return { BT::InputPort<bool>("isFound","false") };
+}
+
+BT::NodeStatus IsNotFoundYet::tick()
+{
+    bool is_found;
+    if (!getInput("isFound", is_found))
+    {
+        throw BT::RuntimeError("Missing required input port: isFound");
+    }
+
+    return is_found ? BT::NodeStatus::FAILURE : BT::NodeStatus::SUCCESS;
+}
 
 
 std::pair<double,double> FindSoundSource::angleToUnitVector(double angle_rad)

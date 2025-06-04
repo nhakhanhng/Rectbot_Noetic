@@ -69,6 +69,7 @@
   <depend>move_base_msgs</depend>
   <depend>visualization_msgs</depend>
   <depend>tf</depend>
+  <depend>new_explore</depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

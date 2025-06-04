@@ -6,5 +6,5 @@ CXX_FLAGS =   -std=c++11
 
 CXX_DEFINES = -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\"rectbot_bt\"
 
-CXX_INCLUDES = -I/home/arar/Documents/rectbot_ws/src/rectbot_bt/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp 
+CXX_INCLUDES = -I/home/arar/Documents/rectbot_ws/src/rectbot_bt/include -I/home/arar/Documents/catkin_ws/devel/include -I/opt/ros/melodic/include -I/opt/ros/melodic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 
 

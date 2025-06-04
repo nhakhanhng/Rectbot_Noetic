@@ -142,9 +142,9 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("/home/arar/Documents/rectbot_ws/build/hardware_node/cmake_install.cmake")
   include("/home/arar/Documents/rectbot_ws/build/rectbot_gazebo/cmake_install.cmake")
   include("/home/arar/Documents/rectbot_ws/build/roboclaw_node/cmake_install.cmake")
-  include("/home/arar/Documents/rectbot_ws/build/rectbot_bt/cmake_install.cmake")
   include("/home/arar/Documents/rectbot_ws/build/rectbot_description/cmake_install.cmake")
   include("/home/arar/Documents/rectbot_ws/build/rectbot_cv/cmake_install.cmake")
+  include("/home/arar/Documents/rectbot_ws/build/rectbot_bt/cmake_install.cmake")
 
 endif()
 

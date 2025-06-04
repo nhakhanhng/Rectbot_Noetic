@@ -2,36 +2,41 @@
 <root main_tree_to_execute="BehaviorTree">
     <!-- ////////// -->
     <BehaviorTree ID="BehaviorTree">
-        <Sequence>
-            <Condition ID="CheckSound"/>
-            <Action ID="CancelAllGoal"/>
+        <ReactiveFallback>
             <Sequence>
-                <Timeout msec="5000">
-                    <Action FirstDirection="{first_dir}" FirstRobotPos="{first_robot_pos}" ID="GetFirstDirection"/>
-                </Timeout>
-                <Action FirstDirection="{first_dir}" FirstRobotPos="{first_robot_pos}" ID="FindNextPosition" Position="{next_pos}"/>
-                <Action ID="GotoPos" Position="{next_pos}"/>
-                <Timeout msec="5000">
-                    <Action ID="GetSecondDirection" SecondDirection="{second_dir}" SecondRobotPos="{second_robot_pos}"/>
-                </Timeout>
-                <Action FirstDirection="{first_dir}" FirstRobotPos="{first_robot_pos}" ID="FindIntersectionPoint" InitSourcePos="{init_pos}" SecondDirection="{second_dir}" SecondRobotPos="{second_robot_pos}"/>
-                <Action CandidateList="{candidate_list}" ID="FindCandidatePos" InitPose="{init_pos}"/>
-                <KeepRunningUntilFailure>
-                    <Sequence>
-                        <Action CandidateList="{candidate_list}" ID="GetNextCandidate" Next_Candidate="{candidate_pos}"/>
-                        <Fallback>
-                            <Sequence>
-                                <Action ID="GotoPos" Position="{candidate_pos}"/>
-                                <RetryUntilSuccessful num_attempts="3">
-                                    <Action DirectionList="" ID="StoreDirectionPose" InitPos="{init_pos}" PosList=""/>
-                                </RetryUntilSuccessful>
-                            </Sequence>
-                            <AlwaysSuccess/>
-                        </Fallback>
+                <Sequence name="ConditionCheckSequence">
+                    <Condition ID="isNotFoundYet" isFound="{source_found}"/>
+                    <Condition ID="CheckSound"/>
+                </Sequence>
+                <Action ID="CancelAllGoal"/>
+                <RetryUntilSuccessful num_attempts="5">
+                    <Sequence name="FindInitPosSequence">
+                        <Action FirstDirection="{first_dir}" FirstRobotPos="{first_robot_pos}" ID="GetFirstDirection"/>
+                        <Action FirstDirection="{first_dir}" FirstRobotPos="{first_robot_pos}" ID="FindNextPosition" Position="{next_pos}"/>
+                        <Action ID="GotoPos" Position="{next_pos}"/>
+                        <Action ID="GetSecondDirection" SecondDirection="{second_dir}" SecondRobotPos="{second_robot_pos}"/>
+                        <Action FirstDirection="{first_dir}" FirstRobotPos="{first_robot_pos}" ID="FindIntersectionPoint" InitSourcePos="{init_pos}" SecondDirection="{second_dir}" SecondRobotPos="{second_robot_pos}"/>
                     </Sequence>
-                </KeepRunningUntilFailure>
+                </RetryUntilSuccessful>
+                <Sequence name="LocalizePhaseSequence">
+                    <Action CandidateList="{candidate_list}" ID="FindCandidatePos" InitPose="{init_pos}"/>
+                    <KeepRunningUntilFailure>
+                        <Sequence>
+                            <Action CandidateList="{candidate_list}" ID="GetNextCandidate" Next_Candidate="{next_pos}"/>
+                            <Fallback>
+                                <Sequence>
+                                    <Action ID="GotoPos" Position="{next_pos}"/>
+                                    <Action DirectionList="{direct_list}" ID="StoreDirectionPose" InitPos="{init_pos}" PosList="{pos_list}"/>
+                                </Sequence>
+                                <AlwaysSuccess name="SkipCandidate"/>
+                            </Fallback>
+                        </Sequence>
+                    </KeepRunningUntilFailure>
+                    <Action DirectionList="{direct_list}" ID="FindSoundSource" PosList="{pos_list}" SourcePos="" isFound="{source_found}"/>
+                </Sequence>
             </Sequence>
-        </Sequence>
+            <Action ID="ExploreMap"/>
+        </ReactiveFallback>
     </BehaviorTree>
     <!-- ////////// -->
     <TreeNodesModel>
@@ -58,7 +63,13 @@
         </Action>
         <Action ID="FindObjects"/>
         <Control ID="FindSoundPos"/>
+        <Action ID="FindSourceLocation">
         <Action ID="FindSoundSource"/>
+            <input_port name="DirectionList"/>
+            <input_port name="PosList"/>
+            <output_port name="SourcePos"/>
+            <output_port name="isFound"/>
+        </Action>
         <Action ID="GetFirstDirection">
             <output_port name="FirstDirection" type="double"/>
             <output_port name="FirstRobotPos" type="geometry_msgs::Pose_&lt;std::allocator&lt;void&gt; &gt;"/>
@@ -80,6 +91,9 @@
             <input_port name="InitPos"/>
             <output_port name="PosList"/>
         </Action>
+        <Condition ID="isNotFoundYet">
+            <input_port name="isFound"/>
+        </Condition>
     </TreeNodesModel>
     <!-- ////////// -->
 </root>

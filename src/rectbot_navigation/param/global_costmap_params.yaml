@@ -6,7 +6,7 @@ global_costmap:
   publish_frequency: 1.0
   transform_tolerance: 0.5
   inflation_radius: 0.25
-  # track_unknown_space: true
+  track_unknown_space: true
   # static_map: true
   rolling_window: false
   origin_x: -30.0

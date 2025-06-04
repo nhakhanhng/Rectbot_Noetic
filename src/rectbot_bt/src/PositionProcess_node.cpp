@@ -189,7 +189,7 @@ BT::NodeStatus GotoPos::tick()
 
   bool finished = ac_->waitForResult(ros::Duration(30.0));
   // bool finished = true ;
-  return BT::NodeStatus::SUCCESS;
+  // return BT::NodeStatus::SUCCESS;
   if (!finished)
   {
     ROS_WARN("GotoPos: time out move_base");
@@ -350,8 +350,12 @@ BT::NodeStatus GenerateCircularCandidates::tick()
     p.position.z = 0.0;
 
     double yaw = std::atan2(init_pose.position.y - p.position.y, init_pose.position.x - p.position.x);
-    p.orientation = tf::createQuaternionMsgFromYaw(yaw);
-    // candidates.push_back(p);
+    // p.orientation = tf::createQuaternionMsgFromYaw(yaw);
+    p.orientation.w = 1.0;  // Identity orientation
+    p.orientation.x = 0.0;
+    p.orientation.y = 0.0;
+    p.orientation.z = 0.0;
+    candidates.push_back(p);
     if (isPlanValid(robot_pose, p))
     {
       candidates.push_back(p);

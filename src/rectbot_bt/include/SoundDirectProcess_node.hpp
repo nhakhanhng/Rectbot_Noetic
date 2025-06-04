@@ -81,6 +81,9 @@ template <> inline std::vector<geometry_msgs::Pose> convertFromString(StringView
 }
 
 
+
+
+
 class GetDirection : public BT::SyncActionNode
 {
 public:
@@ -121,7 +124,15 @@ protected:
   std::string posPortName() const override      { return "FirstRobotPos"; }
 };
 
+class IsNotFoundYet : public BT::ConditionNode
+{
+public:
+    IsNotFoundYet(const std::string& name, const BT::NodeConfiguration& config);
 
+    static BT::PortsList providedPorts();
+
+    BT::NodeStatus tick() override;
+};
 
 class GetSecondDirection : public GetDirection
 {
@@ -225,7 +236,10 @@ public:
 
 private:
   // Hàm tiện ích
+  ros::NodeHandle nh_;
+  ros::Publisher source_marker_pub_;
   std::pair<double,double> angleToUnitVector(double angle_rad);
+  void publishSourceMarker(const geometry_msgs::Pose& source_pos);
   bool computeLineIntersection(
     double x1, double y1, double dx1, double dy1,
     double x2, double y2, double dx2, double dy2,

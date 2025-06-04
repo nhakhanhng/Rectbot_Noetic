@@ -5,7 +5,7 @@ local_costmap:
   update_frequency: 10.0
   publish_frequency: 10.0
   transform_tolerance: 1.5
-  inflation_radius: 0.2
+  inflation_radius: 0.1
   track_unknown_space: true
 
   static_map: true  
@@ -19,4 +19,4 @@ local_costmap:
     combination_method: 1
     # track_unknown_space: true
     observation_sources: scan
-    scan: {sensor_frame: lidar_link, data_type: LaserScan, topic: /scan, marking: true, clearing: true}
+    scan: {sensor_frame: lidar_link, data_type: LaserScan, topic: /scan_multi, marking: true, clearing: true}

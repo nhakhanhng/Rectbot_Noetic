@@ -19,11 +19,11 @@
   <!-- <include file="$(find depthimage_to_laserscan)/launch/launchfile_sample.launch">
   </include> -->
 
-  <!-- <include file="$(find laserscan_kinect)/launch/laserscan.launch">
-  </include> -->
+  <include file="$(find laserscan_kinect)/launch/laserscan.launch">
+  </include>
 
-  <!-- <include file="$(find ira_laser_tools)/launch/laserscan_multi_merger.launch">
-  </include> -->
+  <include file="$(find ira_laser_tools)/launch/laserscan_multi_merger.launch">
+  </include>
 
   <include file="$(find rectbot_bringup)/launch/rectbot_remote.launch">
   </include>
