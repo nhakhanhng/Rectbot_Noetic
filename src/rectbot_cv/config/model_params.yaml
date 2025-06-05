@@ -16,7 +16,7 @@ input:
   
 # Detection parameters
 detection:
-  confidence_threshold: 0.5                         # Minimum confidence threshold for detections
+  confidence_threshold: 0.75                         # Minimum confidence threshold for detections
   nms_threshold: 0.45                               # Non-maximum suppression threshold
   max_detections: 100                               # Maximum number of detections to return
   

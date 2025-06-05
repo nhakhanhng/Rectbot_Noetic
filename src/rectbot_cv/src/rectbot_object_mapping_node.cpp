@@ -335,27 +335,41 @@ void RectbotObjectMapper::processDetections()
 
 bool RectbotObjectMapper::isOldObject(geometry_msgs::PointStamped position,int track_id, int &obj_idx) 
 {
-    // // Check if the object is old
-    // obj_idx = -1;
-    // for (int i = 0; i < objects_positions_.size(); i++) {
-    //     vision_msgs::ObjectHypothesisWithPose obj = objects_positions_[i];
-    //     if (obj.id == track_id) {
-    //         // Calculate Euclidean distance between detection centers
-    //         // float dx = position.point.x - obj.pose.pose.position.x;
-    //         // float dy = position.point.y - obj.pose.pose.position.y;
-    //         // float dz = position.point.z - obj.pose.pose.position.z;
+    // Check if the object is old
+    obj_idx = -1;
+    for (int i = 0; i < objects_positions_.size(); i++) {
+        PoseObjectPosition obj = objects_positions_[i];
+        if (obj.track_id == track_id) {
+            // Calculate Euclidean distance between detection centers
+            // float dx = position.point.x - obj.pose.pose.position.x;
+            // float dy = position.point.y - obj.pose.pose.position.y;
+            // float dz = position.point.z - obj.pose.pose.position.z;
 
-    //         // float distance = std::sqrt(dx*dx + dy*dy + dz*dz);
-    //         // ROS_INFO("Distance: %f", distance);
-    //         // // If the distance is below a threshold, consider it the same object
+            // float distance = std::sqrt(dx*dx + dy*dy + dz*dz);
+            // ROS_INFO("Distance: %f", distance);
+            // // If the distance is below a threshold, consider it the same object
 
-    //         // float distance_threshold = 0.1f;  // Pixel distance threshold, adjust as needed
-    //         // if (distance < distance_threshold) {
-    //             obj_idx = i;
-    //             return true;
-    //         // }
-    //     }
-    // }
+            // float distance_threshold = 0.1f;  // Pixel distance threshold, adjust as needed
+            // if (distance < distance_threshold) {
+                obj_idx = i;
+                return true;
+            // }
+        }
+        else {
+            float dx = position.point.x - obj.position.x;
+            float dy = position.point.y - obj.position.y;
+            float dz = position.point.z - obj.position.z;
+
+            float distance = std::sqrt(dx * dx + dy * dy + dz * dz);
+            ROS_INFO("Distance: %f", distance);
+
+            float distance_threshold = 0.5f;  // Adjust threshold as needed
+            if (distance < distance_threshold) {
+                obj_idx = i;
+                return true;
+            }
+        }
+    }
     return false;
 }
 
@@ -380,7 +394,7 @@ void RectbotObjectMapper::publishMarkers() {
     int new_id = 0;
     ROS_INFO("Object size: %d",objects_positions_.size());
     for (auto &obj : objects_positions_) {
-        m.id = new_id++;
+        m.id = obj.track_id;
         m.type = visualization_msgs::Marker::CUBE;
         m.action = visualization_msgs::Marker::ADD;
         m.pose.position.x = obj.position.x;
@@ -490,15 +504,65 @@ void RectbotObjectMapper::processD2CAligned()
     const std::vector<bytetrack_cpp::STrack> output_track_objs = tracker_.update(bytetrack_objects);
     ROS_INFO("Detect objects: %ld, Output Tracker: %ld\r\n", bytetrack_objects.size(),
             output_track_objs.size());
-    objects_positions_.clear();
+    // objects_positions_.clear();
 
     for (auto obj : output_track_objs) {
-        int obj_idx = -1;
-        float depth_pixel[2] = {obj.tlwh[0] + obj.tlwh[2]/2, obj.tlwh[1] + obj.tlwh[3]/2};
-        printf("Depth pixel: %f,%f\r\n",depth_pixel[0],depth_pixel[1]);
-        float depth_value = depth2color_image.at<uint16_t>(depth_pixel[1],depth_pixel[0]);
-        rs2_deproject_pixel_to_point(center_point, &color_intrinsics_ ,depth_pixel, depth_value * 0.001f);
-        // printf("Center point: %f,%f,%f\r\n",center_point[0],center_point[1],center_point[2]);
+        // int obj_idx = -1;
+
+        // float depth_pixel[2] { 0.0f, 0.0f };
+        // float min_distance = std::numeric_limits<float>::max();
+        // for (const auto& keypoint : obj.keypoints) {
+        //     if (keypoint.score > 0.7) {
+        //     float distance = std::sqrt(std::pow(keypoint.x - obj.tlwh[0] - obj.tlwh[2] / 2, 2) +
+        //                    std::pow(keypoint.y - obj.tlwh[1] - obj.tlwh[3] / 2, 2));
+        //     if (distance < min_distance) {
+        //         min_distance = distance;
+        //         depth_pixel[0] = keypoint.x;
+        //         depth_pixel[1] = keypoint.y;
+        //     }
+        //     }
+        // }
+
+        // // depth_pixel[2] = {obj.tlwh[0] + obj.tlwh[2]/2, obj.tlwh[1] + obj.tlwh[3]/2};
+        // // float depth_pixel[2] = {}
+        // // printf("Top: %f, Left: %f\r\n", obj.tlwh[1], obj.tlwh[0]);
+        // // printf("Depth pixel: %f,%f\r\n",depth_pixel[0],depth_pixel[1]);
+        // float depth_value = depth2color_image.at<uint16_t>(depth_pixel[1],depth_pixel[0]);
+        // rs2_deproject_pixel_to_point(center_point, &color_intrinsics_ ,depth_pixel, depth_value * 0.001f);
+        float min_depth = 500.0;
+        float min_depth_pixel[2] = {0.0f, 0.0f};
+        for (const auto& keypoint : obj.keypoints) {
+            // printf("Keypoint: %f,%f,%f\r\n",keypoint.x, keypoint.y, keypoint.score);
+            if (keypoint.score > 0.7) {
+                float depth_pixel[2] = {keypoint.x, keypoint.y};
+                float depth_value = depth2color_image.at<uint16_t>(depth_pixel[1], depth_pixel[0]) * 0.001f;
+                
+                printf("Min depth: %f\r\n", min_depth);
+                float point[3] = {0};
+                if (depth_value < min_depth) {
+                    min_depth = depth_value;
+                    min_depth_pixel[0] = depth_pixel[0];
+                    min_depth_pixel[1] = depth_pixel[1];
+                    // printf("Depth value:\r\n");
+
+                }
+            }
+        }
+        if (min_depth == 500) {
+            continue;
+        }
+        if (min_depth_pixel[0] == 0.0f && min_depth_pixel[1] == 0.0f) {
+            continue;
+        }
+        printf("Depth value: %f\r\n", min_depth );
+        printf("Min depth pixel: %f,%f\r\n",min_depth_pixel[0],min_depth_pixel[1]);
+        float depth_pixel[2] = {min_depth_pixel[0], min_depth_pixel[1]};
+        rs2_deproject_pixel_to_point(center_point, &color_intrinsics_, depth_pixel, min_depth);
+        printf("Center point: %f,%f,%f\r\n",center_point[0],center_point[1],center_point[2]);
+        if (center_point[2] < 0.1f || center_point[2] > 10.0f) {
+            ROS_WARN("Invalid depth value: %f, skipping object", center_point[2]);
+            continue;
+        }
         // Transform the point
          geometry_msgs::TransformStamped transform;
         try {
@@ -526,6 +590,14 @@ void RectbotObjectMapper::processD2CAligned()
         tf2::doTransform(point_in_cam_link, point_in_map, transform);
         point_in_map.header.frame_id = "map";
         printf("Point in map: %f,%f,%f\r\n",point_in_map.point.x,point_in_map.point.y,point_in_map.point.z);
+        int obj_idx = -1;
+        if (isOldObject(point_in_map, obj.track_id, obj_idx)) {
+            // Update the position of the existing object
+            objects_positions_[obj_idx].position.x = 0.8 * objects_positions_[obj_idx].position.x + 0.2 * point_in_map.point.x;
+            objects_positions_[obj_idx].position.y = 0.8 * objects_positions_[obj_idx].position.y + 0.2 * point_in_map.point.y;
+            objects_positions_[obj_idx].position.z = 0.0;
+            continue;
+        }
         // Create a marker for the object
         // ROS_INFO("New object detected: %d", det.results[0].id);
         PoseObjectPosition new_obj;
@@ -535,7 +607,7 @@ void RectbotObjectMapper::processD2CAligned()
         new_obj.score = obj.score;
         new_obj.position.x = point_in_map.point.x;
         new_obj.position.y = point_in_map.point.y;
-        new_obj.position.z = point_in_map.point.z;
+        new_obj.position.z = 0.0;
         // Get indices of keypoints with score above a threshold
         std::vector<int> high_score_keypoints_indices;
         float score_threshold = 0.7; // Adjust the threshold as needed
