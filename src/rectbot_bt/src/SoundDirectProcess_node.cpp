@@ -54,15 +54,15 @@ BT::NodeStatus GetDirection::tick()
   double map_angle =  angle * M_PI / 180.0 + robot_yaw;
   if (directionPortName() == "FirstDirection")
   {
-  publishBearingMarker(map_angle, pose_msg->pose.pose, 1);
+  publishBearingMarker(map_angle, pose_out.pose, 1);
   }
   else 
   {
-  publishBearingMarker(map_angle, pose_msg->pose.pose, 2);
+  publishBearingMarker(map_angle, pose_out.pose, 2);
   }
   ROS_INFO("Calculated map_angle: %.2f radians", map_angle);
   setOutput(directionPortName(), map_angle);
-  setOutput(posPortName(), pose_msg->pose.pose);
+  setOutput(posPortName(), pose_out.pose);
 
   return BT::NodeStatus::SUCCESS;
 }
@@ -498,8 +498,8 @@ void FindSoundSource::publishSourceMarker(const geometry_msgs::Pose& source_pos)
   marker.type = visualization_msgs::Marker::SPHERE;
   marker.action = visualization_msgs::Marker::ADD;
   marker.pose = source_pos;
-  marker.scale.x = 0.5;  // Sphere diameter
-  marker.scale.y = 0.5;
+  marker.scale.x = 0.1;  // Sphere diameter
+  marker.scale.y = 0.1;
   marker.scale.z = 0.5;
   marker.color.r = 0.0;
   marker.color.g = 1.0;

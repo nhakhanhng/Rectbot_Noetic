@@ -126,6 +126,8 @@ class RectbotObjectMapper
         bytetrack_cpp::BYTETracker tracker_;
         // std::vector<vision_msgs::Detection3D> objects_positions_3d_;
         int markers_id_;
+
+        ros::Timer process_timer_;
 };
 
 #endif

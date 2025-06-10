@@ -35,6 +35,11 @@ RectbotObjectMapper::RectbotObjectMapper():
     depth2color_aligned_info_sub_ = nh_.subscribe(depth2color_aligned_info_topic_, 1, &RectbotObjectMapper::depth2colorAlignedInfoCallback, this);
     object_marker_pub_ = nh_.advertise<visualization_msgs::MarkerArray>(object_marker_topic_, 1);
 
+    // Create a timer to periodically run processD2CAligned
+    process_timer_ = nh_.createTimer(ros::Duration(0.4), [this](const ros::TimerEvent&) {
+        processD2CAligned();
+    });
+
     markers_id_ = 0;
 }
 
@@ -98,8 +103,8 @@ void RectbotObjectMapper::detectionCallback(const rectbot_cv::PoseObjectArrayCon
 {
     detections_msg_ = msg->objects;
     // processDetections();
-    // ROS_INFO("Received %zu detections", detections_msg_.size());
-    processD2CAligned();
+    ROS_INFO("Received %zu detections", detections_msg_.size());
+    // processD2CAligned();
 }
 
 void RectbotObjectMapper::depthImageInfoCallback(const sensor_msgs::CameraInfoConstPtr& msg)
@@ -271,7 +276,7 @@ void RectbotObjectMapper::processDetections()
 {
     if (!depth_image_msg_ || detections_msg_.empty() || !depth_camera_model_.initialized() || !color_camera_model_.initialized())
     {
-        ROS_WARN_THROTTLE(1.0, "Skipping detection processing. Missing data.");
+        // ROS_WARN_THROTTLE(1.0, "Skipping detection processing. Missing data.");
         return;
     }
     visualization_msgs::MarkerArray markers_msg;
@@ -449,6 +454,9 @@ void RectbotObjectMapper::processD2CAligned()
         ROS_WARN_THROTTLE(1.0, "Skipping detection processing. Missing data.");
         return;
     }
+
+    ROS_INFO("Detection message timestamp: %f", detections_msg_[0].detection.header.stamp.toSec());
+    ROS_INFO("Depth2Color aligned image message timestamp: %f", depth2color_aligned_image_msg_->header.stamp.toSec());
     // m.header.frame_id = depth2color_aligned_image_msg_->header.frame_id;
     // visualization_msgs::MarkerArray markers_msg;
     // std::vector<visualization_msgs::Marker>& markers = markers_msg.markers;
@@ -478,6 +486,8 @@ void RectbotObjectMapper::processD2CAligned()
         ROS_ERROR("cv_bridge exception: %s", e.what());
         return;
     }
+
+    // std::vector<rectbot_cv::PoseObject> detections_copy = detections_msg_;
     cv::Mat depth2color_image = cv_ptr->image;
     // Now we can process the detections with the extrinsic matrix
     int new_id = 0;
@@ -532,14 +542,15 @@ void RectbotObjectMapper::processD2CAligned()
         float min_depth = 500.0;
         float min_depth_pixel[2] = {0.0f, 0.0f};
         for (const auto& keypoint : obj.keypoints) {
-            // printf("Keypoint: %f,%f,%f\r\n",keypoint.x, keypoint.y, keypoint.score);
+                // printf("Keypoint[%ld]: %f,%f,%f\r\n", &keypoint - &obj.keypoints[0], keypoint.x, keypoint.y, keypoint.score);
             if (keypoint.score > 0.7) {
                 float depth_pixel[2] = {keypoint.x, keypoint.y};
                 float depth_value = depth2color_image.at<uint16_t>(depth_pixel[1], depth_pixel[0]) * 0.001f;
-                
-                printf("Min depth: %f\r\n", min_depth);
+                if (depth_value <= 0.0f) continue;   // skip invalid depth
+                // printf("Min depth: %f\r\n", min_depth);
                 float point[3] = {0};
                 if (depth_value < min_depth) {
+                // printf("Keypoint[%ld]: %f,%f,%f\r\n", &keypoint - &obj.keypoints[0], keypoint.x, keypoint.y, depth_value);
                     min_depth = depth_value;
                     min_depth_pixel[0] = depth_pixel[0];
                     min_depth_pixel[1] = depth_pixel[1];
@@ -593,6 +604,16 @@ void RectbotObjectMapper::processD2CAligned()
         int obj_idx = -1;
         if (isOldObject(point_in_map, obj.track_id, obj_idx)) {
             // Update the position of the existing object
+            float dx = objects_positions_[obj_idx].position.x - point_in_map.point.x;
+            float dy = objects_positions_[obj_idx].position.y - point_in_map.point.y;
+
+            float distance = std::sqrt(dx * dx + dy * dy);
+
+            if (distance > 1.0f) {
+                ROS_WARN("Distance exceeds 1 meter, skipping update for object ID: %d", objects_positions_[obj_idx].track_id);
+                continue;
+            }
+
             objects_positions_[obj_idx].position.x = 0.8 * objects_positions_[obj_idx].position.x + 0.2 * point_in_map.point.x;
             objects_positions_[obj_idx].position.y = 0.8 * objects_positions_[obj_idx].position.y + 0.2 * point_in_map.point.y;
             objects_positions_[obj_idx].position.z = 0.0;
@@ -654,7 +675,7 @@ void RectbotObjectMapper::processD2CAligned()
     publishMarkers();
     // publishTransform();
 
-    
+    // detections_msg_.clear(); // Clear the detections message after processing
 }
 
 int main(int argc, char** argv)

@@ -32,7 +32,7 @@ int main(int argc, char** argv)
   factory.registerNodeType<GenerateCircularCandidates>("FindCandidatePos");
   factory.registerNodeType<GetNextCandidate>("GetNextCandidate");
   factory.registerNodeType<FindSoundSource>("FindSoundSource");
-  factory.registerNodeType<ExploreActionNode>("ExploreMap");
+  // factory.registerNodeType<ExploreActionNode>("ExploreMap");
   factory.registerNodeType<IsNotFoundYet>("isNotFoundYet");
 
   // Load XML file path from ROS param
@@ -47,7 +47,7 @@ int main(int argc, char** argv)
   BT::Tree tree = factory.createTreeFromFile(xml_file, blackboard);
 
   // Logging
-  // BT::StdCoutLogger logger(tree);
+  BT::StdCoutLogger logger(tree);
   BT::PublisherZMQ publisher_zmq(tree);  // Optional: visualize via Groot
 
   ROS_INFO("Behavior Tree loaded: %s", xml_file.c_str());
@@ -56,10 +56,10 @@ int main(int argc, char** argv)
   while (ros::ok())
   {
     BT::NodeStatus status = tree.tickRoot();
-    // if (status == BT::NodeStatus::SUCCESS)
-    // {
-    //     break;
-    // }
+    if (status == BT::NodeStatus::SUCCESS)
+    {
+        break;
+    }
     rate.sleep();
   }
 

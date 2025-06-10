@@ -231,11 +231,13 @@ BT::NodeStatus CancelAllGoal::tick()
   if (!ac_->isServerConnected())
   {
     ROS_ERROR("CancelAllGoal: move_base action server not connected");
+  ros::Duration(2.0).sleep();
     return BT::NodeStatus::FAILURE;
   }
 
   ROS_INFO("CancelAllGoal: Sending cancel all goals");
   ac_->cancelAllGoals();
+  ros::Duration(2.0).sleep();
   return BT::NodeStatus::SUCCESS;
 }
 
@@ -269,7 +271,7 @@ bool GenerateCircularCandidates::isPlanValid(const geometry_msgs::Pose& start, c
   srv.request.goal.pose = goal;
 
   srv.request.tolerance = 0.15;  // 20cm tolerance
-  if (!make_plan_client_.call(srv))
+  if (!make_plan_client_.call(srv) || srv.response.plan.poses.size() >= 30)
   {
     ROS_WARN("Failed to call service /move_base/make_plan");
     return false;
@@ -364,6 +366,28 @@ BT::NodeStatus GenerateCircularCandidates::tick()
     {
       ROS_WARN("Candidate at (%.2f, %.2f) rejected by make_plan", p.position.x, p.position.y);
     }
+  }
+
+  // Sort candidates by distance to the robot_pose
+  // Sort candidates by distance to the robot_pose
+  std::sort(candidates.begin(), candidates.end(), [&robot_pose](const geometry_msgs::Pose& a, const geometry_msgs::Pose& b) {
+    double dist_a = std::hypot(a.position.x - robot_pose.position.x, a.position.y - robot_pose.position.y);
+    double dist_b = std::hypot(b.position.x - robot_pose.position.x, b.position.y - robot_pose.position.y);
+    return dist_a < dist_b;
+  });
+
+  // Reorder candidates to start with the nearest and follow clockwise order
+  if (!candidates.empty()) {
+    geometry_msgs::Pose nearest = candidates.front();
+    candidates.erase(candidates.begin());
+
+    std::sort(candidates.begin(), candidates.end(), [&nearest](const geometry_msgs::Pose& a, const geometry_msgs::Pose& b) {
+      double angle_a = std::atan2(a.position.y - nearest.position.y, a.position.x - nearest.position.x);
+      double angle_b = std::atan2(b.position.y - nearest.position.y, b.position.x - nearest.position.x);
+      return angle_a > angle_b; // Clockwise order
+    });
+
+    candidates.insert(candidates.begin(), nearest);
   }
   // Publish candidates for visualization
   publishCandidates(candidates);

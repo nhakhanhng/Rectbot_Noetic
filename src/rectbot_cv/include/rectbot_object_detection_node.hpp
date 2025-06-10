@@ -32,6 +32,10 @@ private:
     ros::Publisher processed_pub_;
     ros::Publisher detection_pub_;  // Publisher for detection results
 
+
+    // ROS Image message for subscribing to input images
+    sensor_msgs::ImageConstPtr image_msg_;
+
     // YOLOv8 detector
     std::unique_ptr<YOLOv8> detector_;
 
@@ -48,9 +52,8 @@ private:
     void imageCallback(const sensor_msgs::ImageConstPtr& msg);
     
     // Object detection
-    bool detectObjects(const cv::Mat& image, std::vector<cv::Rect>& detections, 
-                                        std::vector<float>& confidences, std::vector<int>& class_ids);
     
+    void detectObjects_thread();   
     // Load the detection model
     bool loadModel();
 
@@ -59,6 +62,9 @@ private:
     // Model variables
     cv::dnn::Net network_;
     std::vector<std::string> class_names_;
+
+    // Thread for processing detections to coordinates
+    std::thread detect_thread_;
 };
 
 

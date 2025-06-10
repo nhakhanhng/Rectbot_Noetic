@@ -1,20 +1,20 @@
 DWAPlannerROS:
 
 # Robot Configuration Parameters
-  max_vel_x: 0.1
-  min_vel_x: 0.0
+  max_vel_x: 0.2
+  min_vel_x: -0.05
 
   max_vel_y: 0.0
   min_vel_y: 0.0
 
 # The velocity when robot is moving in a straight line
-  max_vel_trans:  0.15
+  max_vel_trans:  0.2
   min_vel_trans:  0.00
 
-  max_vel_theta: 1.0
-  min_vel_theta: 0.0
+  max_vel_theta: 2.0
+  min_vel_theta: 0.5
 
-  acc_lim_x: 5.0
+  acc_lim_x: 1.0
   acc_lim_y: 0.0
   acc_lim_theta: 10.0 
 
@@ -37,7 +37,7 @@ DWAPlannerROS:
   occdist_scale: 2.0
   forward_point_distance: 0.2
   stop_time_buffer: 0.2
-  scaling_speed: 0.25
+  scaling_speed: 0.1
   max_scaling_factor: 0.2
 
 # Oscillation Prevention Parameters
