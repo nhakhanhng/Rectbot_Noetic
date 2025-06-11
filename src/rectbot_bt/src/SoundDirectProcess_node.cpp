@@ -101,9 +101,7 @@ void GetDirection::publishBearingMarker(double bearing_rad, const geometry_msgs:
 
 FindIntersectionPoint::FindIntersectionPoint(const std::string& name, const BT::NodeConfiguration& config)
   : BT::SyncActionNode(name, config) {
-    point_pub_ = nh_.advertise<geometry_msgs::PoseStamped>("/intersection_point", 10);
-    // map_sub_ = nh_.subscribe("/map", 1, &FindIntersectionPoint::mapCallback, this);
-    // Service client for plan checking
+    point_pub_ = nh_.advertise<visualization_msgs::Marker>("/intersection_point_marker", 10);
     make_plan_client_ = nh_.serviceClient<nav_msgs::GetPlan>("/move_base/make_plan");
     make_plan_client_.waitForExistence(ros::Duration(5.0));
   }
@@ -118,7 +116,6 @@ BT::PortsList FindIntersectionPoint::providedPorts()
     BT::OutputPort<geometry_msgs::Pose>("InitSourcePos")
   };
 }
-
 
 bool FindIntersectionPoint::isPlanValid(const geometry_msgs::Pose& start, const geometry_msgs::Pose& goal)
 {
@@ -140,14 +137,10 @@ bool FindIntersectionPoint::isPlanValid(const geometry_msgs::Pose& start, const 
   return !srv.response.plan.poses.empty();
 }
 
-
-
-
 BT::NodeStatus FindIntersectionPoint::tick()
 {
   geometry_msgs::Pose pose1, pose2;
   double angle1, angle2;
-  // return BT::NodeStatus::SUCCESS; //testing
 
   if (!getInput("FirstRobotPos", pose1))
   {
@@ -185,15 +178,22 @@ BT::NodeStatus FindIntersectionPoint::tick()
     pose1.position.x, pose1.position.y, dx1, dy1,
     pose2.position.x, pose2.position.y, dx2, dy2,
     ix, iy);
-  // Check plan feasibility
+
   geometry_msgs::Pose goal_pose;
   goal_pose.position.x = ix;
   goal_pose.position.y = iy;
   goal_pose.position.z = 0;
   goal_pose.orientation.w = 1.0;
-   if (!success)
+
+  if (!success)
   {
     ROS_WARN("Lines are parallel or do not intersect");
+    return BT::NodeStatus::FAILURE;
+  }
+
+  if (!isPlanValid(pose2, goal_pose)) {
+    ROS_WARN("No valid plan to intersection within 0.5m tolerance");
+    return BT::NodeStatus::FAILURE;
     return BT::NodeStatus::FAILURE;
   }
 
@@ -243,15 +243,26 @@ if (dot < 0.0) // behind
 
 void FindIntersectionPoint::publishIntersectionPoint(const geometry_msgs::Pose& intersection)
 {
-  geometry_msgs::PoseStamped intersection_msg;
-  intersection_msg.header.frame_id = "map";
-  intersection_msg.header.stamp = ros::Time::now();
-  intersection_msg.pose = intersection;
+  visualization_msgs::Marker marker;
+  marker.header.frame_id = "map";
+  marker.header.stamp = ros::Time::now();
+  marker.ns = "intersection_marker";
+  marker.id = 0;  // Single marker for the intersection point
+  marker.type = visualization_msgs::Marker::SPHERE;
+  marker.action = visualization_msgs::Marker::ADD;
+  marker.pose = intersection;
+  marker.scale.x = 0.2;  // Sphere diameter
+  marker.scale.y = 0.2;
+  marker.scale.z = 0.2;
+  marker.color.r = 0.0;
+  marker.color.g = 0.0;
+  marker.color.b = 1.0;
+  marker.color.a = 1.0;
 
-  ROS_INFO("Publishing intersection point: (%.2f, %.2f)", 
+  ROS_INFO("Publishing intersection marker at (%.2f, %.2f)", 
            intersection.position.x, intersection.position.y);
 
-  point_pub_.publish(intersection_msg);
+  point_pub_.publish(marker);
 }
 
 std::pair<double, double> FindIntersectionPoint::angleToUnitVector(double angle_rad)
@@ -612,7 +623,8 @@ BT::NodeStatus IsNotFoundYet::tick()
     bool is_found;
     if (!getInput("isFound", is_found))
     {
-        throw BT::RuntimeError("Missing required input port: isFound");
+        // throw BT::RuntimeError("Missing required input port: isFound");
+        is_found = false;
     }
 
     return is_found ? BT::NodeStatus::FAILURE : BT::NodeStatus::SUCCESS;

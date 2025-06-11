@@ -187,6 +187,12 @@ vector
 -
 string
 -
+thread
+-
+mutex
+-
+atomic
+-
 tf2_geometry_msgs/tf2_geometry_msgs.h
 -
 tf2_ros/transform_listener.h

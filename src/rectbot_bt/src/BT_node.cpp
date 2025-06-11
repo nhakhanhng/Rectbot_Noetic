@@ -21,6 +21,7 @@ int main(int argc, char** argv)
   BT::BehaviorTreeFactory factory;
 
   // Register all custom nodes
+  factory.registerNodeType<IsNotFoundYet>("isNotFoundYet");
   factory.registerNodeType<GetFirstDirection>("GetFirstDirection");
   factory.registerNodeType<GetSecondDirection>("GetSecondDirection");
   factory.registerNodeType<FindIntersectionPoint>("FindIntersectionPoint");
@@ -32,8 +33,7 @@ int main(int argc, char** argv)
   factory.registerNodeType<GenerateCircularCandidates>("FindCandidatePos");
   factory.registerNodeType<GetNextCandidate>("GetNextCandidate");
   factory.registerNodeType<FindSoundSource>("FindSoundSource");
-  // factory.registerNodeType<ExploreActionNode>("ExploreMap");
-  factory.registerNodeType<IsNotFoundYet>("isNotFoundYet");
+  factory.registerNodeType<ExploreActionNode>("ExploreMap");
 
   // Load XML file path from ROS param
   ROS_INFO("Loading Behavior Tree XML file from parameter: bt_xml_file");

@@ -5,7 +5,7 @@
         <ReactiveFallback>
             <Sequence>
                 <Sequence name="ConditionCheckSequence">
-                    <!-- <Condition ID="isNotFoundYet" isFound="{source_found}"/> -->
+                    <Condition ID="isNotFoundYet" isFound="{source_found}"/>
                     <Condition ID="CheckSound"/>
                 </Sequence>
                 <Action ID="CancelAllGoal"/>
@@ -37,7 +37,7 @@
                     <Action DirectionList="{direct_list}" ID="FindSoundSource" PosList="{pos_list}" SourcePos="" isFound="{source_found}"/>
                 </Sequence>
             </Sequence>
-            <!-- <Action ID="ExploreMap"/> -->
+            <Action ID="ExploreMap"/>
         </ReactiveFallback>
     </BehaviorTree>
     <!-- ////////// -->
@@ -46,7 +46,7 @@
         <Condition ID="CheckObjects"/>
         <Condition ID="CheckSound"/>
         <Action ID="Docking"/>
-        <!-- <Action ID="ExploreMap"/> -->
+        <Action ID="ExploreMap"/>
         <Action ID="FindCandidatePos">
             <output_port default="{candidate_list}" name="CandidateList"/>
             <input_port default="{init_pos}" name="InitPose"/>
@@ -93,9 +93,9 @@
             <input_port name="InitPos"/>
             <output_port name="PosList"/>
         </Action>
-        <!-- <Condition ID="isNotFoundYet">
+        <Condition ID="isNotFoundYet">
             <input_port name="isFound"/>
-        </Condition> -->
+        </Condition>
     </TreeNodesModel>
     <!-- ////////// -->
 </root>

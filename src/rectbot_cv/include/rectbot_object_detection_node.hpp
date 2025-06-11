@@ -12,6 +12,10 @@
 #include <visualization_msgs/MarkerArray.h>
 #include <chrono>
 
+#include <thread>
+#include <mutex>
+#include <atomic>
+
 #include "rectbot_cv/PoseObject.h"
 #include "rectbot_cv/PoseObjectArray.h"
 
@@ -22,49 +26,25 @@ public:
     RectbotObjectDetectionNode();
     ~RectbotObjectDetectionNode();
 
-    bool initialize();
-    void run();
-
 private:
-    ros::NodeHandle nh_;
-    ros::NodeHandle private_nh_{"~"}; // Private node handle for parameters
-    ros::Subscriber image_sub_;
-    ros::Publisher processed_pub_;
-    ros::Publisher detection_pub_;  // Publisher for detection results
+    void loadParameters();
+    void imageCallback(const sensor_msgs::ImageConstPtr& msg);
+    void detectObjects_thread();
 
-
-    // ROS Image message for subscribing to input images
+    ros::NodeHandle nh_, private_nh_;
+    std::string input_topic_, output_topic_, detection_topic_, model_path_;
+    float conf_threshold_, nms_threshold_;
+    std::unique_ptr<YOLOv8> detector_;
     sensor_msgs::ImageConstPtr image_msg_;
 
-    // YOLOv8 detector
-    std::unique_ptr<YOLOv8> detector_;
+    // threading
+    std::thread process_d2c_thread_;
+    std::mutex image_mutex_;
+    std::atomic<bool> running_{true};
 
-    // Parameters
-    std::string input_topic_;
-    std::string output_topic_;
-    std::string detection_topic_;
-    std::string model_path_;
-    float conf_threshold_;
-    float nms_threshold_;
-    // float conf_threshold_
-    
-    // Image callback
-    void imageCallback(const sensor_msgs::ImageConstPtr& msg);
-    
-    // Object detection
-    
-    void detectObjects_thread();   
-    // Load the detection model
-    bool loadModel();
-
-    void loadParameters();
-    
-    // Model variables
-    cv::dnn::Net network_;
-    std::vector<std::string> class_names_;
-
-    // Thread for processing detections to coordinates
-    std::thread detect_thread_;
+    ros::Subscriber image_sub_;
+    ros::Publisher processed_pub_;
+    ros::Publisher detection_pub_;
 };
 
 

@@ -13,6 +13,11 @@
 #include <image_geometry/pinhole_camera_model.h>
 #include <vector>
 #include <string>
+
+#include <thread>
+#include <mutex>
+#include <atomic>
+
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <tf2_ros/transform_listener.h>
 #include <tf2_ros/transform_broadcaster.h>
@@ -75,6 +80,7 @@ class RectbotObjectMapper
         void publishMarkers();
         void publishTransform();
         bool isOldObject(geometry_msgs::PointStamped position,int track_id, int &obj_idx);
+        void threadedProcess();
 
 
     private:
@@ -128,6 +134,12 @@ class RectbotObjectMapper
         int markers_id_;
 
         ros::Timer process_timer_;
+
+        // Threading for processing
+        std::thread process_thread_;
+        std::mutex data_mutex_;
+        std::atomic<bool> running_{true};
+
 };
 
 #endif
